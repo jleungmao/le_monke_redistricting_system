@@ -1,0 +1,72 @@
+NY/FL/TX
+GUI.
+Map (Mapbox).
+Map of state and districts.
+Map must be pannable and zoomable.
+Select a state to display.
+Users can select a state from a dropdown menu, which will display the selected state centered on the screen.
+Select a district to display.
+User can click the district to highlight and display 
+Racial breakdown
+Population
+Red vs Blue numbers
+Objective score (based on objective function)
+Score (relative to other districts objective scores)
+Index District (relative to other districts)
+Counties will be highlighted in different colors
+Precincts belonging to each county will have their color
+User should be able to display more data analysis upon hovering over certain precincts
+Which precinct it is
+
+
+Have a side window to display the information about district/county/precinct.
+Using sliders set the numerical parameters on the objective function.
+Selectors to choose categorical data for objective function (ex. incumbent to preserve).
+
+
+Delete a previously generated jobs
+Display old jobs
+Cancel a specific job
+Users can sort filtered set of districtings by specific measures of the objective function, or the entire objective function
+
+
+
+
+Backend.
+Query job from Seawulf DB.
+Job consists of generating random districting 
+Query Resource DB.
+Query Project DB.
+Send finished jobs from Seawulf to project DB
+Possibly need to format finished jobs into readable JSON 
+Fulfill get requests from front-end for random districtings
+Provide analytical data of random districtings
+Average cases
+Extreme cases
+Deviation of current districting from average
+
+
+Seawulf.
+Does the hard math
+Need communication method between Backend and Seawulf
+Progress of generations
+Fetching data for generation from DB.
+Form a precinct graph.
+
+
+Preprocessing (Python).
+Mapping data to shapefile & geoJSON.
+Data cleaning.
+Get rid of empty / faulty data records.
+Data normalization
+Convert all types of data to precinct level.
+Party affiliation, population size, racial breakdown.
+Election data (preferred).
+Storing of preprocessed data (through server or datafile).
+
+Algorithm.
+Generate random (seed) districtings
+Prunes edges of sub-graphs to improve random districtings
+Objective function.
+[Population equality, Compactness, Racial Fairness, Political Fairness, Split counties, Minimal change, Incumbent protection, Communities of Interest]
+
