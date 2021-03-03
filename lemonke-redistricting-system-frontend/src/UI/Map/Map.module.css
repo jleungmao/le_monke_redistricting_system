@@ -1,3 +1,6 @@
+/* TODO: */
+/* this is probably what should be changed 
+    in order to make the map act normally within a container */
 .map_container {
     height: 700px;
 }
