@@ -20,9 +20,11 @@ function Map() {
 		});
 		// add navigation control (the +/- zoom buttons)
 		map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+	
 
 		return () => map.remove();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+
 
 	return (
 		<div>
