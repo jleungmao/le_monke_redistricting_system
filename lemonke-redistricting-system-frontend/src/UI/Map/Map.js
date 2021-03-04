@@ -28,21 +28,23 @@ function Map() {
 				// Only the data in this project is available to the code here.
 				// All data therefor should be loaded into the "public" directory in this project.
 				// Later we will change this to be an api call.
-				data: './1.geojson'
+				data: './2012_Congress.geojson'
 			});
 
-			map.addLayer({
-				id: 'state-data',
-				type: 'fill',
-				source: 'state-data',
-				layout: {},
-				paint: {
-					'fill-color': '#088',
-					'fill-opacity': 0.8
-				}
-			});
-
+			// map.addLayer({
+			// 	id: 'state-data',
+			// 	type: 'fill',
+			// 	source: 'state-data',
+			// 	layout: {},
+			// 	paint: {
+			// 		'fill-color': '#088',
+			// 		'fill-opacity': 0.8
+			// 	}
+			// });
+			populatingLayers(map);
 		})
+
+		
 
 		// add navigation control (the +/- zoom buttons)
 		map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
@@ -53,8 +55,23 @@ function Map() {
 	// TODO:
 	// Add all districts onto the map
 	// Probably running thought a loop and "addLayer" for each of the distr.
-	const populatingLayers = () => {
-
+	const populatingLayers = (map) => {
+		let enacted = map.getSource('state-data');
+		console.log(enacted._data);
+		//data is not actually the json within, its the path to the geojson file
+		let i = 0;
+		for(feature in enacted._data){
+			i++;
+			this.map.addLayer({
+				id:i,
+				type:'fill',
+				source:feature,
+				paint: {
+					'fill-color': Math.floor(Math.random()*16777215).toString(16),
+					'fill-opacity': 0.8
+				}
+			})
+		}
 	}
 
 	// TODO:
