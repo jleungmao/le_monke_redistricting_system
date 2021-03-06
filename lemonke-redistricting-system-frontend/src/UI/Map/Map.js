@@ -21,8 +21,35 @@ function Map(props) {
 			center: [lng, lat],
 			zoom: zoom
 		});
+		
 
-		setLng(props.initialState.longitude)
+		loadJSONFile(function(response) {
+			stateData = JSON.parse(response);
+		 }, './2012_Congress.geojson');
+
+		map.on('load', () => {
+			// map.addSource('state-data', {
+			// 	type: 'geojson',
+			// 	// Only the data in this project is available to the code here.
+			// 	// All data therefor should be loaded into the "public" directory in this project.
+			// 	// Later we will change this to be an api call.
+			// 	data: './2012_Congress.geojson'
+			// });
+
+			// map.addLayer({
+			// 	id: 'state-data',
+			// 	type: 'fill',
+			// 	source: 'state-data',
+			// 	layout: {},
+			// 	paint: {
+			// 		'fill-color': '#088',
+			// 		'fill-opacity': 0.8
+			// 	}
+			// });
+			populatingLayers(map, stateData);
+			console.log(map)
+		})
+    setLng(props.initialState.longitude)
 		setLat(props.initialState.latitude)
 		setZoom(props.initialState.zoom)
 
@@ -54,30 +81,6 @@ function Map(props) {
 			map.setLayoutProperty('road-label', 'visibility', 'none');
 			map.setLayoutProperty('road-number-shield', 'visibility', 'none');
 
-
-			map.addSource('state-data', {
-				type: 'geojson',
-				// Only the data in this project is available to the code here.
-				// All data therefor should be loaded into the "public" directory in this project.
-				// Later we will change this to be an api call.
-				data: './2012_Congress.geojson'
-			});
-			map.addLayer({
-				id: 'state-data',
-				type: 'fill',
-				source: 'state-data',
-				layout: {},
-				paint: {
-					'fill-color': '#088',
-					'fill-opacity': 0.8
-				}
-			}, firstSymbolId);
-
-			console.log(map.getStyle().layers)
-		})
-
-
-
 		// add navigation control (the +/- zoom buttons)
 		map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
@@ -87,9 +90,49 @@ function Map(props) {
 	// TODO:
 	// Add all districts onto the map
 	// Probably running thought a loop and "addLayer" for each of the distr.
-	const populatingLayers = () => {
+	const populatingLayers = (map, stateData) => {
+		let i = 1;
+		for(var feature of stateData.features){
+			console.log(feature);
+			//current method adds a source for every district, looking into better way to implement 
+			//one idea is when loading a new districting we clear the sources
+			map.addSource(
+				i.toString(),
+				{type: "geojson",
+				data: feature}
+			);
 
+			map.addLayer({
+				id: "district" + i.toString(),
+				type:'fill',
+				source: i.toString(),
+				paint: {
+					'fill-color': addColor(),
+					'fill-opacity': 0.8
+				}
+			});
+			i++;
+		}
 	}
+
+	function loadJSONFile(callback, url) { 
+		//ideally we get the url via a callback once a job is loaded in
+
+		var xmlobj = new XMLHttpRequest();
+	
+		xmlobj.overrideMimeType("application/json");
+	
+		xmlobj.open('GET', url, true); 
+	
+		xmlobj.onreadystatechange = function () {
+			  if (xmlobj.readyState == 4 && xmlobj.status == "200") {
+				// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+				callback(xmlobj.responseText);
+			  }
+		};
+	
+		xmlobj.send(null);  
+	 }
 
 	// TODO:
 	// Random color generator, but somehow making sure that colors dont repeat.
@@ -98,7 +141,9 @@ function Map(props) {
 	// In the future this should probably be its own class that assigns color to a "district" Object.
 	// https://www.geeksforgeeks.org/graph-coloring-applications/#:~:text=Graph%20coloring%20problem%20is%20to,are%20colored%20using%20same%20color.
 	const addColor = () => {
-
+		//very quick one-liner, doesn't necesarilly spit nice colors
+		var color = Math.floor(0x1000000 * Math.random()).toString(16);
+    	return '#' + ('000000' + color).slice(-6);
 	}
 
 
