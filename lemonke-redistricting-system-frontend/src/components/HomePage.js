@@ -13,11 +13,33 @@ function HomePage() {
 	// https://material-ui.com/components/tabs/
 
 	
+	let stateLocations = [
+		{
+			stateName: 'NewYork',
+			longitude: -75.4326,
+			latitude: 42.8315,
+			zoom: 6.17
+		},
+		{
+			stateName: 'Florida',
+			longitude: -82.3791,
+			latitude: 28.1770,
+			zoom: 6.13
+		},
+		{
+			stateName: 'NewYork',
+			longitude: -99.5540,
+			latitude: 31.5156,
+			zoom: 5.20
+		}
+	]
+
+
 
 	return (
 		<>
 			<Header />
-			<Map />
+			<Map initialState={stateLocations[2]}/>
 		</>
 	)
 }
