@@ -27,7 +27,6 @@ function Map(props) {
 			stateData = JSON.parse(response);
 		}, './2012_Congress.geojson');
 
-
 		setLng(props.initialState.longitude);
 		setLat(props.initialState.latitude);
 		setZoom(props.initialState.zoom);
@@ -62,7 +61,7 @@ function Map(props) {
 
 			// add navigation control (the +/- zoom buttons)
 			map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
-			populatingLayers(map, stateData);
+			populatingLayers(map, stateData, firstSymbolId);
 			console.log(map);
 		})
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -71,7 +70,7 @@ function Map(props) {
 	// TODO:
 	// Add all districts onto the map
 	// Probably running thought a loop and "addLayer" for each of the distr.
-	const populatingLayers = (map, stateData) => {
+	const populatingLayers = (map, stateData, firstSymbolId) => {
 		let i = 1;
 		for (var feature of stateData.features) {
 			console.log(feature);
@@ -86,14 +85,14 @@ function Map(props) {
 			);
 
 			map.addLayer({
-				id: "district" + i.toString(),
+				id: 'district' + i.toString(),
 				type: 'fill',
 				source: i.toString(),
 				paint: {
 					'fill-color': addColor(),
 					'fill-opacity': 0.8
 				}
-			});
+			}, firstSymbolId);
 			i++;
 		}
 	}
@@ -136,10 +135,9 @@ function Map(props) {
 				<div className={classes.sidebar}>
 					Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
 				</div>
-				<div className="map-container" ref={mapContainer} />
 			</div>
-			<div id='map'>
-				<div className={classes.map_container} ref={mapContainer} />
+			<div className='map-container'>
+				<div id='map' className={classes.map_container} ref={mapContainer} />
 			</div>
 		</div>
 	)

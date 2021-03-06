@@ -14,7 +14,7 @@ function HomePage() {
 	let stateLocations = [
 		{
 			stateName: 'NewYork',
-			longitude: -75.4326,
+			longitude: -73.6944,
 			latitude: 42.8315,
 			zoom: 6.17
 		},
@@ -35,7 +35,7 @@ function HomePage() {
 	return (
 		<>
 			<Sidepanel />
-			<Map initialState={stateLocations[1]}/>
+			<Map initialState={stateLocations[0]}/>
 		</>
 	)
 }
