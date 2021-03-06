@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import Header from '../UI/Header/Header';
+import Sidepanel from '../UI/Sidepanel/Sidepanel';
 import Map from '.././UI/Map/Map';
 
 function HomePage() {
@@ -38,7 +38,7 @@ function HomePage() {
 
 	return (
 		<>
-			<Header />
+			<Sidepanel />
 			<Map initialState={stateLocations[2]}/>
 		</>
 	)
