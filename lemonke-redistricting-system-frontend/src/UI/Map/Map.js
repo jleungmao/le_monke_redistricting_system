@@ -26,7 +26,7 @@ function Map() {
 
 		loadJSONFile(function(response) {
 			stateData = JSON.parse(response);
-		 });
+		 }, './2012_Congress.geojson');
 
 		map.on('load', () => {
 			// map.addSource('state-data', {
@@ -48,6 +48,7 @@ function Map() {
 			// 	}
 			// });
 			populatingLayers(map, stateData);
+			console.log(map)
 		})
 
 		
@@ -62,9 +63,11 @@ function Map() {
 	// Add all districts onto the map
 	// Probably running thought a loop and "addLayer" for each of the distr.
 	const populatingLayers = (map, stateData) => {
-		let i = 0;
+		let i = 1;
 		for(var feature of stateData.features){
 			console.log(feature);
+			//current method adds a source for every district, looking into better way to implement 
+			//one idea is when loading a new districting we clear the sources
 			map.addSource(
 				i.toString(),
 				{type: "geojson",
@@ -79,18 +82,19 @@ function Map() {
 					'fill-color': addColor(),
 					'fill-opacity': 0.8
 				}
-			})
+			});
 			i++;
 		}
 	}
 
-	function loadJSONFile(callback) {   
+	function loadJSONFile(callback, url) { 
+		//ideally we get the url via a callback once a job is loaded in
 
 		var xmlobj = new XMLHttpRequest();
 	
 		xmlobj.overrideMimeType("application/json");
 	
-		xmlobj.open('GET', './2012_Congress.geojson', true); // Provide complete path to your json file here. Change true to false for synchronous loading.
+		xmlobj.open('GET', url, true); 
 	
 		xmlobj.onreadystatechange = function () {
 			  if (xmlobj.readyState == 4 && xmlobj.status == "200") {
@@ -109,8 +113,9 @@ function Map() {
 	// In the future this should probably be its own class that assigns color to a "district" Object.
 	// https://www.geeksforgeeks.org/graph-coloring-applications/#:~:text=Graph%20coloring%20problem%20is%20to,are%20colored%20using%20same%20color.
 	const addColor = () => {
-		var color = '#'+Math.floor(Math.random()*16777215).toString(16);
-		return color;
+		//very quick one-liner, doesn't necesarilly spit nice colors
+		var color = Math.floor(0x1000000 * Math.random()).toString(16);
+    	return '#' + ('000000' + color).slice(-6);
 	}
 
 
