@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Sidepanel from '../UI/Sidepanel/Sidepanel';
 import Map from '.././UI/Map/Map';
 
@@ -12,7 +11,6 @@ function HomePage() {
 	// These are just other cool things I found on ther Website.
 	// https://material-ui.com/components/tabs/
 
-	
 	let stateLocations = [
 		{
 			stateName: 'NewYork',
@@ -34,12 +32,10 @@ function HomePage() {
 		}
 	]
 
-
-
 	return (
 		<>
 			<Sidepanel />
-			<Map initialState={stateLocations[2]}/>
+			<Map initialState={stateLocations[1]}/>
 		</>
 	)
 }

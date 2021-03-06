@@ -4,13 +4,9 @@ import HomePage from './components/HomePage';
 
 function App() {
     return (
-        <>
-        <div id = 'map'>
-            <BrowserRouter>
-                <Route exact path='/' component={HomePage}></Route>
-            </BrowserRouter>
-        </div>
-        </>
+        <BrowserRouter>
+            <Route exact path='/' component={HomePage}></Route>
+        </BrowserRouter>
     )
 }
 

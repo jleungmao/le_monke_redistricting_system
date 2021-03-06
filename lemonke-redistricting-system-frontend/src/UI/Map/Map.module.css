@@ -3,6 +3,9 @@
     in order to make the map act normally within a container */
 .map_container {
     height: 700px;
+    position: fixed;
+    width: 100%;
+    left: 350px;
 }
 
 .sidebar {
@@ -13,7 +16,7 @@
     z-index: 1;
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     margin: 12px;
     border-radius: 4px;
-    }
+}

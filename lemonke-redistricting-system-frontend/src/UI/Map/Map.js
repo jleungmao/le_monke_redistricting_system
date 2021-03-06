@@ -138,7 +138,9 @@ function Map(props) {
 				</div>
 				<div className="map-container" ref={mapContainer} />
 			</div>
-			<div className={classes.map_container} ref={mapContainer} />
+			<div id='map'>
+				<div className={classes.map_container} ref={mapContainer} />
+			</div>
 		</div>
 	)
 }

@@ -1,4 +1,4 @@
-.sidepanel{
+#sidepanel{
 	position: fixed;
 	width: 350px;
 	height: 100%;
@@ -9,7 +9,7 @@
 	border: 2px solid black;
 }
 
-.tab{
+#tabs{
 	overflow: hidden;
 	border-bottom: 1px solid #ccc;
 	background-color: #f1f1f1;
