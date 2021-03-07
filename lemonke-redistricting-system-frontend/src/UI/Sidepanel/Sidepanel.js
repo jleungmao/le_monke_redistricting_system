@@ -10,19 +10,19 @@ import Button from '@material-ui/core/Button';
 import Boxplot from '../../components/Boxplot';
 import {Route} from 'react-router-dom';
 
+
 function Sidepanel(props) {
 
 
-	const [selectedTab, setSelectedTab] = useState(0)
-	const [activeStep, setActiveStep] = useState(1);
+	const [selectedTab, setSelectedTab] = useState(0);
+	const [activeStep, setActiveStep] = useState(0);
 
-	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Select Districtings', 'Districting Stats'];
+	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Set Measures', 'Select Districting'];
 						// Population equality.
 						// Inccumbent protenction.
 						// Magority/ minority districts.
 						// Minimum number of districts where the districts have x population for minority.
 
-						
 
 	function TabPanel(props) {
 		const { index, value, children } = props;
@@ -46,13 +46,11 @@ function Sidepanel(props) {
 						id="demo-customized-select"
 						value={props.stateIndx}
 						onChange={(e) => props.setState(e.target.value)}
-					// input={<BootstrapInput />}
 					>
 						<MenuItem value={0}>NewYork</MenuItem>
 						<MenuItem value={1}>Florida</MenuItem>
 						<MenuItem value={2}>Texas</MenuItem>
 					</Select>
-					<h1>{props.stateIndx}</h1>
 					<ProgressBar></ProgressBar>
 				</Container>
 			</TabPanel>
@@ -169,8 +167,7 @@ function Sidepanel(props) {
 						<Button
 							variant="contained"
 							color="primary"
-							onClick={() => setActiveStep(activeStep + 1)}
-						>
+							onClick={() => setActiveStep(activeStep + 1)}>
 							{activeStep === steps.length - 1 ? 'Finish' : 'Next'}
 						</Button>
 					</div>

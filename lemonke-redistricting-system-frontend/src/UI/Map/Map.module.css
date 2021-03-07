@@ -20,3 +20,10 @@
     margin: 12px;
     border-radius: 4px;
 }
+
+.button_update {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
