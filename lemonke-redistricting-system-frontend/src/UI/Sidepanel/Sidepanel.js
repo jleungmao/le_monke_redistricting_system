@@ -7,7 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Container from '@material-ui/core/Container';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import Button from '@material-ui/core/Button';
-import Plot from 'react-plotly.js';
+// import Plot from 'react-plotly.js';
 
 function Sidepanel(props) {
 
@@ -15,7 +15,7 @@ function Sidepanel(props) {
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [activeStep, setActiveStep] = useState(0);
 
-	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Select Districtings', 'Districting Stats'];
+	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Set Measures', 'Select Districting'];
 						// Population equality.
 						// Inccumbent protenction.
 						// Magority/ minority districts.
@@ -181,9 +181,9 @@ function Sidepanel(props) {
 			<TabPanel value={activeStep} index={2}>
 				<Container maxWidth="sm">
 					<h5>View Filtered Districts, using the objective function.</h5>
-					<Plot data={data1} layout= {{width: 300, height: 300, title: 'title goes here'}}></Plot>
-	  			<Plot data={data} layout= {layout}></Plot>
-  				<Plot data={data1} layout= {{width: 300, height: 300, title: 'another title goes here'}}></Plot>
+					{/* <Plot data={data1} layout= {{width: 300, height: 300, title: 'title goes here'}}></Plot>
+	  				<Plot data={data} layout= {layout}></Plot>
+  					<Plot data={data1} layout= {{width: 300, height: 300, title: 'another title goes here'}}></Plot> */}
 				</Container>
 			</TabPanel>
 			<TabPanel value={activeStep} index={3}>
