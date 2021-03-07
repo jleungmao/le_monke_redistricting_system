@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
-import { Tabs, Tab, AppBar } from '@material-ui/core'
+import { Tabs, Tab } from '@material-ui/core'
 import classes from './Sidepanel.module.css';
 import Plot from 'react-plotly.js';
 
-function Sidepanel() {
+function Sidepanel(props) {
 	const [selectedTab, setSelectedTab] = useState(0)
 
-	const handleChange = (event, newValue) => {
-		setSelectedTab(newValue)
-	}
 
 	function TabPanel(props) {
-		const {index, value, children} = props;
+		const { index, value, children } = props;
 		return (
 			<>
 				{
@@ -24,6 +21,7 @@ function Sidepanel() {
 	}
 	var xData = ['x1', 'x2',
 	'x3', 'x4',];
+
 
 	function getrandom(num , mul) {
 		var value = [ ];
@@ -116,12 +114,15 @@ function Sidepanel() {
 	}
 	data.push(marker);
 
+
+
 	return (
 		<div className={classes.sidepanel}>
-			<Tabs value={selectedTab} onChange={handleChange} className={classes.tabs}>
-				<Tab label="Tab 1" />
-				<Tab label="Tab 2" />
-				<Tab label="Tab 3" />
+			<Tabs onChange={(e, val) => setSelectedTab(val)} >
+
+				<Tab className={classes.tabs} style={{ minWidth: '33%' }} label="1" />
+				<Tab className={classes.tabs} style={{ minWidth: '33%' }} label="2" />
+				<Tab className={classes.tabs} style={{ minWidth: '33%' }} label="3" />
 			</Tabs>
 			<TabPanel value={selectedTab} index={0}>Item 1
 				<Plot data={data1} layout= {{width: 300, height: 300, title: 'title goes here'}}></Plot>

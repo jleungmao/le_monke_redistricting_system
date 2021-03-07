@@ -1,14 +1,13 @@
-#map {
-    height: 40%;
-}
 
+/* Map container CSS */
 .map_container {
     height: 100%;
     position: fixed;
-    width: 100%;
-    left: 350px;
+    width: 80%;
+    margin-left: 20%;
 }
 
+/* the little indicator for Longitude and Latitude. */
 .sidebar {
     background-color: rgba(35, 55, 75, 0.9);
     color: #ffffff;
