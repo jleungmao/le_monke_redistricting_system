@@ -64,7 +64,7 @@ function Map(props) {
 			populatingLayers(map, stateData, firstSymbolId);
 			console.log(map);
 		})
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [props.initialState]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
 	// TODO:

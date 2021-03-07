@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Sidepanel from '../UI/Sidepanel/Sidepanel';
 import Map from '.././UI/Map/Map';
 
@@ -10,13 +10,15 @@ function HomePage() {
 	// https://material-ui.com/components/drawers/
 	// These are just other cool things I found on ther Website.
 	// https://material-ui.com/components/tabs/
+	const [state, setState] = useState(0)
+
 
 	let stateLocations = [
 		{
 			stateName: 'NewYork',
-			longitude: -73.6944,
-			latitude: 42.8315,
-			zoom: 6.17
+			longitude: -75.7240,
+			latitude: 42.9109,
+			zoom: 6.58
 		},
 		{
 			stateName: 'Florida',
@@ -25,7 +27,7 @@ function HomePage() {
 			zoom: 6.13
 		},
 		{
-			stateName: 'NewYork',
+			stateName: 'Texas',
 			longitude: -99.5540,
 			latitude: 31.5156,
 			zoom: 5.20
@@ -34,8 +36,8 @@ function HomePage() {
 
 	return (
 		<>
-			<Sidepanel />
-			<Map initialState={stateLocations[0]}/>
+			<Sidepanel stateIndx={state} setState={setState}/>
+			<Map initialState={stateLocations[state]}/>
 		</>
 	)
 }
