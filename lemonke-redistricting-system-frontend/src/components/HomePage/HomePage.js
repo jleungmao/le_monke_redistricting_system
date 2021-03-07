@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import Sidepanel from '../UI/Sidepanel/Sidepanel';
-import Map from '.././UI/Map/Map';
+import Sidepanel from '../../UI/Sidepanel/Sidepanel';
+import Map from '../../UI/Map/Map';
 
 function HomePage() {
 
