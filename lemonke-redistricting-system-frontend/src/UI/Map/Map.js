@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import classes from './Map.module.css';
+import axios from 'axios';
 import geojsonMerge from 'geojson-merge';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -24,9 +25,12 @@ function Map(props) {
 				center: [lng, lat],
 				zoom: zoom
 			});
-			loadJSONFile(function (response) {
-				stateData = JSON.parse(response);
-			}, './2012_Congress.geojson');
+			axios.get('./2012_Congress.geojson')
+			.then(res=> {
+				console.log(res);
+				stateData = res.data;
+			});
+			
 			inialized = 1;
 		} else {
 			setLng(props.initialState.longitude);
@@ -99,25 +103,6 @@ function Map(props) {
 		}
 		// map.moveLayer('water', 'district' + i.toString() + 1)
 		console.log(i)
-	}
-
-	function loadJSONFile(callback, url) {
-		//ideally we get the url via a callback once a job is loaded in
-
-		var xmlobj = new XMLHttpRequest();
-
-		xmlobj.overrideMimeType("application/json");
-
-		xmlobj.open('GET', url, true);
-
-		xmlobj.onreadystatechange = function () {
-			if (xmlobj.readyState == 4 && xmlobj.status == "200") {
-				// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-				callback(xmlobj.responseText);
-			}
-		};
-
-		xmlobj.send(null);
 	}
 
 	// TODO:
