@@ -128,7 +128,7 @@ function Map(props) {
 		return '#' + ('000000' + color).slice(-6);
 	}
 
-
+	
 	return (
 		<div>
 			<div>
