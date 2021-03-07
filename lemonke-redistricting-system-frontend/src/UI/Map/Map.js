@@ -11,34 +11,37 @@ function Map(props) {
 	const [lng, setLng] = useState(props.initialState.longitude);
 	const [lat, setLat] = useState(props.initialState.latitude);
 	const [zoom, setZoom] = useState(props.initialState.zoom);
-
+	let map;
+	let inialized = 0
+	let stateData;
 
 	useEffect(async () => {
 
-		let map = new mapboxgl.Map({
-			container: mapContainer.current,
-			style: 'mapbox://styles/mapbox/streets-v11',
-			center: [lng, lat],
-			zoom: zoom
-		});
+		if (!inialized) {
+			map = new mapboxgl.Map({
+				container: mapContainer.current,
+				style: 'mapbox://styles/mapbox/streets-v11',
+				center: [lng, lat],
+				zoom: zoom
+			});
+			loadJSONFile(function (response) {
+				stateData = JSON.parse(response);
+			}, './2012_Congress.geojson');
+			inialized = 1;
+		} else {
+			setLng(props.initialState.longitude);
+			setLat(props.initialState.latitude);
+			setZoom(props.initialState.zoom);
+		}
 
-		let stateData;
-		loadJSONFile(function (response) {
-			stateData = JSON.parse(response);
-		}, './2012_Congress.geojson');
-
-		setLng(props.initialState.longitude);
-		setLat(props.initialState.latitude);
-		setZoom(props.initialState.zoom);
-
-		// on move
+		// On move
 		map.on('move', () => {
 			setLng(map.getCenter().lng.toFixed(4));
 			setLat(map.getCenter().lat.toFixed(4));
 			setZoom(map.getZoom().toFixed(2));
 		});
 
-		// on load
+		// On load
 		map.on('load', () => {
 			var layers = map.getStyle().layers;
 			// Find the index of the first symbol layer in the map style
@@ -54,16 +57,15 @@ function Map(props) {
 			for (let i = 35; i < 59; i++) {
 				let level_name = layers[i].id;
 				map.setLayoutProperty(level_name, 'visibility', 'none');
-
 			}
+
 			map.setLayoutProperty('road-label', 'visibility', 'none');
 			map.setLayoutProperty('road-number-shield', 'visibility', 'none');
 
 			// add navigation control (the +/- zoom buttons)
 			map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 			populatingLayers(map, stateData, firstSymbolId);
-			console.log(map);
-		})
+		});
 	}, [props.initialState]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
@@ -73,7 +75,7 @@ function Map(props) {
 	const populatingLayers = (map, stateData, firstSymbolId) => {
 		let i = 1;
 		for (var feature of stateData.features) {
-			console.log(feature);
+
 			//current method adds a source for every district, looking into better way to implement 
 			//one idea is when loading a new districting we clear the sources
 			map.addSource(
@@ -95,6 +97,8 @@ function Map(props) {
 			}, firstSymbolId);
 			i++;
 		}
+		// map.moveLayer('water', 'district' + i.toString() + 1)
+		console.log(i)
 	}
 
 	function loadJSONFile(callback, url) {
@@ -128,7 +132,7 @@ function Map(props) {
 		return '#' + ('000000' + color).slice(-6);
 	}
 
-	
+
 	return (
 		<div>
 			<div>
