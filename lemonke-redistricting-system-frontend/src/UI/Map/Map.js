@@ -1,7 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, { BoxZoomHandler } from 'mapbox-gl';
 import classes from './Map.module.css';
 import geojsonMerge from 'geojson-merge';
+import axios from 'axios';
+
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
@@ -12,37 +14,29 @@ function Map(props) {
 	const [lat, setLat] = useState(props.initialState.latitude);
 	const [zoom, setZoom] = useState(props.initialState.zoom);
 	let map;
-	let inialized = 0
 	let stateData;
+	let initialized = 0;
 
-	useEffect(async () => {
 
-		if (!inialized) {
-			map = new mapboxgl.Map({
-				container: mapContainer.current,
-				style: 'mapbox://styles/mapbox/streets-v11',
-				center: [lng, lat],
-				zoom: zoom
-			});
-			loadJSONFile(function (response) {
-				stateData = JSON.parse(response);
-			}, './2012_Congress.geojson');
-			inialized = 1;
-		} else {
-			setLng(props.initialState.longitude);
-			setLat(props.initialState.latitude);
-			setZoom(props.initialState.zoom);
-		}
+	useEffect(() => {
 
-		// On move
-		map.on('move', () => {
-			setLng(map.getCenter().lng.toFixed(4));
-			setLat(map.getCenter().lat.toFixed(4));
-			setZoom(map.getZoom().toFixed(2));
+		map = new mapboxgl.Map({
+			container: mapContainer.current,
+			style: 'mapbox://styles/mapbox/streets-v11',
+			center: [lng, lat],
+			zoom: zoom
 		});
+
+		map.dragRotate.disable();
+
+		// stateData = await axios('./2012_Congress.geojson');
+		loadJSONFile(function (response) {
+			stateData = JSON.parse(response);
+		}, './2012_Congress.geojson');
 
 		// On load
 		map.on('load', () => {
+			console.log("onload")
 			var layers = map.getStyle().layers;
 			// Find the index of the first symbol layer in the map style
 			var firstSymbolId;
@@ -66,6 +60,19 @@ function Map(props) {
 			map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 			populatingLayers(map, stateData, firstSymbolId);
 		});
+
+		// On move
+		map.on('move', () => {
+			console.log("moving")
+			setLng(map.getCenter().lng.toFixed(4));
+			setLat(map.getCenter().lat.toFixed(4));
+			setZoom(map.getZoom().toFixed(2));
+		});
+
+		map.setCenter([props.initialState.longitude, props.initialState.latitude])
+		map.setZoom(props.initialState.zoom)
+
+		return () => map.remove();
 	}, [props.initialState]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
@@ -97,8 +104,6 @@ function Map(props) {
 			}, firstSymbolId);
 			i++;
 		}
-		// map.moveLayer('water', 'district' + i.toString() + 1)
-		console.log(i)
 	}
 
 	function loadJSONFile(callback, url) {
@@ -133,12 +138,11 @@ function Map(props) {
 	}
 
 
+
 	return (
 		<div>
-			<div>
-				<div className={classes.sidebar}>
-					Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-				</div>
+			<div className={classes.sidebar}>
+				Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
 			</div>
 			<div className='map-container'>
 				<div id='map' className={classes.map_container} ref={mapContainer} />

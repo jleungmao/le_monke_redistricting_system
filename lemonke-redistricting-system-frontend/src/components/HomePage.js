@@ -10,7 +10,7 @@ function HomePage() {
 	// https://material-ui.com/components/drawers/
 	// These are just other cool things I found on ther Website.
 	// https://material-ui.com/components/tabs/
-	const [state, setState] = useState(0)
+	const [state, setState] = useState(0);
 
 
 	let stateLocations = [
