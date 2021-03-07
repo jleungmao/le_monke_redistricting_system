@@ -8,6 +8,7 @@ import Container from '@material-ui/core/Container';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import Button from '@material-ui/core/Button';
 import Boxplot from '../../components/Boxplot';
+import SetMeasures from '../../components/Tabs/SetMeasures';
 import {Route} from 'react-router-dom';
 
 
@@ -91,32 +92,7 @@ function Sidepanel(props) {
 			</TabPanel>
 			<TabPanel value={activeStep} index={3}>
 				<Container maxWidth="sm">
-					<h5>Set OBJ Constant</h5>
-					<Typography id="discrete-slider-small-steps" gutterBottom>
-						Slider 1
-      				</Typography>
-					<Slider
-						defaultValue={0.00000005}
-						aria-labelledby="discrete-slider-small-steps"
-						step={0.00000001}
-						marks
-						min={-0.00000005}
-						max={0.0000001}
-						valueLabelDisplay="auto"
-					/>
-					<br />
-					<Typography id="discrete-slider-small-steps" gutterBottom>
-						Slider 1
-      				</Typography>
-					<Slider
-						defaultValue={0.00000005}
-						aria-labelledby="discrete-slider-small-steps"
-						step={0.00000001}
-						marks
-						min={-0.00000005}
-						max={0.0000001}
-						valueLabelDisplay="auto"
-					/>
+					<Route exact path='/' component={SetMeasures}></Route>
 				</Container>
 			</TabPanel>
 			<TabPanel value={activeStep} index={4}>
