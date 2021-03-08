@@ -1,0 +1,325 @@
+{
+    "bestDistricts": [
+        {
+            "OFScore": 10,
+            "Deviation From Average": 10,
+            "Deviation From Enacted": 10,
+            "Population Equality": 10,
+            "Compactness": 10,
+            "Political Fairness": 10,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 20,
+            "Deviation From Average": 20,
+            "Deviation From Enacted": 20,
+            "Population Equality": 20,
+            "Compactness": 20,
+            "Political Fairness": 20,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 30,
+            "Deviation From Average": 30,
+            "Deviation From Enacted": 30,
+            "Population Equality": 30,
+            "Compactness": 30,
+            "Political Fairness": 30,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 40,
+            "Deviation From Average": 40,
+            "Deviation From Enacted": 40,
+            "Population Equality": 40,
+            "Compactness": 40,
+            "Political Fairness": 10,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 50,
+            "Deviation From Average": 50,
+            "Deviation From Enacted": 50,
+            "Population Equality": 50,
+            "Compactness": 50,
+            "Political Fairness": 50,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 60,
+            "Deviation From Average": 60,
+            "Deviation From Enacted": 60,
+            "Population Equality": 60,
+            "Compactness": 60,
+            "Political Fairness": 60,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 70,
+            "Deviation From Average": 70,
+            "Deviation From Enacted": 70,
+            "Population Equality": 70,
+            "Compactness": 70,
+            "Political Fairness": 70,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 80,
+            "Deviation From Average": 80,
+            "Deviation From Enacted": 80,
+            "Population Equality": 80,
+            "Compactness": 80,
+            "Political Fairness": 80,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 90,
+            "Deviation From Average": 90,
+            "Deviation From Enacted": 90,
+            "Population Equality": 90,
+            "Compactness": 90,
+            "Political Fairness": 90,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 100,
+            "Deviation From Average": 100,
+            "Deviation From Enacted": 100,
+            "Population Equality": 100,
+            "Compactness": 100,
+            "Political Fairness": 100,
+            "Split Counties": 0
+        }
+    ],
+    "majorityMinority": [
+        {
+            "OFScore": 10,
+            "Deviation From Average": 10,
+            "Deviation From Enacted": 10,
+            "Population Equality": 10,
+            "Compactness": 10,
+            "Political Fairness": 10,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 20,
+            "Deviation From Average": 20,
+            "Deviation From Enacted": 20,
+            "Population Equality": 20,
+            "Compactness": 20,
+            "Political Fairness": 20,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 30,
+            "Deviation From Average": 30,
+            "Deviation From Enacted": 30,
+            "Population Equality": 30,
+            "Compactness": 30,
+            "Political Fairness": 30,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 40,
+            "Deviation From Average": 40,
+            "Deviation From Enacted": 40,
+            "Population Equality": 40,
+            "Compactness": 40,
+            "Political Fairness": 10,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 50,
+            "Deviation From Average": 50,
+            "Deviation From Enacted": 50,
+            "Population Equality": 50,
+            "Compactness": 50,
+            "Political Fairness": 50,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 60,
+            "Deviation From Average": 60,
+            "Deviation From Enacted": 60,
+            "Population Equality": 60,
+            "Compactness": 60,
+            "Political Fairness": 60,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 70,
+            "Deviation From Average": 70,
+            "Deviation From Enacted": 70,
+            "Population Equality": 70,
+            "Compactness": 70,
+            "Political Fairness": 70,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 80,
+            "Deviation From Average": 80,
+            "Deviation From Enacted": 80,
+            "Population Equality": 80,
+            "Compactness": 80,
+            "Political Fairness": 80,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 90,
+            "Deviation From Average": 90,
+            "Deviation From Enacted": 90,
+            "Population Equality": 90,
+            "Compactness": 90,
+            "Political Fairness": 90,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 100,
+            "Deviation From Average": 100,
+            "Deviation From Enacted": 100,
+            "Population Equality": 100,
+            "Compactness": 100,
+            "Political Fairness": 100,
+            "Split Counties": 0
+        }
+    ],
+    "closeToEnacted" : [
+        {
+            "OFScore": 10,
+            "Deviation From Average": 10,
+            "Deviation From Enacted": 10,
+            "Population Equality": 10,
+            "Compactness": 10,
+            "Political Fairness": 10,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 20,
+            "Deviation From Average": 20,
+            "Deviation From Enacted": 20,
+            "Population Equality": 20,
+            "Compactness": 20,
+            "Political Fairness": 20,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 30,
+            "Deviation From Average": 30,
+            "Deviation From Enacted": 30,
+            "Population Equality": 30,
+            "Compactness": 30,
+            "Political Fairness": 30,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 40,
+            "Deviation From Average": 40,
+            "Deviation From Enacted": 40,
+            "Population Equality": 40,
+            "Compactness": 40,
+            "Political Fairness": 10,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 50,
+            "Deviation From Average": 50,
+            "Deviation From Enacted": 50,
+            "Population Equality": 50,
+            "Compactness": 50,
+            "Political Fairness": 50,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 60,
+            "Deviation From Average": 60,
+            "Deviation From Enacted": 60,
+            "Population Equality": 60,
+            "Compactness": 60,
+            "Political Fairness": 60,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 70,
+            "Deviation From Average": 70,
+            "Deviation From Enacted": 70,
+            "Population Equality": 70,
+            "Compactness": 70,
+            "Political Fairness": 70,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 80,
+            "Deviation From Average": 80,
+            "Deviation From Enacted": 80,
+            "Population Equality": 80,
+            "Compactness": 80,
+            "Political Fairness": 80,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 90,
+            "Deviation From Average": 90,
+            "Deviation From Enacted": 90,
+            "Population Equality": 90,
+            "Compactness": 90,
+            "Political Fairness": 90,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 100,
+            "Deviation From Average": 100,
+            "Deviation From Enacted": 100,
+            "Population Equality": 100,
+            "Compactness": 100,
+            "Political Fairness": 100,
+            "Split Counties": 0
+        }
+    ],
+    "areaPairDeviation" : [
+        {
+            "OFScore": 10,
+            "Deviation From Average": 10,
+            "Deviation From Enacted": 10,
+            "Population Equality": 10,
+            "Compactness": 10,
+            "Political Fairness": 10,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 20,
+            "Deviation From Average": 20,
+            "Deviation From Enacted": 20,
+            "Population Equality": 20,
+            "Compactness": 20,
+            "Political Fairness": 20,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 30,
+            "Deviation From Average": 30,
+            "Deviation From Enacted": 30,
+            "Population Equality": 30,
+            "Compactness": 30,
+            "Political Fairness": 30,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 40,
+            "Deviation From Average": 40,
+            "Deviation From Enacted": 40,
+            "Population Equality": 40,
+            "Compactness": 40,
+            "Political Fairness": 10,
+            "Split Counties": 0
+        },
+        {
+            "OFScore": 50,
+            "Deviation From Average": 50,
+            "Deviation From Enacted": 50,
+            "Population Equality": 50,
+            "Compactness": 50,
+            "Political Fairness": 50,
+            "Split Counties": 0
+        }
+    ]
+}
