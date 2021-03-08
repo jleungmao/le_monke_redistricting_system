@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import classes from './Sidepanel.module.css';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
@@ -7,6 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Container from '@material-ui/core/Container';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import Button from '@material-ui/core/Button';
+import SetConstraints from '../../components/Tabs/SetConstraint';
 import Boxplot from '../../components/Boxplot';
 import SetMeasures from '../../components/Tabs/SetMeasures';
 import {Route} from 'react-router-dom';
@@ -17,6 +18,10 @@ function Sidepanel(props) {
 
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [activeStep, setActiveStep] = useState(0);
+	const [incumbentProtection, setIncumbentProtection] = useState(0.5);
+	const [compactness, setCompactness] = useState(0);
+	const [populationEq, setPopulationEq] = useState(0);
+
 
 	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Set Measures', 'Select Districting'];
 						// Population equality.
@@ -58,35 +63,21 @@ function Sidepanel(props) {
 			<TabPanel value={activeStep} index={1}>
 				<Container maxWidth="sm">
 					<h5>Set Filtering Constraints</h5>
-					<Typography id="discrete-slider-small-steps" gutterBottom>
-						Slider 1
-      				</Typography>
-					<Slider
-						defaultValue={0.00000005}
-						aria-labelledby="discrete-slider-small-steps"
-						step={0.00000001}
-						marks
-						min={-0.00000005}
-						max={0.0000001}
-						valueLabelDisplay="auto"
-					/>
-					<br />
-					<Typography id="discrete-slider-small-steps" gutterBottom>
-						Slider 1
-      				</Typography>
-					<Slider
-						defaultValue={0.00000005}
-						aria-labelledby="discrete-slider-small-steps"
-						step={0.00000001}
-						marks
-						min={-0.00000005}
-						max={0.0000001}
-						valueLabelDisplay="auto"
-					/>
 				</Container>
 			</TabPanel>
 			<TabPanel value={activeStep} index={2}>
 				<Container maxWidth="sm">
+					<SetConstraints 
+						setIncumbentProtection={setIncumbentProtection} 
+						incumbentProtection={incumbentProtection}
+						compactness={compactness} 
+						setCompactness={setCompactness}
+						populationEq={populationEq} 
+						setPopulationEq={setPopulationEq}
+						title={'View Filtered Districts, using the objective function.'} />
+					<h1>{incumbentProtection}</h1>
+					<h1>{compactness}</h1>
+					<h1>{populationEq}</h1>
 					<h5>View Filtered Districts, using the objective function.</h5>
 				</Container>
 			</TabPanel>
