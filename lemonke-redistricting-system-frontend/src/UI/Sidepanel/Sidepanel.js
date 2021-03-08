@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import classes from './Sidepanel.module.css';
 import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import Container from '@material-ui/core/Container';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import Button from '@material-ui/core/Button';
@@ -12,6 +9,7 @@ import SetMeasures from '../../components/Tabs/SetMeasures';
 import SetConstraints from '../../components/Tabs/SetConstraint';
 import SelectJob from '../../components/Tabs/SelectJob';
 import SelectDistricting from '../../components/Tabs/SelectDistricting';
+import SelectState from '../../components/Tabs/SelectState';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { Route } from 'react-router-dom';
@@ -62,18 +60,7 @@ function Sidepanel(props) {
 
 				<TabPanel value={activeStep} index={0}>
 					<Container maxWidth="sm">
-						<h5>Select State</h5>
-						<Select
-							labelId="demo-customized-select-label"
-							id="demo-customized-select"
-							value={props.stateIndx}
-							onChange={(e) => props.setState(e.target.value)}
-						>
-							<MenuItem value={0}>NewYork</MenuItem>
-							<MenuItem value={1}>Florida</MenuItem>
-							<MenuItem value={2}>Texas</MenuItem>
-						</Select>
-						<ProgressBar></ProgressBar>
+						<SelectState stateIndx={props.stateIndx} setState={props.setState}/>
 					</Container>
 				</TabPanel>
 				<TabPanel value={activeStep} index={1}>
