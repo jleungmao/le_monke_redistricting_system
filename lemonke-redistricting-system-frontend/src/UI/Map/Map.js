@@ -2,13 +2,12 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl, { BoxZoomHandler } from 'mapbox-gl';
 import classes from './Map.module.css';
 import axios from 'axios';
-import geojsonMerge from 'geojson-merge';
 
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 function Map(props) {
-
+	console.log(props);
 	const mapContainer = useRef();
 	const [lng, setLng] = useState(props.initialState.longitude);
 	const [lat, setLat] = useState(props.initialState.latitude);
@@ -20,7 +19,7 @@ function Map(props) {
 
 	useEffect(() => {
 
-		if (!initialized){
+		if (!initialized && props.initialState.stateName == 'NewYork'){
 			axios.get('./2012_Congress.geojson')
 				.then(res => {
 					stateData = res.data;
@@ -44,9 +43,12 @@ function Map(props) {
 			container: mapContainer.current,
 			style: 'mapbox://styles/mapbox/streets-v11',
 			center: [lng, lat],
-			zoom: zoom
+			zoom: zoom,
+			maxBounds: [
+				[-107, 23], // Southwest coordinates
+				[-64.91058699000139, 47.87764500765852] // Northeast coordinates
+		]
 		});
-
 		map.dragRotate.disable();
 		
 		// On load

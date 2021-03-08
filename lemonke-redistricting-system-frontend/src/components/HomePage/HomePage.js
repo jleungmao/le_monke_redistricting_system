@@ -10,7 +10,7 @@ function HomePage() {
 	// https://material-ui.com/components/drawers/
 	// These are just other cool things I found on ther Website.
 	// https://material-ui.com/components/tabs/
-	const [state, setState] = useState(0);
+	const [state, setState] = useState(3);
 
 
 	let stateLocations = [
@@ -31,7 +31,13 @@ function HomePage() {
 			longitude: -99.5540,
 			latitude: 31.5156,
 			zoom: 5.20
-		}
+		},
+		{
+			stateName: 'startPos',
+			longitude: -85.5975,
+			latitude: 36.4289,
+			zoom: 4.55
+		},
 	]
 
 	return (
