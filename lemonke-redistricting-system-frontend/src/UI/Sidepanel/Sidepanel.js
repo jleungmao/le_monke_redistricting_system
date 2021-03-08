@@ -76,19 +76,13 @@ function Sidepanel(props) {
 						votingAge={votingAge} 
 						setVotingAge={setVotingAge}
 						citizenVotingAge={citizenVotingAge}
-						setCitizenVotingAge={setCitizenVotingAge}
-						title={'View Filtered Districts, using the objective function.'} />
+						setCitizenVotingAge={setCitizenVotingAge}/>
 				</Container>
 			</TabPanel>
 			<TabPanel value={activeStep} index={3}>
 				<Container maxWidth="sm">
 					<Route exact path='/' component={SetMeasures}></Route>
 				</Container>
-				</TabPanel>
-				<TabPanel value={activeStep} index={3}>
-					<Container maxWidth="sm">
-						<Route exact path='/' component={SetMeasures}></Route>
-					</Container>
 				</TabPanel>
 				<TabPanel value={activeStep} index={4}>
 					<Container maxWidth="sm">
