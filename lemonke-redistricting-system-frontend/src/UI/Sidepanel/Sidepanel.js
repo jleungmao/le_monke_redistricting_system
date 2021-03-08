@@ -19,7 +19,8 @@ function Sidepanel(props) {
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [activeStep, setActiveStep] = useState(0);
 	const [compactness, setCompactness] = useState(0.5);
-	const [populationEq, setPopulationEq] = useState(0.5);
+	const [votingAge, setVotingAge] = useState(0.5);
+	const [citizenVotingAge, setCitizenVotingAge] = useState(0.5);
 
 
 	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Set Measures', 'Select Districting'];
@@ -69,8 +70,10 @@ function Sidepanel(props) {
 					<SetConstraints 
 						compactness={compactness} 
 						setCompactness={setCompactness}
-						populationEq={populationEq} 
-						setPopulationEq={setPopulationEq}
+						votingAge={votingAge} 
+						setVotingAge={setVotingAge}
+						citizenVotingAge={citizenVotingAge}
+						setCitizenVotingAge={setCitizenVotingAge}
 						title={'View Filtered Districts, using the objective function.'} />
 				</Container>
 			</TabPanel>

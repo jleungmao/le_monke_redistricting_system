@@ -19,7 +19,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,6 +40,20 @@ const useStyles = makeStyles((theme) => ({
 	title: {
 		fontSize: 14,
 	},
+	button: {
+		display: 'block',
+		marginTop: theme.spacing(2),
+	},
+	formControl: {
+		margin: theme.spacing(1),
+		minWidth: 120,
+	},
+	rail: {
+		height: 24,
+		width: "14px !important",
+		borderRadius: 24,
+		opacity: 1,
+	}
 }));
 
 
@@ -45,50 +61,64 @@ function SetConstraints(props) {
 
 	const [incumbentProtection, setIncumbentProtection] = useState(props.incumbentProtection);
 	const [compactness, setCompactness] = useState(props.compactness);
-	const [populationEq, setPopulationEq] = useState(props.populationEq);
+	const [votingAge, setVotingAge] = useState(props.votingAge);
+	const [citizenVotingAge, setCitizenVotingAge] = useState(props.citizenVotingAge)
 	const [value, setValue] = useState('pp');
 	const [open, setOpen] = useState(false);
+	const [openMinMaxDis, setOpenMinMaxDis] = useState(false);
+	const [minMaxDis, setMinMaxDis] = useState('');
 	const classes = useStyles();
+
 
 	let incumbents = [{
 		name: 'Jack',
 		last: 'Moron',
-		state: 'NY'
+		state: 'NY',
+		district: 1
 	},
 	{
 		name: 'Ben',
 		last: 'Flin',
-		state: 'NY'
+		state: 'NY',
+		district: 3
 	},
 	{
 		name: 'Fin',
 		last: 'Butler',
-		state: 'NY'
+		state: 'NY',
+		district: 4
 	},
 	{
 		name: 'Leon',
 		last: 'Kak',
-		state: 'NY'
+		state: 'NY',
+		district: 9
 	},
 	{
 		name: 'Derek',
 		last: 'Wein',
-		state: 'NY'
+		state: 'NY',
+		district: 17
 	},
 	{
 		name: 'George',
 		last: 'Ohot',
-		state: 'NY'
+		state: 'NY',
+		district: 6
 	},
 	{
 		name: 'Andrey',
 		last: 'Paley',
-		state: 'NY'
+		state: 'NY',
+		district: 7
 	}]
 
-	useEffect(() => {
+	let minMaxDisSelection = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
+	// jsut there to update on 'open'
+	useEffect(() => {
 	}, [open])
+
 
 
 	const marks = [
@@ -99,6 +129,10 @@ function SetConstraints(props) {
 		{
 			value: 1,
 			label: '1'
+		},
+		{
+			value: 100,
+			label: '100'
 		}
 	]
 
@@ -115,7 +149,7 @@ function SetConstraints(props) {
 									{inc.name + ' ' + inc.last}
 								</Typography>
 								<Typography className={classes.pos} color="textSecondary">
-									{inc.state}
+									{inc.state}, district {inc.district}
 								</Typography>
 								<Typography variant="body2" component="p">
 									Keep them safe
@@ -185,7 +219,7 @@ function SetConstraints(props) {
 			>
 				<br />
 				<br />
-				
+
 				<Grid item xs={12} style={{ padding: '10px' }}>
 					<Typography gutterBottom variant='h4'>Set Protected Incumbents</Typography>
 					<Button variant="outlined" color="primary" onClick={handleClickOpen}>
@@ -195,15 +229,15 @@ function SetConstraints(props) {
 				</Grid>
 				<br />
 				<br />
-				
+
 				<Grid item xs={12} style={{ padding: '10px' }}>
 					{/* THe form to select compactness */}
-					<Typography gutterBottom  variant='h4'>Select Compactness</Typography>
+					<Typography gutterBottom variant='h4'>Select Compactness</Typography>
 					{/* <FormControl component="fieldset"> */}
 					<RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
 						<FormControlLabel value="pp" control={<Radio />} label="Polsby-Popper" />
-						<FormControlLabel value="gc" control={<Radio />} label="GraphCompactness" />
-						<FormControlLabel value="fat" control={<Radio />} label="Fatness" />
+						<FormControlLabel value="gc" control={<Radio />} label="Graph Compactness" />
+						<FormControlLabel value="fat" control={<Radio />} label="Population Fatness" />
 					</RadioGroup>
 					{/* </FormControl> */}
 					<Slider
@@ -222,9 +256,8 @@ function SetConstraints(props) {
 				</Grid>
 				<br />
 				<br />
-				
 				<Grid item xs={12} style={{ padding: '10px' }}>
-					<Typography gutterBottom variant='h4'>Population Equality Constraint</Typography>
+					{/* <Typography gutterBottom variant='h4'>Population Equality Constraint</Typography>
 					<Slider
 						value={typeof populationEq === 'number' ? populationEq : 0}
 						onChange={(e, val) => setPopulationEq(val)}
@@ -236,6 +269,72 @@ function SetConstraints(props) {
 						min={0}
 						max={1}
 						marks={marks}
+						valueLabelDisplay="auto"
+					/> */}
+					<Typography gutterBottom variant='h4'>Majority-Minority Districts</Typography>
+					<FormControl className={classes.formControl}>
+						<Select
+							labelId="demo-controlled-open-select-label"
+							id="demo-controlled-open-select"
+							open={openMinMaxDis}
+							onClose={() => setOpenMinMaxDis(false)}
+							onOpen={() => setOpenMinMaxDis(true)}
+							value={minMaxDis}
+							onChange={(e) => setMinMaxDis(e.target.value)}
+						>
+							<MenuItem value="">
+								<em>None</em>
+							</MenuItem>
+							{minMaxDisSelection.map(val => (<MenuItem value={val}>{val}</MenuItem>))}
+						</Select>
+					</FormControl>
+				</Grid>
+				<br />
+				<br />
+				<Grid item xs={12} style={{ padding: '10px' }}>
+					<Typography gutterBottom variant='h4'>Voting Age Constraint</Typography>
+					<Typography gutterBottom >Voting Age Population (TVAP)</Typography>
+					<Slider
+						value={typeof votingAge === 'number' ? votingAge : 0}
+						onChange={(e, val) => setVotingAge(val)}
+						onChangeCommitted={(e, val) => {
+							e.preventDefault();
+							props.setVotingAge(val)
+						}}
+						disabled={true}
+						step={0.01}
+						min={0}
+						max={1}
+						marks={[{
+							value: 0,
+							label: '0'
+						},
+						{
+							value: 100,
+							label: 'maxPop'
+						}]}
+						valueLabelDisplay="auto"
+					/>
+					<Typography gutterBottom >Citizen Voting Age Population (CVAP)</Typography>
+					<Slider
+						// value={typeof citizenVotingAge === 'array' ? [citizenVotingAge, citizenVotingAge+1]  : [0,1]}
+						value={[citizenVotingAge, citizenVotingAge + 90]}
+						onChange={(e, val) => setCitizenVotingAge(val[0])}
+						onChangeCommitted={(e, val) => {
+							e.preventDefault();
+							props.setCitizenVotingAge(val[0])
+						}}
+						step={0.01}
+						min={0}
+						max={100}
+						marks={[{
+							value: 0,
+							label: '0'
+						},
+						{
+							value: 100,
+							label: 'maxPop'
+						}]}
 						valueLabelDisplay="auto"
 					/>
 				</Grid>
