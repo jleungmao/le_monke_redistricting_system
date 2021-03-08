@@ -94,7 +94,6 @@ function Sidepanel(props) {
 						<h1>{incumbentProtection}</h1>
 						<h1>{compactness}</h1>
 						<h1>{populationEq}</h1>
-					<h5>View Filtered Districts, using the objective function.</h5>
 				</Container>
 				</TabPanel>
 				<TabPanel value={activeStep} index={3}>
