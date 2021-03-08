@@ -15,6 +15,7 @@ function Map(props) {
 	let map;
 	let inialized = 0
 	let stateData;
+	let selectedDistrictId = null;
 
 	useEffect(async () => {
 
@@ -26,11 +27,21 @@ function Map(props) {
 				zoom: zoom
 			});
 			axios.get('./2012_Congress.geojson')
-			.then(res=> {
-				console.log(res);
-				stateData = res.data;
-			});
-			
+				.then(res => {
+					stateData = res.data;
+					// preprocessing
+					let i = 1;
+					for (var feature of stateData.features) {
+						feature.properties = {
+							"demographic_data": Math.random() * 30000,
+							"color": addColor(),
+						};
+						feature.id = i;
+						i++;
+					}
+					console.log(stateData);
+				});
+
 			inialized = 1;
 		} else {
 			setLng(props.initialState.longitude);
@@ -69,6 +80,30 @@ function Map(props) {
 			// add navigation control (the +/- zoom buttons)
 			map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 			populatingLayers(map, stateData, firstSymbolId);
+
+
+			//highlight district
+			map.on('click', 'districts', function (e) {
+				if (e.features.length > 0) {
+					if (selectedDistrictId
+					) {
+						map.setFeatureState(
+							{
+								source: 'new-york', id: selectedDistrictId
+							},
+							{ hover: false }
+						);
+					}
+					selectedDistrictId = e.features[0].id;
+					console.log(selectedDistrictId);
+					map.setFeatureState(
+						{
+							source: 'new-york', id: selectedDistrictId
+						},
+						{ hover: true }
+					);
+				}
+			});
 		});
 	}, [props.initialState]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -77,32 +112,41 @@ function Map(props) {
 	// Add all districts onto the map
 	// Probably running thought a loop and "addLayer" for each of the distr.
 	const populatingLayers = (map, stateData, firstSymbolId) => {
-		let i = 1;
-		for (var feature of stateData.features) {
+		// the id should be the state, and possibly districting number
+		console.log(stateData);
+		map.addSource(
+			'new-york',
+			{
+				type: "geojson",
+				data: stateData
+			}
+		);
+		console.log(map.getSource('new-york'));
+		map.addLayer({
+			id: 'districts',
+			type: 'fill',
+			source: 'new-york',
+			paint: {
+				'fill-color': ['get', 'color'],
+				'fill-opacity': [
+					'case',
+					['boolean', ['feature-state', 'hover'], false],
+					1,
+					0.5
+				]
+			},
+		}, firstSymbolId);
 
-			//current method adds a source for every district, looking into better way to implement 
-			//one idea is when loading a new districting we clear the sources
-			map.addSource(
-				i.toString(),
-				{
-					type: "geojson",
-					data: feature
-				}
-			);
-
-			map.addLayer({
-				id: 'district' + i.toString(),
-				type: 'fill',
-				source: i.toString(),
-				paint: {
-					'fill-color': addColor(),
-					'fill-opacity': 0.8
-				}
-			}, firstSymbolId);
-			i++;
-		}
-		// map.moveLayer('water', 'district' + i.toString() + 1)
-		console.log(i)
+		map.addLayer({
+			'id': 'district-borders',
+			'type': 'line',
+			'source': 'new-york',
+			'layout': {},
+			'paint': {
+				'line-color': 'black',
+				'line-width': 2
+			}
+		});
 	}
 
 	// TODO:
