@@ -15,6 +15,10 @@ function Map(props) {
 	let stateData;
 	let initialized = 0;
 	let selectedDistrictId = null;
+	let bounds = [
+			[-107, 23], // Southwest coordinates
+			[-64.91058699000139, 47.87764500765852] // Northeast coordinates
+	];
 
 	useEffect(() => {
 
@@ -43,10 +47,7 @@ function Map(props) {
 			style: 'mapbox://styles/mapbox/streets-v11',
 			center: [lng, lat],
 			zoom: zoom,
-			maxBounds: [
-				[-107, 23], // Southwest coordinates
-				[-64.91058699000139, 47.87764500765852] // Northeast coordinates
-		]
+			maxBounds: bounds
 		});
 		map.dragRotate.disable();
 		
