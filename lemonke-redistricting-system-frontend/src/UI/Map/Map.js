@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl, { BoxZoomHandler } from 'mapbox-gl';
 import classes from './Map.module.css';
-import geojsonMerge from 'geojson-merge';
 import axios from 'axios';
+import geojsonMerge from 'geojson-merge';
 
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -16,9 +16,29 @@ function Map(props) {
 	let map;
 	let stateData;
 	let initialized = 0;
-
+	let selectedDistrictId = null;
 
 	useEffect(() => {
+
+		if (!initialized){
+			axios.get('./2012_Congress.geojson')
+				.then(res => {
+					stateData = res.data;
+					// preprocessing
+					let i = 1;
+					for (var feature of stateData.features) {
+						feature.properties = {
+							"demographic_data": Math.random() * 30000,
+							"color": addColor(),
+						};
+						feature.id = i;
+						i++;
+					}
+					console.log(stateData);
+				});
+
+			initialized = 1;
+		}
 
 		map = new mapboxgl.Map({
 			container: mapContainer.current,
@@ -28,12 +48,7 @@ function Map(props) {
 		});
 
 		map.dragRotate.disable();
-
-		// stateData = await axios('./2012_Congress.geojson');
-		loadJSONFile(function (response) {
-			stateData = JSON.parse(response);
-		}, './2012_Congress.geojson');
-
+		
 		// On load
 		map.on('load', () => {
 			console.log("onload")
@@ -59,6 +74,30 @@ function Map(props) {
 			// add navigation control (the +/- zoom buttons)
 			map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 			populatingLayers(map, stateData, firstSymbolId);
+
+
+			//highlight district
+			map.on('click', 'districts', function (e) {
+				if (e.features.length > 0) {
+					if (selectedDistrictId
+					) {
+						map.setFeatureState(
+							{
+								source: 'new-york', id: selectedDistrictId
+							},
+							{ hover: false }
+						);
+					}
+					selectedDistrictId = e.features[0].id;
+					console.log(selectedDistrictId);
+					map.setFeatureState(
+						{
+							source: 'new-york', id: selectedDistrictId
+						},
+						{ hover: true }
+					);
+				}
+			});
 		});
 
 		// On move
@@ -80,49 +119,41 @@ function Map(props) {
 	// Add all districts onto the map
 	// Probably running thought a loop and "addLayer" for each of the distr.
 	const populatingLayers = (map, stateData, firstSymbolId) => {
-		let i = 1;
-		for (var feature of stateData.features) {
-
-			//current method adds a source for every district, looking into better way to implement 
-			//one idea is when loading a new districting we clear the sources
-			map.addSource(
-				i.toString(),
-				{
-					type: "geojson",
-					data: feature
-				}
-			);
-
-			map.addLayer({
-				id: 'district' + i.toString(),
-				type: 'fill',
-				source: i.toString(),
-				paint: {
-					'fill-color': addColor(),
-					'fill-opacity': 0.8
-				}
-			}, firstSymbolId);
-			i++;
-		}
-	}
-
-	function loadJSONFile(callback, url) {
-		//ideally we get the url via a callback once a job is loaded in
-
-		var xmlobj = new XMLHttpRequest();
-
-		xmlobj.overrideMimeType("application/json");
-
-		xmlobj.open('GET', url, true);
-
-		xmlobj.onreadystatechange = function () {
-			if (xmlobj.readyState == 4 && xmlobj.status == "200") {
-				// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-				callback(xmlobj.responseText);
+		// the id should be the state, and possibly districting number
+		console.log(stateData);
+		map.addSource(
+			'new-york',
+			{
+				type: "geojson",
+				data: stateData
 			}
-		};
+		);
+		console.log(map.getSource('new-york'));
+		map.addLayer({
+			id: 'districts',
+			type: 'fill',
+			source: 'new-york',
+			paint: {
+				'fill-color': ['get', 'color'],
+				'fill-opacity': [
+					'case',
+					['boolean', ['feature-state', 'hover'], false],
+					1,
+					0.5
+				]
+			},
+		}, firstSymbolId);
 
-		xmlobj.send(null);
+		map.addLayer({
+			'id': 'district-borders',
+			'type': 'line',
+			'source': 'new-york',
+			'layout': {},
+			'paint': {
+				'line-color': 'black',
+				'line-width': 2
+			}
+		});
 	}
 
 	// TODO:
