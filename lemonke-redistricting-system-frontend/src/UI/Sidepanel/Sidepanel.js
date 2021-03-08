@@ -21,9 +21,9 @@ function Sidepanel(props) {
 
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [activeStep, setActiveStep] = useState(0);
-	const [incumbentProtection, setIncumbentProtection] = useState(0.5);
-	const [compactness, setCompactness] = useState(0);
-	const [populationEq, setPopulationEq] = useState(0);
+	const [compactness, setCompactness] = useState(0.5);
+	const [votingAge, setVotingAge] = useState(0.5);
+	const [citizenVotingAge, setCitizenVotingAge] = useState(0.5);
 
 	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Set Measures', 'Select Districting'];
 	// Population equality.
@@ -35,7 +35,7 @@ function Sidepanel(props) {
 	function TabPanel(props) {
 		const { index, value, children, ...other } = props;
 		return (
-			<>{value === index && (<h1>{children}</h1>)}</>
+			<div>{value === index && <>{children}</>}</div>
 		)
 	}
 
@@ -84,16 +84,18 @@ function Sidepanel(props) {
 				<TabPanel value={activeStep} index={2}>
 					<Container maxWidth="sm">
 					<SetConstraints 
-							setIncumbentProtection={setIncumbentProtection} 
-							incumbentProtection={incumbentProtection}
-							compactness={compactness} 
-							setCompactness={setCompactness}
-							populationEq={populationEq} 
-							setPopulationEq={setPopulationEq}
-							title={'View Filtered Districts, using the objective function.'} />
-						<h1>{incumbentProtection}</h1>
-						<h1>{compactness}</h1>
-						<h1>{populationEq}</h1>
+						compactness={compactness} 
+						setCompactness={setCompactness}
+						votingAge={votingAge} 
+						setVotingAge={setVotingAge}
+						citizenVotingAge={citizenVotingAge}
+						setCitizenVotingAge={setCitizenVotingAge}
+						title={'View Filtered Districts, using the objective function.'} />
+				</Container>
+			</TabPanel>
+			<TabPanel value={activeStep} index={3}>
+				<Container maxWidth="sm">
+					<Route exact path='/' component={SetMeasures}></Route>
 				</Container>
 				</TabPanel>
 				<TabPanel value={activeStep} index={3}>
