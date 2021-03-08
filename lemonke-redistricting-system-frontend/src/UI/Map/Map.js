@@ -3,7 +3,6 @@ import mapboxgl, { BoxZoomHandler } from 'mapbox-gl';
 import classes from './Map.module.css';
 import axios from 'axios';
 import geojsonMerge from 'geojson-merge';
-import axios from 'axios';
 
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -38,7 +37,7 @@ function Map(props) {
 					console.log(stateData);
 				});
 
-			inialized = 1;
+			initialized = 1;
 		}
 
 		map = new mapboxgl.Map({
@@ -49,12 +48,7 @@ function Map(props) {
 		});
 
 		map.dragRotate.disable();
-
-		// stateData = await axios('./2012_Congress.geojson');
-		loadJSONFile(function (response) {
-			stateData = JSON.parse(response);
-		}, './2012_Congress.geojson');
-
+		
 		// On load
 		map.on('load', () => {
 			console.log("onload")
