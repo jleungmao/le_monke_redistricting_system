@@ -18,7 +18,7 @@ function SetMeasures() {
 
 
     return (
-        <>
+        <><div style={{maxHeight: '60%', overflow: 'auto', position: 'fixed' }}>
             <h5>Set Objective Function Weight</h5>
             <Typography id="discrete-slider-small-steps" gutterBottom>
                 Population equality
@@ -93,6 +93,7 @@ function SetMeasures() {
                 valueLabelDisplay="auto"
                 marks={marks}
             />
+        </div>
         </>
     )
 }

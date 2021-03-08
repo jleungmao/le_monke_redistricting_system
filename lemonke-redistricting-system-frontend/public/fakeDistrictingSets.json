@@ -7,7 +7,8 @@
             "Population Equality": 10,
             "Compactness": 10,
             "Political Fairness": 10,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 20,
@@ -16,7 +17,8 @@
             "Population Equality": 20,
             "Compactness": 20,
             "Political Fairness": 20,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 30,
@@ -25,7 +27,8 @@
             "Population Equality": 30,
             "Compactness": 30,
             "Political Fairness": 30,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 40,
@@ -34,7 +37,8 @@
             "Population Equality": 40,
             "Compactness": 40,
             "Political Fairness": 10,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 50,
@@ -43,7 +47,8 @@
             "Population Equality": 50,
             "Compactness": 50,
             "Political Fairness": 50,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 60,
@@ -52,7 +57,8 @@
             "Population Equality": 60,
             "Compactness": 60,
             "Political Fairness": 60,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 70,
@@ -61,7 +67,8 @@
             "Population Equality": 70,
             "Compactness": 70,
             "Political Fairness": 70,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 80,
@@ -70,7 +77,8 @@
             "Population Equality": 80,
             "Compactness": 80,
             "Political Fairness": 80,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 90,
@@ -79,7 +87,8 @@
             "Population Equality": 90,
             "Compactness": 90,
             "Political Fairness": 90,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 100,
@@ -88,45 +97,50 @@
             "Population Equality": 100,
             "Compactness": 100,
             "Political Fairness": 100,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         }
     ],
     "majorityMinority": [
         {
-            "OFScore": 10,
-            "Deviation From Average": 10,
-            "Deviation From Enacted": 10,
-            "Population Equality": 10,
-            "Compactness": 10,
-            "Political Fairness": 10,
-            "Split Counties": 0
+            "OFScore": 11,
+            "Deviation From Average": 11,
+            "Deviation From Enacted": 11,
+            "Population Equality": 11,
+            "Compactness": 11,
+            "Political Fairness": 11,
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
-            "OFScore": 20,
-            "Deviation From Average": 20,
-            "Deviation From Enacted": 20,
-            "Population Equality": 20,
-            "Compactness": 20,
-            "Political Fairness": 20,
-            "Split Counties": 0
+            "OFScore": 21,
+            "Deviation From Average": 21,
+            "Deviation From Enacted": 21,
+            "Population Equality": 21,
+            "Compactness": 21,
+            "Political Fairness": 21,
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
-            "OFScore": 30,
-            "Deviation From Average": 30,
-            "Deviation From Enacted": 30,
-            "Population Equality": 30,
-            "Compactness": 30,
-            "Political Fairness": 30,
-            "Split Counties": 0
+            "OFScore": 31,
+            "Deviation From Average": 31,
+            "Deviation From Enacted": 31,
+            "Population Equality": 31,
+            "Compactness": 31,
+            "Political Fairness": 31,
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
-            "OFScore": 40,
-            "Deviation From Average": 40,
-            "Deviation From Enacted": 40,
-            "Population Equality": 40,
-            "Compactness": 40,
-            "Political Fairness": 10,
-            "Split Counties": 0
+            "OFScore": 41,
+            "Deviation From Average": 41,
+            "Deviation From Enacted": 41,
+            "Population Equality": 41,
+            "Compactness": 41,
+            "Political Fairness": 41,
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 50,
@@ -135,7 +149,8 @@
             "Population Equality": 50,
             "Compactness": 50,
             "Political Fairness": 50,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 60,
@@ -144,7 +159,8 @@
             "Population Equality": 60,
             "Compactness": 60,
             "Political Fairness": 60,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 70,
@@ -153,7 +169,8 @@
             "Population Equality": 70,
             "Compactness": 70,
             "Political Fairness": 70,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 80,
@@ -162,7 +179,8 @@
             "Population Equality": 80,
             "Compactness": 80,
             "Political Fairness": 80,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 90,
@@ -171,7 +189,8 @@
             "Population Equality": 90,
             "Compactness": 90,
             "Political Fairness": 90,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 100,
@@ -180,54 +199,60 @@
             "Population Equality": 100,
             "Compactness": 100,
             "Political Fairness": 100,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         }
     ],
     "closeToEnacted" : [
         {
-            "OFScore": 10,
-            "Deviation From Average": 10,
-            "Deviation From Enacted": 10,
-            "Population Equality": 10,
-            "Compactness": 10,
-            "Political Fairness": 10,
-            "Split Counties": 0
+            "OFScore": 77,
+            "Deviation From Average": 77,
+            "Deviation From Enacted": 77,
+            "Population Equality": 77,
+            "Compactness": 77,
+            "Political Fairness": 77,
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
-            "OFScore": 20,
-            "Deviation From Average": 20,
-            "Deviation From Enacted": 20,
-            "Population Equality": 20,
-            "Compactness": 20,
-            "Political Fairness": 20,
-            "Split Counties": 0
+            "OFScore": 13,
+            "Deviation From Average": 15,
+            "Deviation From Enacted": 23,
+            "Population Equality": 26,
+            "Compactness": 84,
+            "Political Fairness": 52,
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
-            "OFScore": 30,
-            "Deviation From Average": 30,
-            "Deviation From Enacted": 30,
-            "Population Equality": 30,
-            "Compactness": 30,
-            "Political Fairness": 30,
-            "Split Counties": 0
+            "OFScore": 76,
+            "Deviation From Average": 12,
+            "Deviation From Enacted": 64,
+            "Population Equality": 12,
+            "Compactness": 22,
+            "Political Fairness": 46,
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 40,
-            "Deviation From Average": 40,
-            "Deviation From Enacted": 40,
-            "Population Equality": 40,
-            "Compactness": 40,
-            "Political Fairness": 10,
-            "Split Counties": 0
+            "Deviation From Average": 84,
+            "Deviation From Enacted": 2,
+            "Population Equality": 3,
+            "Compactness": 42,
+            "Political Fairness": 77,
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
-            "OFScore": 50,
-            "Deviation From Average": 50,
-            "Deviation From Enacted": 50,
-            "Population Equality": 50,
-            "Compactness": 50,
-            "Political Fairness": 50,
-            "Split Counties": 0
+            "OFScore": 1,
+            "Deviation From Average": 1,
+            "Deviation From Enacted": 1,
+            "Population Equality": 1,
+            "Compactness": 0,
+            "Political Fairness": 12,
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 60,
@@ -236,7 +261,8 @@
             "Population Equality": 60,
             "Compactness": 60,
             "Political Fairness": 60,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 70,
@@ -245,16 +271,18 @@
             "Population Equality": 70,
             "Compactness": 70,
             "Political Fairness": 70,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
-            "OFScore": 80,
-            "Deviation From Average": 80,
-            "Deviation From Enacted": 80,
-            "Population Equality": 80,
-            "Compactness": 80,
-            "Political Fairness": 80,
-            "Split Counties": 0
+            "OFScore": 4,
+            "Deviation From Average": 123,
+            "Deviation From Enacted": 1,
+            "Population Equality": 23,
+            "Compactness": 11,
+            "Political Fairness": 11,
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 90,
@@ -263,7 +291,8 @@
             "Population Equality": 90,
             "Compactness": 90,
             "Political Fairness": 90,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 100,
@@ -272,7 +301,8 @@
             "Population Equality": 100,
             "Compactness": 100,
             "Political Fairness": 100,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         }
     ],
     "areaPairDeviation" : [
@@ -283,7 +313,8 @@
             "Population Equality": 10,
             "Compactness": 10,
             "Political Fairness": 10,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 20,
@@ -292,7 +323,8 @@
             "Population Equality": 20,
             "Compactness": 20,
             "Political Fairness": 20,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 30,
@@ -301,7 +333,8 @@
             "Population Equality": 30,
             "Compactness": 30,
             "Political Fairness": 30,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 40,
@@ -310,7 +343,8 @@
             "Population Equality": 40,
             "Compactness": 40,
             "Political Fairness": 10,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         },
         {
             "OFScore": 50,
@@ -319,7 +353,8 @@
             "Population Equality": 50,
             "Compactness": 50,
             "Political Fairness": 50,
-            "Split Counties": 0
+            "Split Counties": 0,
+            "GeoJSON": ""
         }
     ]
 }

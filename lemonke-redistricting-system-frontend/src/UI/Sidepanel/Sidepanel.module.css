@@ -1,4 +1,4 @@
-.sidepanel{
+/* .sidepanel{
 	position: fixed;
 	width: 30%;
 	height: 100%;
@@ -6,13 +6,8 @@
 	background-color: white;
 	border: 2px solid black;
 	border-radius: 10px;
-	/* opacity: 0.4; */
-}
+} */
 
-.tabs{
-	border-bottom: 1px solid #ccc;
-	background-color: #f1f1f1;
-}
  
 .tabContent{
 	position: fixed;

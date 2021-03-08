@@ -113,7 +113,6 @@ function Sidepanel(props) {
 				</TabPanel>
 				<TabPanel value={activeStep} index={4}>
 					<Container maxWidth="sm">
-						<h5>Districting Stats</h5>
 						<SelectDistricting />
 						{/* <Route exact path='/' component={Boxplot}></Route> */}
 					</Container>

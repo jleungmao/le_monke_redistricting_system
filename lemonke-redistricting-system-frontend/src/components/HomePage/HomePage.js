@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Sidepanel from '../../UI/Sidepanel/Sidepanel';
+import Paper from '@material-ui/core/Paper'
 import Map from '../../UI/Map/Map';
 
 function HomePage() {
@@ -36,8 +37,10 @@ function HomePage() {
 
 	return (
 		<>
-			<Sidepanel stateIndx={state} setState={setState}/>
-			<Map initialState={stateLocations[state]}/>
+			<Paper style={{width: '30%', height: '100%', overflow: 'auto', position: 'fixed' }}>
+				<Sidepanel stateIndx={state} setState={setState} />
+			</Paper>
+			<Map initialState={stateLocations[state]} />
 		</>
 	)
 }
