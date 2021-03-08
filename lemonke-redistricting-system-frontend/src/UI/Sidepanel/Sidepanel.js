@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import classes from './Sidepanel.module.css';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
@@ -7,13 +7,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Container from '@material-ui/core/Container';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import Button from '@material-ui/core/Button';
-// import Boxplot from '../../components/Boxplot';
+//import Boxplot from '../../components/Boxplot';
 import SetMeasures from '../../components/Tabs/SetMeasures';
+import SetConstraints from '../../components/Tabs/SetConstraint';
+import SelectJob from '../../components/Tabs/SelectJob';
 import SelectDistricting from '../../components/Tabs/SelectDistricting';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { Route } from 'react-router-dom';
-
 
 function Sidepanel(props) {
 
@@ -23,7 +24,6 @@ function Sidepanel(props) {
 	const [incumbentProtection, setIncumbentProtection] = useState(0.5);
 	const [compactness, setCompactness] = useState(0);
 	const [populationEq, setPopulationEq] = useState(0);
-
 
 	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Set Measures', 'Select Districting'];
 	// Population equality.
@@ -54,6 +54,7 @@ function Sidepanel(props) {
 			<div>{getTab(value)}</div>
 		</div>
 	)
+  
 	function getTab(value) {
 		if (value == 0) {
 			return <div className = {classes.tabContent}>
@@ -77,38 +78,24 @@ function Sidepanel(props) {
 				</TabPanel>
 				<TabPanel value={activeStep} index={1}>
 					<Container maxWidth="sm">
-						<h5>Set Filtering Constraints</h5>
-						<Typography id="discrete-slider-small-steps" gutterBottom>
-							Slider 1
-	  							</Typography>
-						<Slider
-							defaultValue={0.00000005}
-							aria-labelledby="discrete-slider-small-steps"
-							step={0.00000001}
-							marks
-							min={-0.00000005}
-							max={0.0000001}
-							valueLabelDisplay="auto"
-						/>
-						<br />
-						<Typography id="discrete-slider-small-steps" gutterBottom>
-							Slider 1
-	  							</Typography>
-						<Slider
-							defaultValue={0.00000005}
-							aria-labelledby="discrete-slider-small-steps"
-							step={0.00000001}
-							marks
-							min={-0.00000005}
-							max={0.0000001}
-							valueLabelDisplay="auto"
-						/>
+						<Route exact path='/' component={SelectJob}></Route>
 					</Container>
 				</TabPanel>
 				<TabPanel value={activeStep} index={2}>
 					<Container maxWidth="sm">
-						<h5>View Filtered Districts, using the objective function.</h5>
-					</Container>
+					<SetConstraints 
+							setIncumbentProtection={setIncumbentProtection} 
+							incumbentProtection={incumbentProtection}
+							compactness={compactness} 
+							setCompactness={setCompactness}
+							populationEq={populationEq} 
+							setPopulationEq={setPopulationEq}
+							title={'View Filtered Districts, using the objective function.'} />
+						<h1>{incumbentProtection}</h1>
+						<h1>{compactness}</h1>
+						<h1>{populationEq}</h1>
+					<h5>View Filtered Districts, using the objective function.</h5>
+				</Container>
 				</TabPanel>
 				<TabPanel value={activeStep} index={3}>
 					<Container maxWidth="sm">
