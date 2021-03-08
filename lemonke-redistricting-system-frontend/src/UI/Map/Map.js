@@ -7,7 +7,6 @@ import axios from 'axios';
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 function Map(props) {
-	console.log(props);
 	const mapContainer = useRef();
 	const [lng, setLng] = useState(props.initialState.longitude);
 	const [lat, setLat] = useState(props.initialState.latitude);
@@ -85,7 +84,7 @@ function Map(props) {
 					) {
 						map.setFeatureState(
 							{
-								source: 'new-york', id: selectedDistrictId
+								source: props.initialState.stateName, id: selectedDistrictId
 							},
 							{ hover: false }
 						);
@@ -94,7 +93,7 @@ function Map(props) {
 					console.log(selectedDistrictId);
 					map.setFeatureState(
 						{
-							source: 'new-york', id: selectedDistrictId
+							source: props.initialState.stateName, id: selectedDistrictId
 						},
 						{ hover: true }
 					);
@@ -124,17 +123,17 @@ function Map(props) {
 		// the id should be the state, and possibly districting number
 		console.log(stateData);
 		map.addSource(
-			'new-york',
+			props.initialState.stateName,
 			{
 				type: "geojson",
 				data: stateData
 			}
 		);
-		console.log(map.getSource('new-york'));
+		console.log(map.getSource(props.initialState.stateName));
 		map.addLayer({
 			id: 'districts',
 			type: 'fill',
-			source: 'new-york',
+			source: props.initialState.stateName,
 			paint: {
 				'fill-color': ['get', 'color'],
 				'fill-opacity': [
@@ -149,7 +148,7 @@ function Map(props) {
 		map.addLayer({
 			'id': 'district-borders',
 			'type': 'line',
-			'source': 'new-york',
+			'source': props.initialState.stateName,
 			'layout': {},
 			'paint': {
 				'line-color': 'black',
