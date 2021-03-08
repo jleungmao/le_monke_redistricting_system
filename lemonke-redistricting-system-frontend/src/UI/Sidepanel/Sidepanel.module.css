@@ -14,8 +14,8 @@
 	background-color: #f1f1f1;
 }
  
-.tablinks{
-	background-color: inherit;
-	outline: none;
-	border: none;
+.tabContent{
+	position: fixed;
+	width: 30%;
+	height: 100%;
 }
