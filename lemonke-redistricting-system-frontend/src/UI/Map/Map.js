@@ -2,13 +2,11 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl, { BoxZoomHandler } from 'mapbox-gl';
 import classes from './Map.module.css';
 import axios from 'axios';
-import geojsonMerge from 'geojson-merge';
 
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 function Map(props) {
-
 	const mapContainer = useRef();
 	const [lng, setLng] = useState(props.initialState.longitude);
 	const [lat, setLat] = useState(props.initialState.latitude);
@@ -17,10 +15,14 @@ function Map(props) {
 	let stateData;
 	let initialized = 0;
 	let selectedDistrictId = null;
+	let bounds = [
+			[-107, 23], // Southwest coordinates
+			[-64.91058699000139, 47.87764500765852] // Northeast coordinates
+	];
 
 	useEffect(() => {
 
-		if (!initialized){
+		if (!initialized && props.initialState.stateName == 'NewYork'){
 			axios.get('./2012_Congress.geojson')
 				.then(res => {
 					stateData = res.data;
@@ -44,9 +46,9 @@ function Map(props) {
 			container: mapContainer.current,
 			style: 'mapbox://styles/mapbox/streets-v11',
 			center: [lng, lat],
-			zoom: zoom
+			zoom: zoom,
+			maxBounds: bounds
 		});
-
 		map.dragRotate.disable();
 		
 		// On load
@@ -83,7 +85,7 @@ function Map(props) {
 					) {
 						map.setFeatureState(
 							{
-								source: 'new-york', id: selectedDistrictId
+								source: props.initialState.stateName, id: selectedDistrictId
 							},
 							{ hover: false }
 						);
@@ -92,7 +94,7 @@ function Map(props) {
 					console.log(selectedDistrictId);
 					map.setFeatureState(
 						{
-							source: 'new-york', id: selectedDistrictId
+							source: props.initialState.stateName, id: selectedDistrictId
 						},
 						{ hover: true }
 					);
@@ -122,17 +124,17 @@ function Map(props) {
 		// the id should be the state, and possibly districting number
 		console.log(stateData);
 		map.addSource(
-			'new-york',
+			props.initialState.stateName,
 			{
 				type: "geojson",
 				data: stateData
 			}
 		);
-		console.log(map.getSource('new-york'));
+		console.log(map.getSource(props.initialState.stateName));
 		map.addLayer({
 			id: 'districts',
 			type: 'fill',
-			source: 'new-york',
+			source: props.initialState.stateName,
 			paint: {
 				'fill-color': ['get', 'color'],
 				'fill-opacity': [
@@ -147,7 +149,7 @@ function Map(props) {
 		map.addLayer({
 			'id': 'district-borders',
 			'type': 'line',
-			'source': 'new-york',
+			'source': props.initialState.stateName,
 			'layout': {},
 			'paint': {
 				'line-color': 'black',

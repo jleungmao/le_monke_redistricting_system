@@ -1,25 +1,27 @@
 import React, { useState } from 'react';
 import classes from './Sidepanel.module.css';
 import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import Container from '@material-ui/core/Container';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import Button from '@material-ui/core/Button';
-// import Boxplot from '../../components/Boxplot';
+//import Boxplot from '../../components/Boxplot';
 import SetMeasures from '../../components/Tabs/SetMeasures';
+import SetConstraints from '../../components/Tabs/SetConstraint';
+import SelectJob from '../../components/Tabs/SelectJob';
 import SelectDistricting from '../../components/Tabs/SelectDistricting';
+import SelectState from '../../components/Tabs/SelectState';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { Route } from 'react-router-dom';
-
 
 function Sidepanel(props) {
 
 
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [activeStep, setActiveStep] = useState(0);
+	const [compactness, setCompactness] = useState(0.5);
+	const [votingAge, setVotingAge] = useState(0.5);
+	const [citizenVotingAge, setCitizenVotingAge] = useState(0.5);
 
 	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Set Measures', 'Select Districting'];
 	// Population equality.
@@ -31,7 +33,7 @@ function Sidepanel(props) {
 	function TabPanel(props) {
 		const { index, value, children, ...other } = props;
 		return (
-			<>{value === index && (<h1>{children}</h1>)}</>
+			<div>{value === index && <>{children}</>}</div>
 		)
 	}
 
@@ -50,6 +52,7 @@ function Sidepanel(props) {
 			<div>{getTab(value)}</div>
 		</div>
 	)
+  
 	function getTab(value) {
 		if (value == 0) {
 			return <div className = {classes.tabContent}>
@@ -57,59 +60,29 @@ function Sidepanel(props) {
 
 				<TabPanel value={activeStep} index={0}>
 					<Container maxWidth="sm">
-						<h5>Select State</h5>
-						<Select
-							labelId="demo-customized-select-label"
-							id="demo-customized-select"
-							value={props.stateIndx}
-							onChange={(e) => props.setState(e.target.value)}
-						>
-							<MenuItem value={0}>NewYork</MenuItem>
-							<MenuItem value={1}>Florida</MenuItem>
-							<MenuItem value={2}>Texas</MenuItem>
-						</Select>
-						<ProgressBar></ProgressBar>
+						<SelectState stateIndx={props.stateIndx} setState={props.setState}/>
 					</Container>
 				</TabPanel>
 				<TabPanel value={activeStep} index={1}>
 					<Container maxWidth="sm">
-						<h5>Set Filtering Constraints</h5>
-						<Typography id="discrete-slider-small-steps" gutterBottom>
-							Slider 1
-	  							</Typography>
-						<Slider
-							defaultValue={0.00000005}
-							aria-labelledby="discrete-slider-small-steps"
-							step={0.00000001}
-							marks
-							min={-0.00000005}
-							max={0.0000001}
-							valueLabelDisplay="auto"
-						/>
-						<br />
-						<Typography id="discrete-slider-small-steps" gutterBottom>
-							Slider 1
-	  							</Typography>
-						<Slider
-							defaultValue={0.00000005}
-							aria-labelledby="discrete-slider-small-steps"
-							step={0.00000001}
-							marks
-							min={-0.00000005}
-							max={0.0000001}
-							valueLabelDisplay="auto"
-						/>
+						<Route exact path='/' component={SelectJob}></Route>
 					</Container>
 				</TabPanel>
 				<TabPanel value={activeStep} index={2}>
 					<Container maxWidth="sm">
-						<h5>View Filtered Districts, using the objective function.</h5>
-					</Container>
-				</TabPanel>
-				<TabPanel value={activeStep} index={3}>
-					<Container maxWidth="sm">
-						<Route exact path='/' component={SetMeasures}></Route>
-					</Container>
+					<SetConstraints 
+						compactness={compactness} 
+						setCompactness={setCompactness}
+						votingAge={votingAge} 
+						setVotingAge={setVotingAge}
+						citizenVotingAge={citizenVotingAge}
+						setCitizenVotingAge={setCitizenVotingAge}/>
+				</Container>
+			</TabPanel>
+			<TabPanel value={activeStep} index={3}>
+				<Container maxWidth="sm">
+					<Route exact path='/' component={SetMeasures}></Route>
+				</Container>
 				</TabPanel>
 				<TabPanel value={activeStep} index={4}>
 					<Container maxWidth="sm">

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import axios from 'axios';
-import Collapse from '@material-ui/core/Collapse'
+import Collapse from '@material-ui/core/Collapse';
 import Divider from '@material-ui/core/Divider';
 import FormControl from '@material-ui/core/FormControl';
 import List from '@material-ui/core/List';
@@ -9,7 +9,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import classes from './SelectDistricting.module.css';
-import { supported } from 'mapbox-gl';
 
 
 function SelectDistricting() {
