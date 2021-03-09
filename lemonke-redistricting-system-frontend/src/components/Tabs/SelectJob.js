@@ -16,7 +16,7 @@ function SelectJob() {
 
     return (
         <>
-            <h5>Select Job</h5>
+            <h2>Select Job</h2>
             <List component = "nav" aria-labe="job lists">
                 <ListItem button 
                 selected={selectedIndex[0] === 0} 

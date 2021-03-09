@@ -134,10 +134,6 @@ function SetConstraints(props) {
 		{
 			value: 1,
 			label: '1'
-		},
-		{
-			value: 100,
-			label: '100'
 		}
 	]
 

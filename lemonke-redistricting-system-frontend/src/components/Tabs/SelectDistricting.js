@@ -11,7 +11,7 @@ import Select from '@material-ui/core/Select';
 import classes from './SelectDistricting.module.css';
 
 
-function SelectDistricting() {
+function SelectDistricting(props) {
 
     const [districtingSet, setDistrictingSet] = React.useState([]);
     //select an item in the list to highlight
@@ -29,9 +29,7 @@ function SelectDistricting() {
     const handleSetChange = (event) => {
         setToChangeTo(event.target.value);
     };
-
-
-
+    console.log(props.selectedDistrictId);
     useEffect(() => {
         console.log('update')
         axios.get('./fakeDistrictingSets.json').then(res => {
@@ -138,6 +136,7 @@ function SelectDistricting() {
 
     return (
         <>
+            <h2>Select Districting</h2>
             <FormControl>
                 <Select
                     value={selectedSet}

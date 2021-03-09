@@ -11,8 +11,8 @@ function HomePage() {
 	// https://material-ui.com/components/drawers/
 	// These are just other cool things I found on ther Website.
 	// https://material-ui.com/components/tabs/
-	const [state, setState] = useState(0);
-
+	const [state, setState] = useState(3);
+	const [selectedDistrict, setSelectedDistrict] = useState(0);
 
 	let stateLocations = [
 		{
@@ -35,12 +35,17 @@ function HomePage() {
 		}
 	]
 
+	const getSelectedDistrict = (selectedDistrictId) =>{
+		setSelectedDistrict(selectedDistrictId);
+		console.log("hi" + selectedDistrict);
+	}
+
 	return (
 		<>
 			<Paper style={{width: '30%', height: '100%', overflow: 'auto', position: 'fixed' }}>
-				<Sidepanel stateIndx={state} setState={setState} />
+				<Sidepanel stateIndx={state} setState={setState} selectedDistrictId = {selectedDistrict} />
 			</Paper>
-			<Map initialState={stateLocations[state]} />
+			<Map initialState={stateLocations[state]} parentCallback = {getSelectedDistrict} selectedDistrictId = {selectedDistrict} />
 		</>
 	)
 }
