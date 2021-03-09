@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import Button from '@material-ui/core/Button';
-//import Boxplot from '../../components/Boxplot';
 import SetMeasures from '../../components/Tabs/SetMeasures';
 import SetConstraints from '../../components/Tabs/SetConstraint';
 import SelectJob from '../../components/Tabs/SelectJob';
