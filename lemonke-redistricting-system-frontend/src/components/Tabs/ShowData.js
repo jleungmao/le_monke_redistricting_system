@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Boxplot from '../Boxplot';
+// import Boxplot from '../Boxplot';
 import { Route } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import axios from 'axios';
@@ -93,7 +93,7 @@ function ShowData(props) {
 
     return (
         <>
-            {<Route exact path='/' component={Boxplot}></Route>}
+            {/* {<Route exact path='/' component={Boxplot}></Route>} */}
             <List style={{ width: '30%', maxHeight: '50%', overflow: 'auto', position: 'fixed' }} >
                 {getList()}
             </List>
