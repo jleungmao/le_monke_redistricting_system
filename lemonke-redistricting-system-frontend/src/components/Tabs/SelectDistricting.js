@@ -14,6 +14,23 @@ import classes from './SelectDistricting.module.css';
 function SelectDistricting() {
 
     const [districtingSet, setDistrictingSet] = React.useState([]);
+    //select an item in the list to highlight
+    //handles collapsing of the array
+    const [selectedIndex, setSelectedIndex] = React.useState();
+    const [collapseArray, updateCollapseArray] = React.useState(new Array(10).fill(false));
+    //pick the set to display
+    const [selectedSet, setToChangeTo] = React.useState('bestDistricts');
+
+    const handleListItemClick = (event, index) => {
+        setSelectedIndex(index);
+        updateCollapseArray(collapseArray => collapseArray.map((item, idx) => idx === index ? !item : false))
+    };
+
+    const handleSetChange = (event) => {
+        setToChangeTo(event.target.value);
+    };
+
+
 
     useEffect(() => {
         console.log('update')
@@ -31,13 +48,6 @@ function SelectDistricting() {
         }
     }, [])
 
-
-    //pick the set to display
-    const [selectedSet, setToChangeTo] = React.useState('bestDistricts');
-
-    const handleSetChange = (event) => {
-        setToChangeTo(event.target.value);
-    };
 
 
     //creates the JSX list of districtings
@@ -124,15 +134,6 @@ function SelectDistricting() {
         }
         return districtings
     }
-
-    //select an item in the list to highlight
-    //handles collapsing of the array
-    const [selectedIndex, setSelectedIndex] = React.useState();
-    const [collapseArray, updateCollapseArray] = React.useState(new Array(10).fill(false));
-    const handleListItemClick = (event, index) => {
-        setSelectedIndex(index);
-        updateCollapseArray(collapseArray => collapseArray.map((item, idx) => idx === index ? !item : false))
-    };
 
 
     return (
