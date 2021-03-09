@@ -25,7 +25,9 @@ import Paper from '@material-ui/core/Paper';
 
 function ShowData(props) {
 
+    console.log(props);
     const [districtSet, setDistrictSet] = React.useState([]);
+    const [selectedSet, setToChangeTo] = React.useState('district'+props.selectedDistrict.toString());
 
     useEffect(() => {
         axios.get('./fakeDistrictSets.json').then(res => {
@@ -67,10 +69,10 @@ function ShowData(props) {
     const [collapseArray, updateCollapseArray] = React.useState(new Array(27).fill(false));
 
     const handleSetChange = (event) => {
+        console.log(event);
         setToChangeTo(event.target.value);
+        props.homePageCallback(parseInt(event.target.value.replace('district','')))
     }
-
-    const [selectedSet, setToChangeTo] = React.useState('district1');
 
     function getDistricts() {
         let listOptions;

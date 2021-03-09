@@ -25,6 +25,8 @@ function Sidepanel(props) {
 	const [vtpaAvailable, setVtpaAvailable] = useState(false);
 	const [totalPopulationAvailable, setTotalPopulationAvailable] = useState(false);
 	const [cvPopulation, setCvPopulation] = useState(false);
+	let selectedDistrictId = props.selectedDistrictId;
+	let homePageCallback = props.homePageCallback;
 
 	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Set Measures', 'Select Districting'];
 	// Population equality.
@@ -100,7 +102,7 @@ function Sidepanel(props) {
 						</TabPanel>
 						<TabPanel value={activeStep} index={4}>
 							<Container maxWidth="sm">
-								<SelectDistricting selectedDistrictId = {props.selectedDistrictId}/>
+								<SelectDistricting />
 								{/* <Route exact path='/' component={Boxplot}></Route> */}
 							</Container>
 						</TabPanel>
@@ -133,7 +135,7 @@ function Sidepanel(props) {
 		} else if (value == 1) {
 			return (
 				<div className={classes.tabContent}>
-					<Route exact path='/' component={ShowData}></Route>
+					<Route exact path='/' render={(props) => (<ShowData selectedDistrict={selectedDistrictId} homePageCallback = {homePageCallback}/>)}></Route>
 				</div>
 			)
 		}

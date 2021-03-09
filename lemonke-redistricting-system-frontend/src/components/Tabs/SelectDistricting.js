@@ -11,10 +11,9 @@ import Select from '@material-ui/core/Select';
 import classes from './SelectDistricting.module.css';
 
 
-function SelectDistricting(props) {
+function SelectDistricting() {
 
     const [districtingSet, setDistrictingSet] = React.useState([]);
-    console.log(props.selectedDistrictId);
     useEffect(() => {
         console.log('update')
         axios.get('./fakeDistrictingSets.json').then(res => {

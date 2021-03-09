@@ -12,7 +12,7 @@ function HomePage() {
 	// These are just other cool things I found on ther Website.
 	// https://material-ui.com/components/tabs/
 	const [state, setState] = useState(3);
-	const [selectedDistrict, setSelectedDistrict] = useState(0);
+	const [selectedDistrict, setSelectedDistrict] = useState(1);
 
 	let stateLocations = [
 		{
@@ -49,7 +49,7 @@ function HomePage() {
 	return (
 		<>
 			<Paper style={{width: '30%', height: '100%', overflow: 'auto', position: 'fixed' }}>
-				<Sidepanel stateIndx={state} setState={setState} selectedDistrictId = {selectedDistrict} />
+				<Sidepanel stateIndx={state} setState={setState} selectedDistrictId = {selectedDistrict} homePageCallback = {getSelectedDistrict} />
 			</Paper>
 			<Map initialState={stateLocations[state]} parentCallback = {getSelectedDistrict} selectedDistrictId = {selectedDistrict} />
 		</>
