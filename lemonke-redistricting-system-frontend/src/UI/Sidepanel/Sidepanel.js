@@ -17,7 +17,6 @@ import { Route } from 'react-router-dom';
 function Sidepanel(props) {
 
 
-	const [selectedTab, setSelectedTab] = useState(0);
 	const [activeStep, setActiveStep] = useState(0);
 	const [compactness, setCompactness] = useState(0.5);
 	const [votingAge, setVotingAge] = useState(0.5);
@@ -61,6 +60,7 @@ function Sidepanel(props) {
 				<TabPanel value={activeStep} index={0}>
 					<Container maxWidth="sm">
 						<SelectState stateIndx={props.stateIndx} setState={props.setState}/>
+						<h1>{props.stateIndx}</h1>
 					</Container>
 				</TabPanel>
 				<TabPanel value={activeStep} index={1}>

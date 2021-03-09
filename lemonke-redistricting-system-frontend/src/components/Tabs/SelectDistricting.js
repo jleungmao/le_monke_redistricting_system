@@ -16,6 +16,7 @@ function SelectDistricting() {
     const [districtingSet, setDistrictingSet] = React.useState([]);
 
     useEffect(() => {
+        console.log('update')
         axios.get('./fakeDistrictingSets.json').then(res => {
             // console.log(res.data);
             let districtingData = [];

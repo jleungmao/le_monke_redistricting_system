@@ -16,7 +16,7 @@ function Map(props) {
 	let initialized = 0;
 	let selectedDistrictId = null;
 	let bounds = [
-			[-107, 23], // Southwest coordinates
+			[-110, 23], // Southwest coordinates
 			[-64.91058699000139, 47.87764500765852] // Northeast coordinates
 	];
 
