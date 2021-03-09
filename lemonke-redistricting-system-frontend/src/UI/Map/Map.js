@@ -23,7 +23,7 @@ function Map(props) {
 	useEffect(() => {
 
 		if (!initialized && props.initialState.stateName == 'NewYork'){
-			axios.get('./2012_Congress.geojson')
+			axios.get('./fake_districting.geojson')
 				.then(res => {
 					stateData = res.data;
 					// preprocessing

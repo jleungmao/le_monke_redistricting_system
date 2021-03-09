@@ -1,12 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 // import Boxplot from '../Boxplot';
 import { Route } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import axios from 'axios';
-import { ListItemText } from '@material-ui/core';
+import { Dialog, ListItemText } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
 import Collapse from '@material-ui/core/Collapse';
 import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
 
 function ShowData(props) {
 
@@ -91,12 +96,51 @@ function ShowData(props) {
         return container;
     }
 
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+    function DialogContainer() {
+        return(
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth='md'
+            >
+                <DialogTitle id="alert-dialog-title"></DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={3}>
+                        {/* {<Route exact path='/' component={Boxplot}></Route>} */}
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        )
+    }
+
     return (
         <>
-            {/* {<Route exact path='/' component={Boxplot}></Route>} */}
-            <List style={{ width: '30%', maxHeight: '50%', overflow: 'auto', position: 'fixed' }} >
+        <Grid item xs={12} style={{ padding: '10px'}}>
+            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+                Display Box & whisker Plot.
+            </Button>
+            <DialogContainer />
+            <List style={{ width: '30%', maxHeight: '45%', overflow: 'auto', position: 'fixed' }} >
                 {getList()}
             </List>
+        </Grid>
         </>
     )
 }
