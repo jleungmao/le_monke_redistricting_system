@@ -16,6 +16,7 @@ function Map(props) {
 	let stateData;
 	let initialized = 0;
 	let selectedDistrictId = props.selectedDistrictId;
+	let districtingToLoad = props.selectedDistrictingId;
 	let bounds = [
 			[-110, 23], // Southwest coordinates
 			[-64.91058699000139, 47.87764500765852] // Northeast coordinates
@@ -24,7 +25,7 @@ function Map(props) {
 	useEffect(() => {
 
 		if (!initialized && props.initialState.stateName == 'NewYork'){
-			axios.get('./fake_districting.geojson')
+			axios.get('./'+districtingToLoad)
 				.then(res => {
 					stateData = res.data;
 					// preprocessing

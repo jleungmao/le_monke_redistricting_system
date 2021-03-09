@@ -8,7 +8,7 @@
             "Compactness": 10,
             "Political Fairness": 10,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 20,
@@ -18,7 +18,7 @@
             "Compactness": 20,
             "Political Fairness": 20,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 30,
@@ -28,7 +28,7 @@
             "Compactness": 30,
             "Political Fairness": 30,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 40,
@@ -38,7 +38,7 @@
             "Compactness": 40,
             "Political Fairness": 10,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 50,
@@ -48,7 +48,7 @@
             "Compactness": 50,
             "Political Fairness": 50,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 60,
@@ -58,7 +58,7 @@
             "Compactness": 60,
             "Political Fairness": 60,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 70,
@@ -68,7 +68,7 @@
             "Compactness": 70,
             "Political Fairness": 70,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 80,
@@ -78,7 +78,7 @@
             "Compactness": 80,
             "Political Fairness": 80,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 90,
@@ -88,7 +88,7 @@
             "Compactness": 90,
             "Political Fairness": 90,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 100,
@@ -98,7 +98,7 @@
             "Compactness": 100,
             "Political Fairness": 100,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         }
     ],
     "majorityMinority": [
@@ -110,7 +110,7 @@
             "Compactness": 11,
             "Political Fairness": 11,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 21,
@@ -120,7 +120,7 @@
             "Compactness": 21,
             "Political Fairness": 21,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 31,
@@ -130,7 +130,7 @@
             "Compactness": 31,
             "Political Fairness": 31,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 41,
@@ -140,7 +140,7 @@
             "Compactness": 41,
             "Political Fairness": 41,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 50,
@@ -150,7 +150,7 @@
             "Compactness": 50,
             "Political Fairness": 50,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 60,
@@ -160,7 +160,7 @@
             "Compactness": 60,
             "Political Fairness": 60,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 70,
@@ -170,7 +170,7 @@
             "Compactness": 70,
             "Political Fairness": 70,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 80,
@@ -180,7 +180,7 @@
             "Compactness": 80,
             "Political Fairness": 80,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 90,
@@ -190,7 +190,7 @@
             "Compactness": 90,
             "Political Fairness": 90,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 100,
@@ -200,7 +200,7 @@
             "Compactness": 100,
             "Political Fairness": 100,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         }
     ],
     "closeToEnacted" : [
@@ -212,7 +212,7 @@
             "Compactness": 77,
             "Political Fairness": 77,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 13,
@@ -222,7 +222,7 @@
             "Compactness": 84,
             "Political Fairness": 52,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 76,
@@ -232,7 +232,7 @@
             "Compactness": 22,
             "Political Fairness": 46,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 40,
@@ -242,7 +242,7 @@
             "Compactness": 42,
             "Political Fairness": 77,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 1,
@@ -252,7 +252,7 @@
             "Compactness": 0,
             "Political Fairness": 12,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 60,
@@ -262,7 +262,7 @@
             "Compactness": 60,
             "Political Fairness": 60,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 70,
@@ -272,7 +272,7 @@
             "Compactness": 70,
             "Political Fairness": 70,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 4,
@@ -282,7 +282,7 @@
             "Compactness": 11,
             "Political Fairness": 11,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 90,
@@ -292,7 +292,7 @@
             "Compactness": 90,
             "Political Fairness": 90,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 100,
@@ -302,7 +302,7 @@
             "Compactness": 100,
             "Political Fairness": 100,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         }
     ],
     "areaPairDeviation" : [
@@ -314,7 +314,7 @@
             "Compactness": 10,
             "Political Fairness": 10,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 20,
@@ -324,7 +324,7 @@
             "Compactness": 20,
             "Political Fairness": 20,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 30,
@@ -334,7 +334,7 @@
             "Compactness": 30,
             "Political Fairness": 30,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         },
         {
             "OFScore": 40,
@@ -344,7 +344,7 @@
             "Compactness": 40,
             "Political Fairness": 10,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "2012_Congress.geojson"
         },
         {
             "OFScore": 50,
@@ -354,7 +354,7 @@
             "Compactness": 50,
             "Political Fairness": 50,
             "Split Counties": 0,
-            "GeoJSON": ""
+            "GeoJSON": "fake_districting.geojson"
         }
     ]
 }
