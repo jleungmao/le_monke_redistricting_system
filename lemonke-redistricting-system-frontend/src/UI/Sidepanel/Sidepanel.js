@@ -10,6 +10,7 @@ import SetConstraints from '../../components/Tabs/SetConstraint';
 import SelectJob from '../../components/Tabs/SelectJob';
 import SelectDistricting from '../../components/Tabs/SelectDistricting';
 import SelectState from '../../components/Tabs/SelectState';
+import ShowData from '../../components/Tabs/ShowData';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { Route } from 'react-router-dom';
@@ -130,7 +131,7 @@ function Sidepanel(props) {
 			</div>
 		} else if (value == 1) {
 			return <div className = {classes.tabContent}>
-				
+				<Route exact path='/' component = {ShowData}></Route>
 			</div>
 		}
 	}
