@@ -17,6 +17,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import Card from '@material-ui/core/Card';
+import Switch from '@material-ui/core/Switch';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -63,10 +64,13 @@ function SetConstraints(props) {
 	const [compactness, setCompactness] = useState(props.compactness);
 	const [votingAge, setVotingAge] = useState(props.votingAge);
 	const [citizenVotingAge, setCitizenVotingAge] = useState(props.citizenVotingAge)
-	const [value, setValue] = useState('pp');
+	const [valueCompactness, setValueCompactness] = useState('pp');
 	const [open, setOpen] = useState(false);
 	const [openMinMaxDis, setOpenMinMaxDis] = useState(false);
 	const [minMaxDis, setMinMaxDis] = useState('');
+	const [vtpaAvailable, setVtpaAvailable] = useState(false)
+	const [totalPopulationAvailable, setTotalPopulationAvailable] = useState(false)
+	const [cvPopulation, setCvPopulation] = useState(false)
 	const classes = useStyles();
 
 
@@ -197,7 +201,7 @@ function SetConstraints(props) {
 	}
 
 	const handleChange = (event) => {
-		setValue(event.target.value);
+		setValueCompactness(event.target.value);
 	};
 
 	const handleClickOpen = () => {
@@ -219,7 +223,6 @@ function SetConstraints(props) {
 			>
 				<br />
 				<br />
-
 				<Grid item xs={12} style={{ padding: '10px' }}>
 					<Typography gutterBottom variant='h4'>Set Protected Incumbents</Typography>
 					<Button variant="outlined" color="primary" onClick={handleClickOpen}>
@@ -234,7 +237,7 @@ function SetConstraints(props) {
 					{/* THe form to select compactness */}
 					<Typography gutterBottom variant='h4'>Select Compactness</Typography>
 					{/* <FormControl component="fieldset"> */}
-					<RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
+					<RadioGroup aria-label="gender" name="gender1" value={valueCompactness} onChange={handleChange}>
 						<FormControlLabel value="pp" control={<Radio />} label="Polsby-Popper" />
 						<FormControlLabel value="gc" control={<Radio />} label="Graph Compactness" />
 						<FormControlLabel value="fat" control={<Radio />} label="Population Fatness" />
@@ -292,8 +295,48 @@ function SetConstraints(props) {
 				<br />
 				<br />
 				<Grid item xs={12} style={{ padding: '10px' }}>
-					<Typography gutterBottom variant='h4'>Voting Age Constraint</Typography>
-					<Typography gutterBottom >Voting Age Population (TVAP)</Typography>
+					<Typography gutterBottom variant='h4'>Population Constraints</Typography>
+					<Typography gutterBottom>Total Population</Typography>
+					<Switch
+						checked={totalPopulationAvailable}
+						onChange={() => setTotalPopulationAvailable(totalPopulationAvailable ? false : true)}
+						disabled={true}
+						color="primary"
+						name="checkedB"
+						inputProps={{ 'aria-label': 'primary checkbox' }}
+					/>
+					<Slider
+						// value={typeof votingAge === 'number' ? votingAge : 0}
+						value={0.5}
+						// onChange={(e, val) => setVotingAge(val)}
+						// onChangeCommitted={(e, val) => {
+						// 	e.preventDefault();
+						// 	props.setVotingAge(val)
+						// }}
+						step={0.01}
+						min={0}
+						max={100}
+						disabled={!totalPopulationAvailable}
+						marks={[
+							{
+								value: 0,
+								label: '0'
+							},
+							{
+								value: 100,
+								label: 'all'
+							}
+						]}
+						valueLabelDisplay="auto"
+					/>
+					<Typography gutterBottom>Voting Age Population (TVAP)</Typography>
+					<Switch
+						checked={vtpaAvailable}
+						onChange={() => setVtpaAvailable(vtpaAvailable ? false : true)}
+						color="primary"
+						name="checkedB"
+						inputProps={{ 'aria-label': 'primary checkbox' }}
+					/>
 					<Slider
 						value={typeof votingAge === 'number' ? votingAge : 0}
 						onChange={(e, val) => setVotingAge(val)}
@@ -301,29 +344,38 @@ function SetConstraints(props) {
 							e.preventDefault();
 							props.setVotingAge(val)
 						}}
-						disabled={true}
+						disabled={!vtpaAvailable}
 						step={0.01}
 						min={0}
-						max={1}
-						marks={[{
-							value: 0,
-							label: '0'
-						},
-						{
-							value: 100,
-							label: 'maxPop'
-						}]}
+						max={100}
+						marks={[
+							{
+								value: 0,
+								label: '0'
+							},
+							{
+								value: 100,
+								label: 'all'
+							}
+						]}
 						valueLabelDisplay="auto"
 					/>
-					<Typography gutterBottom >Citizen Voting Age Population (CVAP)</Typography>
+					<Typography gutterBottom>Citizen Voting Age Population (CVAP)</Typography>
+					<Switch
+						checked={cvPopulation}
+						onChange={() => setCvPopulation(cvPopulation? false : true)}
+						color="primary"
+						name="checkedB"
+						inputProps={{ 'aria-label': 'primary checkbox' }}
+					/>
 					<Slider
-						// value={typeof citizenVotingAge === 'array' ? [citizenVotingAge, citizenVotingAge+1]  : [0,1]}
-						value={[citizenVotingAge, citizenVotingAge + 90]}
-						onChange={(e, val) => setCitizenVotingAge(val[0])}
+						value={citizenVotingAge}
+						onChange={(e, val) => setCitizenVotingAge(val)}
 						onChangeCommitted={(e, val) => {
 							e.preventDefault();
-							props.setCitizenVotingAge(val[0])
+							props.setCitizenVotingAge(val)
 						}}
+						disabled={!cvPopulation}
 						step={0.01}
 						min={0}
 						max={100}
@@ -333,10 +385,11 @@ function SetConstraints(props) {
 						},
 						{
 							value: 100,
-							label: 'maxPop'
+							label: 'all'
 						}]}
 						valueLabelDisplay="auto"
 					/>
+					{/* </RadioGroup> */}
 				</Grid>
 			</Grid>
 		</div>
