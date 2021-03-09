@@ -1,8 +1,46 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import GridList from '@material-ui/core/GridList';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1
+    },
+    paper: {
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        minWidth: '100px'
+    },
+    pos: {
+        marginBottom: 12,
+    },
+    title: {
+        fontSize: 14,
+    },
+    button: {
+        display: 'block',
+        marginTop: theme.spacing(2),
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    rail: {
+        height: 24,
+        width: "14px !important",
+        borderRadius: 24,
+        opacity: 1,
+    }
+}));
+
 
 function SetMeasures() {
+
+    const classes = useStyles();
 
     const marks = [
         {
@@ -18,83 +56,89 @@ function SetMeasures() {
 
 
     return (
-        <><div style={{maxHeight: '60%', overflow: 'auto', position: 'fixed' }}>
-            <h5>Set Objective Function Weight</h5>
-            <Typography id="discrete-slider-small-steps" gutterBottom>
-                Population equality
-      				</Typography>
-            <Slider
-                defaultValue={0.5}
-                aria-labelledby="discrete-slider"
-                step={0.01}
-                min={0}
-                max={1}
-                valueLabelDisplay="auto"
-                marks={marks}
-            />
-            <br />
-            <Typography id="discrete-slider-small-steps" gutterBottom>
-                Split counties
-      				</Typography>
-            <Slider
-                defaultValue={0.5}
-                aria-labelledby="discrete-slider"
-                step={0.01}
-                min={0}
-                max={1}
-                valueLabelDisplay="auto"
-                marks={marks}
-            />
-            <Typography id="discrete-slider-small-steps" gutterBottom>
-                Deviation from average districting
-      				</Typography>
-            <Slider
-                defaultValue={0.5}
-                aria-labelledby="discrete-slider"
-                step={0.01}
-                min={0}
-                max={1}
-                valueLabelDisplay="auto"
-                marks={marks}
-            />
-            <Typography id="discrete-slider-small-steps" gutterBottom>
-                Deviation from enacted plan
-      				</Typography>
-            <Slider
-                defaultValue={0.5}
-                aria-labelledby="discrete-slider"
-                step={0.01}
-                min={0}
-                max={1}
-                valueLabelDisplay="auto"
-                marks={marks}
-            />
-            <Typography id="discrete-slider-small-steps" gutterBottom>
-                Compactness
-      				</Typography>
-            <Slider
-                defaultValue={0.5}
-                aria-labelledby="discrete-slider"
-                step={0.01}
-                min={0}
-                max={1}
-                valueLabelDisplay="auto"
-                marks={marks}
-            />
-            <Typography id="discrete-slider-small-steps" gutterBottom>
-                Political Fairness
-      				</Typography>
-            <Slider
-                defaultValue={0.5}
-                aria-labelledby="discrete-slider"
-                step={0.01}
-                min={0}
-                max={1}
-                valueLabelDisplay="auto"
-                marks={marks}
-            />
-        </div>
-        </>
+        <div className={classes.root}>
+            <h2>Set Objective Function Weight</h2>
+            {/* <Grid
+                container
+                direction="column"
+                justify="space-around"
+                alignItems="stretch"
+            > */}
+            <GridList cellHeight={160} className={classes.gridList} cols={3}>
+                <Grid item xs={12} style={{ padding: '10px' }}>
+                    <Typography gutterBottom >Population equality</Typography>
+                    <Slider
+                        defaultValue={0.5}
+                        step={0.01}
+                        min={0}
+                        max={1}
+                        valueLabelDisplay="auto"
+                        marks={marks}
+                    />
+                </Grid>
+                <br />
+                <Grid item xs={12} style={{ padding: '10px' }}>
+                    <Typography gutterBottom>Split counties</Typography>
+                    <Slider
+                        defaultValue={0.5}
+                        step={0.01}
+                        min={0}
+                        max={1}
+                        valueLabelDisplay="auto"
+                        marks={marks}
+                    />
+                </Grid>
+                <br />
+                <Grid item xs={12} style={{ padding: '10px' }}>
+                    <Typography gutterBottom>Deviation from average districting</Typography>
+                    <Slider
+                        defaultValue={0.5}
+                        step={0.01}
+                        min={0}
+                        max={1}
+                        valueLabelDisplay="auto"
+                        marks={marks}
+                    />
+                </Grid>
+                <br />
+                <Grid item xs={12} style={{ padding: '10px' }}>
+                    <Typography gutterBottom>Deviation from enacted plan</Typography>
+                    <Slider
+                        defaultValue={0.5}
+                        step={0.01}
+                        min={0}
+                        max={1}
+                        valueLabelDisplay="auto"
+                        marks={marks}
+                    />
+                </Grid>
+                <br />
+                <Grid item xs={12} style={{ padding: '10px' }}>
+                    <Typography gutterBottom>Compactness</Typography>
+                    <Slider
+                        defaultValue={0.5}
+                        step={0.01}
+                        min={0}
+                        max={1}
+                        valueLabelDisplay="auto"
+                        marks={marks}
+                    />
+                </Grid>
+                <br />
+                <Grid item xs={12} style={{ padding: '10px' }}>
+                    <Typography gutterBottom>Political Fairness</Typography>
+                    <Slider
+                        defaultValue={0.5}
+                        step={0.01}
+                        min={0}
+                        max={1}
+                        valueLabelDisplay="auto"
+                        marks={marks}
+                    />
+                </Grid>
+            </GridList>
+            {/* </Grid> */}
+        </div >
     )
 }
 
