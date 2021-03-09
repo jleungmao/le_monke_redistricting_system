@@ -14,29 +14,56 @@ import classes from './SelectDistricting.module.css';
 function SelectDistricting() {
 
     const [districtingSet, setDistrictingSet] = React.useState([]);
+    const [selectedGeoJSON, setSelectedGEOJSON] = React.useState("");
+    //select an item in the list to highlight
+    //handles collapsing of the array
+    const [selectedIndex, setSelectedIndex] = React.useState();
+    const [collapseArray, updateCollapseArray] = React.useState(new Array(10).fill(false));
+    //pick the set to display
+    const [selectedSet, setToChangeTo] = React.useState('bestDistricts');
+    const [newLoad, setNewLoad] = React.useState(true);
+
+    const handleListItemClick = async (index) => {
+        setSelectedIndex(index);
+        updateCollapseArray(collapseArray => collapseArray.map((item, idx) => idx === index ? !item : false))
+        // props.selectedDistrictingId = districtingSet[index][Object.keys(districtingSet)];
+        console.log(districtingSet[selectedSet][index]["GeoJSON"]);
+        props.parentCallback(districtingSet[selectedSet][index]["GeoJSON"]);
+    };
+
+    const handleSetChange = (event) => {
+        setToChangeTo(event.target.value);
+    };
+
+  
+
+
+
+    // console.log(props.selectedDistrictId);
+
     useEffect(() => {
         console.log('update')
-        axios.get('./fakeDistrictingSets.json').then(res => {
-            // console.log(res.data);
-            let districtingData = [];
-            districtingData['bestDistricts'] = res.data.bestDistricts
-            districtingData['closeToEnacted'] = res.data.closeToEnacted
-            districtingData['majorityMinority'] = res.data.majorityMinority
-            districtingData['areaPairDeviation'] = res.data.areaPairDeviation
-            setDistrictingSet(districtingData);
-        });
+        //load a new json
+        if (newLoad) {
+            axios.get('./fakeDistrictingSets.json').then(res => {
+                // console.log(res.data);
+                let districtingData = [];
+                districtingData['bestDistricts'] = res.data.bestDistricts
+                districtingData['closeToEnacted'] = res.data.closeToEnacted
+                districtingData['majorityMinority'] = res.data.majorityMinority
+                districtingData['areaPairDeviation'] = res.data.areaPairDeviation
+                setDistrictingSet(districtingData);
+                // console.log(districtingData);
+            });
+        } else {
+            setNewLoad(false);
+        }
+        
         return () => {
             // cleanup
         }
     }, [])
 
-
-    //pick the set to display
-    const [selectedSet, setToChangeTo] = React.useState('bestDistricts');
-
-    const handleSetChange = (event) => {
-        setToChangeTo(event.target.value);
-    };
 
 
     //creates the JSX list of districtings
@@ -57,7 +84,7 @@ function SelectDistricting() {
                     listOptions = sortDistrictings(districtingSet['areaPairDeviation']);
                     break;
             }
-            console.log(listOptions);
+            // console.log(listOptions);
             return createDistrictingList(listOptions);
         } else {
             return;
@@ -70,7 +97,9 @@ function SelectDistricting() {
             let item = <>
                 <ListItem button
                     selected={selectedIndex === i}
-                    onClick={(event) => handleListItemClick(event, i)}>
+                    onClick={() => {
+                        handleListItemClick(i);
+                    }}>
                     <ListItemText
                         primary={"Districting " + (i + 1)}
                         secondary={"Objective Function Score: " + listOfDistrictings[i]["OFScore"]}
@@ -95,14 +124,14 @@ function SelectDistricting() {
         let categories = Object.keys(districting)
         let container = []
         // console.log(categories)
-        for(let i = 0; i<categories.length - 1; i++){
-            if(categories[i] == "OFScore"){
+        for (let i = 0; i < categories.length - 1; i++) {
+            if (categories[i] == "OFScore") {
                 continue;
             }
             container.push(<ListItem>
                 <ListItemText
-                        primary={categories[i] +": "+districting[categories[i]]}
-                    />
+                    primary={categories[i] + ": " + districting[categories[i]]}
+                />
             </ListItem>);
         }
         return container;
@@ -123,15 +152,6 @@ function SelectDistricting() {
         }
         return districtings
     }
-
-    //select an item in the list to highlight
-    //handles collapsing of the array
-    const [selectedIndex, setSelectedIndex] = React.useState();
-    const [collapseArray, updateCollapseArray] = React.useState(new Array(10).fill(false));
-    const handleListItemClick = (event, index) => {
-        setSelectedIndex(index);
-        updateCollapseArray(collapseArray => collapseArray.map((item, idx) => idx === index ? !item : false))
-    };
 
 
     return (

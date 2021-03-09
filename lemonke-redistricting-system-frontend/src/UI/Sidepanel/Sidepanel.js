@@ -27,8 +27,26 @@ function Sidepanel(props) {
 	const [cvPopulation, setCvPopulation] = useState(false);
 	let selectedDistrictId = props.selectedDistrictId;
 	let homePageCallback = props.homePageCallback;
+	let selectedDistricting = "2012_Congress.geojson";
 
 	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Set Measures', 'Select Districting'];
+	const handleChangeStep = (index) => {
+		// console.log(index)
+		if (index === steps.length) {
+			props.parentCallback(selectedDistricting);
+		} else {
+			setActiveStep(index);
+		}
+	};
+
+	
+
+	
+	const setSelectedDistrictingId = (selectedDistrictingId) => {
+		selectedDistricting = selectedDistrictingId;
+		// console.log("saving the value for button" + selectedDistrictingId);
+	}
+
 	// Population equality.
 	// Inccumbent protenction.
 	// Magority/ minority districts.
@@ -102,33 +120,30 @@ function Sidepanel(props) {
 						</TabPanel>
 						<TabPanel value={activeStep} index={4}>
 							<Container maxWidth="sm">
-								<SelectDistricting />
+								<SelectDistricting 
+									parentCallback={setSelectedDistrictingId}
+								/>
 								{/* <Route exact path='/' component={Boxplot}></Route> */}
 							</Container>
 						</TabPanel>
 						{/* Button Next, Back and Finish  */}
 					</div>
 					<div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
-						{activeStep === steps.length ? (
-							<div>
-								<Typography> All steps completed - you&apos;re finished</Typography>
-								<Button onClick={() => setActiveStep(0)} >
-									Reset
-									</Button>
-							</div>
-						) : (
-							<div>
-								<Button disabled={activeStep === 0} onClick={() => setActiveStep(activeStep - 1)} >
-									Back
+						<div>
+							<Button disabled={activeStep === 0} onClick={() => handleChangeStep(activeStep - 1)} >
+								Back
 		  							</Button>
-								<Button
-									variant="contained"
-									color="primary"
-									onClick={() => setActiveStep(activeStep + 1)}>
-									{activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-								</Button>
-							</div>
-						)}
+							<Button
+								variant="contained"
+								color="primary"
+								onClick={() => handleChangeStep(activeStep + 1)}>
+								{activeStep === steps.length - 1 ? 'Display' : 'Next'}
+							</Button>
+							{activeStep === steps.length - 1 ?
+								<Button onClick={() => handleChangeStep(0)} >
+									Reset
+								</Button> : ""}
+						</div>
 					</div>
 				</div>
 			)
