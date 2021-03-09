@@ -11,7 +11,7 @@ import Select from '@material-ui/core/Select';
 import classes from './SelectDistricting.module.css';
 
 
-function SelectDistricting() {
+function SelectDistricting(props) {
 
     const [districtingSet, setDistrictingSet] = React.useState([]);
     const [selectedGeoJSON, setSelectedGEOJSON] = React.useState("");

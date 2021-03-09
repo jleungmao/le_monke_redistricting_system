@@ -54,7 +54,9 @@ function HomePage() {
 			<Paper style={{ width: '30%', height: '100%', overflow: 'auto', position: 'fixed' }}>
 				<Sidepanel stateIndx={state}
 					setState={setState}
-					parentCallback={setSelectedDistrictingId} />
+					parentCallback={setSelectedDistrictingId} 
+					selectedDistrictId = {selectedDistrict}
+					homePageCallback = {getSelectedDistrict} />
 			</Paper>
 			<Map initialState={stateLocations[state]}
 				parentCallback={getSelectedDistrict}
