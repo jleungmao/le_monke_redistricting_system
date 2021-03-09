@@ -62,14 +62,15 @@ function SetConstraints(props) {
 
 	const [incumbentProtection, setIncumbentProtection] = useState(props.incumbentProtection);
 	const [compactness, setCompactness] = useState(props.compactness);
+	const [totalPopulation, setTotalPopulation] = useState(props.totalPopulation)
 	const [votingAge, setVotingAge] = useState(props.votingAge);
 	const [citizenVotingAge, setCitizenVotingAge] = useState(props.citizenVotingAge)
 	const [valueCompactness, setValueCompactness] = useState('pp');
 	const [open, setOpen] = useState(false);
 	const [openMinMaxDis, setOpenMinMaxDis] = useState(false);
 	const [minMaxDis, setMinMaxDis] = useState('');
+	// const [totalPopulationAvailable, setTotalPopulationAvailable] = useState(false)
 	const [vtpaAvailable, setVtpaAvailable] = useState(false)
-	const [totalPopulationAvailable, setTotalPopulationAvailable] = useState(false)
 	const [cvPopulation, setCvPopulation] = useState(false)
 	const classes = useStyles();
 
@@ -260,20 +261,6 @@ function SetConstraints(props) {
 				<br />
 				<br />
 				<Grid item xs={12} style={{ padding: '10px' }}>
-					{/* <Typography gutterBottom variant='h4'>Population Equality Constraint</Typography>
-					<Slider
-						value={typeof populationEq === 'number' ? populationEq : 0}
-						onChange={(e, val) => setPopulationEq(val)}
-						onChangeCommitted={(e, val) => {
-							e.preventDefault();
-							props.setPopulationEq(val)
-						}}
-						step={0.01}
-						min={0}
-						max={1}
-						marks={marks}
-						valueLabelDisplay="auto"
-					/> */}
 					<Typography gutterBottom variant='h4'>Majority-Minority Districts</Typography>
 					<FormControl className={classes.formControl}>
 						<Select
@@ -294,29 +281,29 @@ function SetConstraints(props) {
 				</Grid>
 				<br />
 				<br />
+				{/* Population Constraints */}
 				<Grid item xs={12} style={{ padding: '10px' }}>
 					<Typography gutterBottom variant='h4'>Population Constraints</Typography>
 					<Typography gutterBottom>Total Population</Typography>
 					<Switch
-						checked={totalPopulationAvailable}
-						onChange={() => setTotalPopulationAvailable(totalPopulationAvailable ? false : true)}
+						checked={props.totalPopulationAvailable}
+						onChange={() => props.setTotalPopulationAvailable(props.totalPopulationAvailable ? false : true)}
 						disabled={true}
 						color="primary"
 						name="checkedB"
 						inputProps={{ 'aria-label': 'primary checkbox' }}
 					/>
 					<Slider
-						// value={typeof votingAge === 'number' ? votingAge : 0}
-						value={0.5}
-						// onChange={(e, val) => setVotingAge(val)}
-						// onChangeCommitted={(e, val) => {
-						// 	e.preventDefault();
-						// 	props.setVotingAge(val)
-						// }}
+						value={totalPopulation}
+						onChange={(e, val) => setTotalPopulation(val)}
+						onChangeCommitted={(e, val) => {
+							e.preventDefault();
+							props.setTotalPopulation(val)
+						}}
 						step={0.01}
 						min={0}
 						max={100}
-						disabled={!totalPopulationAvailable}
+						disabled={!props.totalPopulationAvailable}
 						marks={[
 							{
 								value: 0,
@@ -331,8 +318,8 @@ function SetConstraints(props) {
 					/>
 					<Typography gutterBottom>Voting Age Population (TVAP)</Typography>
 					<Switch
-						checked={vtpaAvailable}
-						onChange={() => setVtpaAvailable(vtpaAvailable ? false : true)}
+						checked={props.vtpaAvailable}
+						onChange={() => props.setVtpaAvailable(props.vtpaAvailable ? false : true)}
 						color="primary"
 						name="checkedB"
 						inputProps={{ 'aria-label': 'primary checkbox' }}
@@ -344,7 +331,7 @@ function SetConstraints(props) {
 							e.preventDefault();
 							props.setVotingAge(val)
 						}}
-						disabled={!vtpaAvailable}
+						disabled={!props.vtpaAvailable}
 						step={0.01}
 						min={0}
 						max={100}
@@ -362,8 +349,8 @@ function SetConstraints(props) {
 					/>
 					<Typography gutterBottom>Citizen Voting Age Population (CVAP)</Typography>
 					<Switch
-						checked={cvPopulation}
-						onChange={() => setCvPopulation(cvPopulation? false : true)}
+						checked={props.cvPopulation}
+						onChange={() => props.setCvPopulation(props.cvPopulation? false : true)}
 						color="primary"
 						name="checkedB"
 						inputProps={{ 'aria-label': 'primary checkbox' }}
@@ -375,7 +362,7 @@ function SetConstraints(props) {
 							e.preventDefault();
 							props.setCitizenVotingAge(val)
 						}}
-						disabled={!cvPopulation}
+						disabled={!props.cvPopulation}
 						step={0.01}
 						min={0}
 						max={100}

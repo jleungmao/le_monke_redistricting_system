@@ -19,8 +19,12 @@ function Sidepanel(props) {
 
 	const [activeStep, setActiveStep] = useState(0);
 	const [compactness, setCompactness] = useState(0.5);
+	const [totalPopulation, setTotalPopulation] = useState(0.5);
 	const [votingAge, setVotingAge] = useState(0.5);
 	const [citizenVotingAge, setCitizenVotingAge] = useState(0.5);
+	const [vtpaAvailable, setVtpaAvailable] = useState(false)
+	const [totalPopulationAvailable, setTotalPopulationAvailable] = useState(false)
+	const [cvPopulation, setCvPopulation] = useState(false)
 
 	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Set Measures', 'Select Districting'];
 	// Population equality.
@@ -73,10 +77,20 @@ function Sidepanel(props) {
 					<SetConstraints 
 						compactness={compactness} 
 						setCompactness={setCompactness}
+						totalPopulation={totalPopulation}
+						setTotalPopulation={setTotalPopulation}
 						votingAge={votingAge} 
 						setVotingAge={setVotingAge}
 						citizenVotingAge={citizenVotingAge}
-						setCitizenVotingAge={setCitizenVotingAge}/>
+						setCitizenVotingAge={setCitizenVotingAge}
+						vtpaAvailable={vtpaAvailable}
+						setVtpaAvailable={setVtpaAvailable}
+						totalPopulationAvailable={totalPopulationAvailable}
+						setTotalPopulationAvailable={setTotalPopulationAvailable}
+						cvPopulation={cvPopulation}
+						setCvPopulation={setCvPopulation}
+						/>
+						
 				</Container>
 			</TabPanel>
 			<TabPanel value={activeStep} index={3}>
