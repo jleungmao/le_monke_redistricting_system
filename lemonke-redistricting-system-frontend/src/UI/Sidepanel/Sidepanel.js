@@ -22,9 +22,9 @@ function Sidepanel(props) {
 	const [totalPopulation, setTotalPopulation] = useState(0.5);
 	const [votingAge, setVotingAge] = useState(0.5);
 	const [citizenVotingAge, setCitizenVotingAge] = useState(0.5);
-	const [vtpaAvailable, setVtpaAvailable] = useState(false)
-	const [totalPopulationAvailable, setTotalPopulationAvailable] = useState(false)
-	const [cvPopulation, setCvPopulation] = useState(false)
+	const [vtpaAvailable, setVtpaAvailable] = useState(false);
+	const [totalPopulationAvailable, setTotalPopulationAvailable] = useState(false);
+	const [cvPopulation, setCvPopulation] = useState(false);
 
 	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Set Measures', 'Select Districting'];
 	// Population equality.
@@ -100,7 +100,7 @@ function Sidepanel(props) {
 				</TabPanel>
 				<TabPanel value={activeStep} index={4}>
 					<Container maxWidth="sm">
-						<SelectDistricting />
+						<SelectDistricting selectedDistrictId = {props.selectedDistrictId}/>
 						{/* <Route exact path='/' component={Boxplot}></Route> */}
 					</Container>
 				</TabPanel>

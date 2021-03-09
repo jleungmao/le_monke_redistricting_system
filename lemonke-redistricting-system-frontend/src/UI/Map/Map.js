@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import mapboxgl, { BoxZoomHandler } from 'mapbox-gl';
 import classes from './Map.module.css';
 import axios from 'axios';
@@ -8,13 +8,14 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 function Map(props) {
 	const mapContainer = useRef();
+	console.log(props);
 	const [lng, setLng] = useState(props.initialState.longitude);
 	const [lat, setLat] = useState(props.initialState.latitude);
 	const [zoom, setZoom] = useState(props.initialState.zoom);
 	let map;
 	let stateData;
 	let initialized = 0;
-	let selectedDistrictId = null;
+	let selectedDistrictId = props.selectedDistrictId;
 	let bounds = [
 			[-110, 23], // Southwest coordinates
 			[-64.91058699000139, 47.87764500765852] // Northeast coordinates
@@ -77,27 +78,27 @@ function Map(props) {
 			map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 			populatingLayers(map, stateData, firstSymbolId);
 
-
-			//highlight district
 			map.on('click', 'districts', function (e) {
 				if (e.features.length > 0) {
-					if (selectedDistrictId
-					) {
-						map.setFeatureState(
-							{
-								source: props.initialState.stateName, id: selectedDistrictId
-							},
-							{ hover: false }
-						);
-					}
-					selectedDistrictId = e.features[0].id;
-					console.log(selectedDistrictId);
-					map.setFeatureState(
-						{
-							source: props.initialState.stateName, id: selectedDistrictId
-						},
-						{ hover: true }
-					);
+					props.parentCallback(e.features[0].id);
+					// if (selectedDistrictId) {
+					// 	map.setFeatureState(
+					// 		{
+					// 			source: props.initialState.stateName, id: selectedDistrictId
+					// 		},
+					// 		{ hover: false }
+					// 	);
+					// }
+					// console.log(e.features);
+					// props.parentCallback(e.features[0].id);
+					// map.setFeatureState(
+					// 	{
+					// 		source: props.initialState.stateName, id: selectedDistrictId
+					// 	},
+					// 	{ hover: true }
+					// );
+					//send this to homepage homepage send to selectDistrictings
+					// setSelectedDistrict(selectedDistrictId);
 				}
 			});
 		});
@@ -116,7 +117,6 @@ function Map(props) {
 		return () => map.remove();
 	}, [props.initialState]); // eslint-disable-line react-hooks/exhaustive-deps
 
-
 	// TODO:
 	// Add all districts onto the map
 	// Probably running thought a loop and "addLayer" for each of the distr.
@@ -130,7 +130,7 @@ function Map(props) {
 				data: stateData
 			}
 		);
-		console.log(map.getSource(props.initialState.stateName));
+
 		map.addLayer({
 			id: 'districts',
 			type: 'fill',
@@ -141,7 +141,7 @@ function Map(props) {
 					'case',
 					['boolean', ['feature-state', 'hover'], false],
 					1,
-					0.5
+					0.3
 				]
 			},
 		}, firstSymbolId);
@@ -153,9 +153,21 @@ function Map(props) {
 			'layout': {},
 			'paint': {
 				'line-color': 'black',
-				'line-width': 2
+				'line-width': [
+					'case',
+					['boolean',['feature-state', 'hover'], false],
+					2,
+					0.5
+				]
 			}
 		});
+		//highlight selected one
+		map.setFeatureState(
+			{
+				source: props.initialState.stateName, id: selectedDistrictId
+			},
+			{ hover: true }
+		);
 	}
 
 	// TODO:
