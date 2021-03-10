@@ -58,6 +58,7 @@ function SetMeasures() {
     return (
         <div className={classes.root}>
             <h2>Set Objective Function Weight</h2>
+            <h3>Remaining: 1000</h3>
             {/* <Grid
                 container
                 direction="column"
@@ -76,7 +77,6 @@ function SetMeasures() {
                         marks={marks}
                     />
                 </Grid>
-                <br />
                 <Grid item xs={12} style={{ padding: '10px' }}>
                     <Typography gutterBottom>Split counties</Typography>
                     <Slider
@@ -88,7 +88,6 @@ function SetMeasures() {
                         marks={marks}
                     />
                 </Grid>
-                <br />
                 <Grid item xs={12} style={{ padding: '10px' }}>
                     <Typography gutterBottom>Deviation from average districting</Typography>
                     <Slider
@@ -100,7 +99,6 @@ function SetMeasures() {
                         marks={marks}
                     />
                 </Grid>
-                <br />
                 <Grid item xs={12} style={{ padding: '10px' }}>
                     <Typography gutterBottom>Deviation from enacted plan</Typography>
                     <Slider
@@ -112,7 +110,6 @@ function SetMeasures() {
                         marks={marks}
                     />
                 </Grid>
-                <br />
                 <Grid item xs={12} style={{ padding: '10px' }}>
                     <Typography gutterBottom>Compactness</Typography>
                     <Slider
@@ -124,7 +121,6 @@ function SetMeasures() {
                         marks={marks}
                     />
                 </Grid>
-                <br />
                 <Grid item xs={12} style={{ padding: '10px' }}>
                     <Typography gutterBottom>Political Fairness</Typography>
                     <Slider

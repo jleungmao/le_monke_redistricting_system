@@ -12,7 +12,7 @@ function HomePage() {
 	// These are just other cool things I found on ther Website.
 	// https://material-ui.com/components/tabs/
 
-	const [state, setState] = useState(0);
+	const [state, setState] = useState(3);
 	const [selectedDistrict, setSelectedDistrict] = useState(1);
 	const [selectedDistricting, setSelectedDistricting] = useState("2012_Congress.geojson");
 
@@ -26,16 +26,22 @@ function HomePage() {
 		},
 		{
 			stateName: 'Florida',
-			longitude: -82.3791,
-			latitude: 28.1770,
-			zoom: 6.13
+			longitude: -83.6942,
+			latitude: 28.5269,
+			zoom: 6.75
 		},
 		{
 			stateName: 'Texas',
-			longitude: -99.5540,
-			latitude: 31.5156,
-			zoom: 5.20
-		}
+			longitude: -99.2290,
+			latitude: 31.4927,
+			zoom: 6.24
+		},
+		{
+            stateName: 'startPos',
+            longitude: -85.5975,
+            latitude: 36.4289,
+            zoom: 4.55
+        }
 	]
 
 	const getSelectedDistrict = (selectedDistrictId) => {

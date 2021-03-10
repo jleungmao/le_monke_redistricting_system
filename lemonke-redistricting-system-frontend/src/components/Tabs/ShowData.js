@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import Boxplot from '../Boxplot';
+import Boxplot from '../Boxplot';
 import { Route } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import axios from 'axios';
@@ -62,8 +62,8 @@ function ShowData(props) {
 
             setDistrictSet(districtsData);
         });
-        return () => { }
-    }, [])
+        // return () => { }
+    }, [selectedSet])
 
     const [selectedIndex, setSelectedIndex] = React.useState();
     const [collapseArray, updateCollapseArray] = React.useState(new Array(27).fill(false));
@@ -223,7 +223,7 @@ function ShowData(props) {
                 <DialogTitle id="alert-dialog-title"></DialogTitle>
                 <DialogContent>
                     <Grid container spacing={3}>
-                        {/* {<Route exact path='/' component={Boxplot}></Route>} */}
+                        {<Route exact path='/' component={Boxplot}></Route>}
                     </Grid>
                 </DialogContent>
                 <DialogActions>
