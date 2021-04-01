@@ -57,6 +57,7 @@ function SetMeasures() {
 
     return (
         <div className={classes.root}>
+            Districts Remaining: 1000
             <h2>Set Objective Function Weight</h2>
             {/* <Grid
                 container
