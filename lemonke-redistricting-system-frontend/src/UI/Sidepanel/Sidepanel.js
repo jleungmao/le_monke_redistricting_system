@@ -110,7 +110,6 @@ function Sidepanel(props) {
 									cvPopulation={cvPopulation}
 									setCvPopulation={setCvPopulation}
 								/>
-
 							</Container>
 						</TabPanel>
 						<TabPanel value={activeStep} index={3}>

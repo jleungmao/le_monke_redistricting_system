@@ -5,7 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { PinDropSharp } from '@material-ui/icons';
 
-function SelectJob() {
+function SelectJob(props) {
 
     const [selectedIndex, setSelectedIndex] = React.useState([0,"# of Districtings: 100,243. (More info about job 1)"]);
 
@@ -13,6 +13,12 @@ function SelectJob() {
         setSelectedIndex([index,text]);
     }
 
+    let stateID = props.stateID;
+
+    // let data = (() => {
+    //     let res = axios(`http://localhost:8080/lemonke/jobs?stateID = ${stateID}`)
+    //     console.log(res.data)
+    // })();
 
     return (
         <>
