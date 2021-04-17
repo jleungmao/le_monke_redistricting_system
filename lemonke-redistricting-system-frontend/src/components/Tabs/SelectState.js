@@ -1,18 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
+import { StarRateSharp } from '@material-ui/icons';
 
 
 function SelectState(props) {
 
-	let data = (async () => {
-		let ret = await axios('http://localhost:8080/lemonke/states');
-		console.log(ret)
-		return ret.data;
-	})();
+	const [state, setState] = useState([])
 
+
+	useEffect(() => {
+
+		async function fetchStates() {
+			let res = await axios('http://localhost:8080/lemonke/states')
+			setState(res.data)
+		}
+
+		fetchStates();
+	}, [])
 
 	return (
 		<div>
@@ -26,9 +33,12 @@ function SelectState(props) {
 				onChange={(e) => props.setState(e.target.value)}
 			>
 				{/* {data && data.map((d, i) => <MenuItem value={i}>{d.name}</MenuItem>)} */}
-				<MenuItem value={0}>NewYork</MenuItem>
+				{/* <MenuItem value={0}>NewYork</MenuItem>
 				<MenuItem value={1}>Florida</MenuItem>
-				<MenuItem value={2}>Texas</MenuItem>
+				<MenuItem value={2}>Texas</MenuItem> */}
+				{state.map((d, i) =>
+					<MenuItem value={i}>{d['name']}</MenuItem>
+				)}
 			</Select>
 		</div>
 	)

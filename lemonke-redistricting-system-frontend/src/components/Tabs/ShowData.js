@@ -27,7 +27,7 @@ function ShowData(props) {
 
     console.log(props);
     const [districtSet, setDistrictSet] = React.useState([]);
-    const [selectedSet, setToChangeTo] = React.useState('district'+props.selectedDistrict.toString());
+    const [selectedSet, setToChangeTo] = React.useState('district' + props.selectedDistrict.toString());
 
     useEffect(() => {
         axios.get('./fakeDistrictSets.json').then(res => {
@@ -71,7 +71,7 @@ function ShowData(props) {
     const handleSetChange = (event) => {
         console.log(event);
         setToChangeTo(event.target.value);
-        props.homePageCallback(parseInt(event.target.value.replace('district','')))
+        props.homePageCallback(parseInt(event.target.value.replace('district', '')))
     }
 
     function getDistricts() {
@@ -223,7 +223,8 @@ function ShowData(props) {
                 <DialogTitle id="alert-dialog-title"></DialogTitle>
                 <DialogContent>
                     <Grid container spacing={3}>
-                        {<Route exact path='/' component={Boxplot}></Route>}
+                        {/* {<Route exact path='/' component={<Boxplot />}></Route>} */}
+                        <Boxplot x={[1, 2, 3, 4, 5, 6, 7]} y={[[1, 2, 3, 3, 424], [334, 5, 4, 3, 5, 46, 45]]} />
                     </Grid>
                 </DialogContent>
                 <DialogActions>
