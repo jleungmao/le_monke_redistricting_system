@@ -68,6 +68,7 @@ function SetConstraints(props) {
 
 	const [compactness, setCompactness] = useState(constraints['compactness']);
 	const [popEq, setPopEq] = useState(constraints['populationEq']);
+	const [minority, setMinority] = useState(constraints['minority']);
 
 	const [votingAge, setVotingAge] = useState(props.votingAge);
 	const [citizenVotingAge, setCitizenVotingAge] = useState(props.citizenVotingAge);
@@ -122,6 +123,7 @@ function SetConstraints(props) {
 	}]
 
 	let minMaxDisSelection = [0, 1, 2, 3, 4]
+	let minorites = ['black', 'asian', 'hispanic']
 
 	// jsut there to update on 'open'
 	useEffect(() => {
@@ -315,6 +317,24 @@ function SetConstraints(props) {
 						valueLabelDisplay="auto"
 					/>
 				</Grid>
+				<br/>
+				<br/>
+				<Grid item xs={12} style={{ padding: '10px' }}>
+				<Typography gutterBottom variant='h4'>Select Minority Group</Typography>
+				<FormControl className={classes.formControl}>
+					<Select
+						labelId="demo-controlled-open-select-label"
+						id="demo-controlled-open-select"
+						value={constraints['minority']}
+						onChange={(e) => dispatch(Actions.setMinority(e.target.value))}
+					>
+						{/* <MenuItem value="Black">
+							<em>Black</em>
+						</MenuItem> */}
+						{minorites.map(val => (<MenuItem value={val}>{val}</MenuItem>))}
+					</Select>
+				</FormControl>
+			</Grid>
 			</Grid>
 		</div>
 	)
