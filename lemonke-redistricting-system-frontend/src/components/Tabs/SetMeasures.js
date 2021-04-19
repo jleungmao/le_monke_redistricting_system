@@ -4,6 +4,9 @@ import Slider from '@material-ui/core/Slider';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
+import {useSelector, useDispatch} from 'react-redux';
+import * as Actions from '../../actions';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
 function SetMeasures() {
 
     const classes = useStyles();
+    const measures = useSelector(state => state.measures);
+    const dispatch = useDispatch();
+
 
     const marks = [
         {
@@ -69,66 +75,84 @@ function SetMeasures() {
                 <Grid item xs={12} style={{ padding: '10px' }}>
                     <Typography gutterBottom >Population equality</Typography>
                     <Slider
-                        defaultValue={0.5}
+                        defaultValue={measures['popEq']}
                         step={0.01}
                         min={0}
                         max={1}
                         valueLabelDisplay="auto"
+                        onChangeCommitted = {(event,val) => dispatch(Actions.setPopulationEqualityWeight(val))}
                         marks={marks}
                     />
                 </Grid>
                 <Grid item xs={12} style={{ padding: '10px' }}>
                     <Typography gutterBottom>Split counties</Typography>
                     <Slider
-                        defaultValue={0.5}
+                        defaultValue={measures['splitCounty']}
                         step={0.01}
                         min={0}
                         max={1}
                         valueLabelDisplay="auto"
+                        onChangeCommitted = {(event,val) => dispatch(Actions.setSplitCountyWeight(val))}
                         marks={marks}
                     />
                 </Grid>
                 <Grid item xs={12} style={{ padding: '10px' }}>
                     <Typography gutterBottom>Deviation from average districting</Typography>
                     <Slider
-                        defaultValue={0.5}
+                        defaultValue={measures['devFromAvg']}
                         step={0.01}
                         min={0}
                         max={1}
                         valueLabelDisplay="auto"
+                        onChangeCommitted = {(event,val) => dispatch(Actions.setDevFromAvgWeight(val))}
                         marks={marks}
                     />
                 </Grid>
                 <Grid item xs={12} style={{ padding: '10px' }}>
-                    <Typography gutterBottom>Deviation from enacted plan</Typography>
+                    <Typography gutterBottom>Deviation from enacted area</Typography>
                     <Slider
-                        defaultValue={0.5}
+                        defaultValue={measures['devFromEnactedArea']}
                         step={0.01}
                         min={0}
                         max={1}
                         valueLabelDisplay="auto"
+                        onChangeCommitted = {(event,val) => dispatch(Actions.setDevFromEnactedPlanArea(val))}
+                        marks={marks}
+                    />
+                </Grid>
+                <Grid item xs={12} style={{ padding: '10px' }}>
+                    <Typography gutterBottom>Deviation from enacted population</Typography>
+                    <Slider
+                        defaultValue={measures['devFromEnactedPop']}
+                        step={0.01}
+                        min={0}
+                        max={1}
+                        valueLabelDisplay="auto"
+                        onChangeCommitted = {(event,val) => dispatch(Actions.setDevFromEnactedPlanPopulation(val))}
                         marks={marks}
                     />
                 </Grid>
                 <Grid item xs={12} style={{ padding: '10px' }}>
                     <Typography gutterBottom>Compactness</Typography>
                     <Slider
-                        defaultValue={0.5}
+                        defaultValue={measures['compactness']}
                         step={0.01}
                         min={0}
                         max={1}
                         valueLabelDisplay="auto"
+                        onChangeCommitted = {(event,val) => dispatch(Actions.setCompactnessWeight(val))}
                         marks={marks}
                     />
                 </Grid>
                 <Grid item xs={12} style={{ padding: '10px' }}>
                     <Typography gutterBottom>Political Fairness</Typography>
                     <Slider
-                        defaultValue={0.5}
+                        defaultValue={measures['polFairness']}
                         step={0.01}
                         min={0}
                         max={1}
                         valueLabelDisplay="auto"
+                        onChangeCommitted = {(event,val) => dispatch(Actions.setPoliticalFairnessWeight(val))}
                         marks={marks}
                     />
                 </Grid>

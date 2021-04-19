@@ -68,10 +68,7 @@ function SetConstraints(props) {
 
 	const [compactness, setCompactness] = useState(constraints['compactness']);
 	const [popEq, setPopEq] = useState(constraints['populationEq']);
-	const [minority, setMinority] = useState(constraints['minority']);
 
-	const [votingAge, setVotingAge] = useState(props.votingAge);
-	const [citizenVotingAge, setCitizenVotingAge] = useState(props.citizenVotingAge);
 	const [open, setOpen] = useState(false);
 	// const [totalPopulationAvailable, setTotalPopulationAvailable] = useState(false)
 	const [vtpaAvailable, setVtpaAvailable] = useState(false)
