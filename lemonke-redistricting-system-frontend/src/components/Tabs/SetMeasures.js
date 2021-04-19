@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Actions from '../../actions';
+import axios from 'axios';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -168,7 +169,14 @@ function SetMeasures() {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => dispatch(Actions.incrementStep())}>
+						onClick={() => {
+							axios.post('http://localhost:8080/lemonke/setMeasures', {
+								measures
+							}).then(function (response) {
+								console.log(response);
+							});
+							dispatch(Actions.incrementStep());
+						}}>
                         Next
                     </Button>
                 </div>

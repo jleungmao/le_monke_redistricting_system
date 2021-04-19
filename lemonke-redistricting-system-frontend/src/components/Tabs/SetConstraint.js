@@ -25,6 +25,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Actions from '../../actions'
+import axios from 'axios';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -333,19 +334,26 @@ function SetConstraints(props) {
 					</FormControl>
 				</Grid>
 			</Grid>
-            <div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
-                <div>
-                    <Button onClick={() => dispatch(Actions.decrementStep())} >
-                        Back
+			<div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
+				<div>
+					<Button onClick={() => dispatch(Actions.decrementStep())} >
+						Back
 		  			</Button>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => dispatch(Actions.incrementStep())}>
-                        Next
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={() => {
+							axios.post('http://localhost:8080/lemonke/setConstraints', {
+								constraints
+							}).then(function (response) {
+								console.log(response);
+							});
+							dispatch(Actions.incrementStep());
+						}}>
+						Next
                     </Button>
-                </div>
-            </div>
+				</div>
+			</div>
 		</div>
 	)
 }
