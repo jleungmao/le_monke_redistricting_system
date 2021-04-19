@@ -314,25 +314,38 @@ function SetConstraints(props) {
 						valueLabelDisplay="auto"
 					/>
 				</Grid>
-				<br/>
-				<br/>
+				<br />
+				<br />
 				<Grid item xs={12} style={{ padding: '10px' }}>
-				<Typography gutterBottom variant='h4'>Select Minority Group</Typography>
-				<FormControl className={classes.formControl}>
-					<Select
-						labelId="demo-controlled-open-select-label"
-						id="demo-controlled-open-select"
-						value={constraints['minority']}
-						onChange={(e) => dispatch(Actions.setMinority(e.target.value))}
-					>
-						{/* <MenuItem value="Black">
+					<Typography gutterBottom variant='h4'>Select Minority Group</Typography>
+					<FormControl className={classes.formControl}>
+						<Select
+							labelId="demo-controlled-open-select-label"
+							id="demo-controlled-open-select"
+							value={constraints['minority']}
+							onChange={(e) => dispatch(Actions.setMinority(e.target.value))}
+						>
+							{/* <MenuItem value="Black">
 							<em>Black</em>
 						</MenuItem> */}
-						{minorites.map(val => (<MenuItem value={val}>{val}</MenuItem>))}
-					</Select>
-				</FormControl>
+							{minorites.map(val => (<MenuItem value={val}>{val}</MenuItem>))}
+						</Select>
+					</FormControl>
+				</Grid>
 			</Grid>
-			</Grid>
+            <div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
+                <div>
+                    <Button onClick={() => dispatch(Actions.decrementStep())} >
+                        Back
+		  			</Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => dispatch(Actions.incrementStep())}>
+                        Next
+                    </Button>
+                </div>
+            </div>
 		</div>
 	)
 }

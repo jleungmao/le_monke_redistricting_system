@@ -1,12 +1,13 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { PinDropSharp } from '@material-ui/icons';
+import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import {setSelectedJob} from '../../actions'
+import { setSelectedJob, incrementStep, decrementStep } from '../../actions'
 
 function SelectJob(props) {
 
@@ -16,26 +17,21 @@ function SelectJob(props) {
     const [jobList, setJobList] = React.useState([]);
     const dispatch = useDispatch();
 
-    const handleSelectedList = (event, index) => {
-        setSelectedIndex(index);
-        console.log(index);
-    }
 
 
-    
-	useEffect(() => {
+    useEffect(() => {
 
-		async function fetchJobs() {
-			let res = await axios('http://localhost:8080/lemonke/states/'+stateID+'/jobs')
-			setJobList(res.data)
-		}
+        async function fetchJobs() {
+            let res = await axios('http://localhost:8080/lemonke/states/' + stateID + '/jobs')
+            setJobList(res.data);
+        }
 
-		fetchJobs();
-	}, [])
+        fetchJobs();
+    }, [])
     return (
         <>
             <h2>Select Job</h2>
-            <List component = "nav" aria-labe="job lists">
+            <List component="nav" aria-labe="job lists">
                 {/* <ListItem button 
                 selected={selectedIndex[0] === 0} 
                 onClick={(event) => handleSelectedList(event, 0, "# of Districtings: 100,243. (More info about job 1)")}>
@@ -52,18 +48,33 @@ function SelectJob(props) {
                 onClick={(event) => handleSelectedList(event, 2, "# of Districtings: 99,874. (More info about job 3)")}>
                     <ListItemText primary="Job 3" secondary="New York, 26 districtings, (Another MGGG code param)"></ListItemText>
                 </ListItem> */}
-				{jobList.map((data, index) =>
-					<ListItem button 
-                    selected = {selectedIndex === index}
-                    onClick = {(event) => {
-                        setSelectedIndex(index);
-                        dispatch(setSelectedJob(jobList[index]));
-                        console.log(jobList);
-                    }}>
-                        <ListItemText primary={"Job "+jobList[index].id} secondary=""></ListItemText>
+                {jobList.map((data, index) =>
+                    <ListItem button
+                        selected={selectedIndex === index}
+                        onClick={(event) => {
+                            setSelectedIndex(index);
+                            dispatch(setSelectedJob(jobList[index]));
+                            console.log(jobList);
+                        }}>
+                        <ListItemText primary={"Job " + jobList[index].id} secondary=""></ListItemText>
                     </ListItem>
-				)}
+                )}
             </List>
+
+            <div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
+                <div>
+                    <Button onClick={() => dispatch(decrementStep())} >
+                        Back
+		  			</Button>
+                    <Button
+                        disabled = {selectedIndex == null}
+                        variant="contained"
+                        color="primary"
+                        onClick={() => dispatch(incrementStep())}>
+                        Next
+                    </Button>
+                </div>
+            </div>
         </>
     )
 }

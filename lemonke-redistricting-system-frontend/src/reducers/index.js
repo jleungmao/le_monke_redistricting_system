@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import stepperReducer from './stepper.js';
 import selectedStateReducer from './selectedState.js';
 import selectedDistrictingReducer from './selectedDistricting.js';
 import selectedJobReducer from './selectedJob.js';
@@ -7,6 +8,7 @@ import enactedDistrictingReducer from './enactedDistricting.js';
 import measuresReducer from './measures.js';
 
 const allReducers = combineReducers({
+    step : stepperReducer,
     selectedState: selectedStateReducer,
     enactedDistricting: enactedDistrictingReducer,
     selectedJob: selectedJobReducer,

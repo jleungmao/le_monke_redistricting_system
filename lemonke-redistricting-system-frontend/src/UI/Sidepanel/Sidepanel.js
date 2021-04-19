@@ -13,31 +13,18 @@ import ShowData from '../../components/Tabs/ShowData';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { Route } from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
+import * as Actions from '../../actions';
 
 function Sidepanel(props) {
 
 
-	const [activeStep, setActiveStep] = useState(0);
-	const [compactness, setCompactness] = useState(0.5);
-	const [totalPopulation, setTotalPopulation] = useState(0.5);
-	const [votingAge, setVotingAge] = useState(0.5);
-	const [citizenVotingAge, setCitizenVotingAge] = useState(0.5);
-	const [vtpaAvailable, setVtpaAvailable] = useState(false);
-	const [totalPopulationAvailable, setTotalPopulationAvailable] = useState(false);
-	const [cvPopulation, setCvPopulation] = useState(false);
+	const activeStep = useSelector(state => state.step);
 	let selectedDistrictId = props.selectedDistrictId;
 	let homePageCallback = props.homePageCallback;
 	let selectedDistricting = "2012_Congress.geojson";
 
 	const steps = ['Select State', 'Select Job', 'Set Constraints', 'Set Measures', 'Select Districting'];
-	const handleChangeStep = (index) => {
-		// console.log(index)
-		if (index === steps.length) {
-			props.parentCallback(selectedDistricting);
-		} else {
-			setActiveStep(index);
-		}
-	};
 
 
 
@@ -89,11 +76,11 @@ function Sidepanel(props) {
 		if (value == 0) {
 			return (
 				<div className={classes.tabContent}>
-					<ProgressBar activeStep={activeStep} stepsList={steps} />
+					<ProgressBar stepsList={steps} />
 					<div style={{ marginBottom: '100px' }}>
 						<TabPanel value={activeStep} index={0}>
 							<Container maxWidth="sm">
-								<SelectState stateIndx={props.stateIndx} setState={props.setState} />
+								<SelectState/>
 							</Container>
 						</TabPanel>
 						<TabPanel value={activeStep} index={1}>
@@ -103,22 +90,7 @@ function Sidepanel(props) {
 						</TabPanel>
 						<TabPanel value={activeStep} index={2}>
 							<Container maxWidth="sm">
-								<SetConstraints
-									compactness={compactness}
-									setCompactness={setCompactness}
-									totalPopulation={totalPopulation}
-									setTotalPopulation={setTotalPopulation}
-									votingAge={votingAge}
-									setVotingAge={setVotingAge}
-									citizenVotingAge={citizenVotingAge}
-									setCitizenVotingAge={setCitizenVotingAge}
-									vtpaAvailable={vtpaAvailable}
-									setVtpaAvailable={setVtpaAvailable}
-									totalPopulationAvailable={totalPopulationAvailable}
-									setTotalPopulationAvailable={setTotalPopulationAvailable}
-									cvPopulation={cvPopulation}
-									setCvPopulation={setCvPopulation}
-								/>
+								<SetConstraints/>
 							</Container>
 						</TabPanel>
 						<TabPanel value={activeStep} index={3}>
@@ -136,7 +108,7 @@ function Sidepanel(props) {
 						</TabPanel>
 						{/* Button Next, Back and Finish  */}
 					</div>
-					<div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
+					{/* <div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
 						<div>
 							<Button disabled={activeStep === 0} onClick={() => handleChangeStep(activeStep - 1)} >
 								Back
@@ -160,7 +132,7 @@ function Sidepanel(props) {
 									Next
 								</Button>}
 						</div>
-					</div>
+					</div> */}
 				</div>
 			)
 		} else if (value == 1) {

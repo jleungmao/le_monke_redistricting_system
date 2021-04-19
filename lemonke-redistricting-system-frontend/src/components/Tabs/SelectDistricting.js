@@ -8,9 +8,14 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import Button from '@material-ui/core/Button';
+import {useDispatch} from 'react-redux';
+import * as Actions from '../../actions';
 
 
 function SelectDistricting(props) {
+
+    const dispatch = useDispatch();
 
     const [districtingSet, setDistrictingSet] = useState([]);
     const [selectedGeoJSON, setSelectedGEOJSON] = useState("");
@@ -40,7 +45,7 @@ function SelectDistricting(props) {
         updateCollapseArray(collapseArray => collapseArray.map((item, idx) => false))
     };
 
-  
+
 
 
 
@@ -63,7 +68,7 @@ function SelectDistricting(props) {
         } else {
             setNewLoad(false);
         }
-        
+
         return () => {
             // cleanup
         }
@@ -177,6 +182,24 @@ function SelectDistricting(props) {
             <List style={{ width: '27%', maxHeight: '55%', overflow: 'auto', position: 'fixed' }} >
                 {getList()}
             </List>
+
+            <div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
+                <div>
+                    <Button onClick={() => dispatch(Actions.decrementStep())} >
+                        Back
+		  			</Button>
+                    <Button
+                        disabled = {selectedIndex == null}
+                        variant="contained"
+                        color="primary"
+                        onClick={() => console.log("TODO")}>
+                        Display
+					</Button>
+                    <Button onClick={() => dispatch(Actions.resetStep())} >
+                        Reset
+					</Button>
+                </div>
+            </div>
         </>
     );
 }
