@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Plot from 'react-plotly.js';
+// import Plot from 'react-plotly.js';
 
 function Boxplot(props) {
 
@@ -133,7 +133,7 @@ function Boxplot(props) {
 
     return (
         <>
-            <Plot data={boxPlotSet} layout={layout}></Plot>
+            {/* <Plot data={boxPlotSet} layout={layout}></Plot> */}
         </>
     )
 }

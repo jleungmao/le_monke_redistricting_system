@@ -13,6 +13,8 @@ function Map(props) {
 	const [lat, setLat] = useState(props.initialState.latitude);
 	const [zoom, setZoom] = useState(props.initialState.zoom);
 	let map;
+	const [geoJSON, setGeoJSON] = useState([]);
+	const [currentState, setCurrentState] = useState("");
 	let stateData;
 	let initialized = 0;
 	let selectedDistrictId = props.selectedDistrictId;
@@ -21,6 +23,9 @@ function Map(props) {
 			[-110, 23], // Southwest coordinates
 			[-64.91058699000139, 47.87764500765852] // Northeast coordinates
 	];
+
+
+	
 
 	useEffect(() => {
 

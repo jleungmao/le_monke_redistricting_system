@@ -3,23 +3,38 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
+import {useSelector, useDispatch} from 'react-redux';
+import {setEnactedDistricting, setSelectedState} from '../../actions'
 import { StarRateSharp } from '@material-ui/icons';
 
 
 function SelectState(props) {
 
-	const [state, setState] = useState([])
-
+	const [stateList, setStateList] = useState([])
+	const selectedState = useSelector(state => state.selectedState);
+	const selectedIndex = selectedState.id;
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 
 		async function fetchStates() {
 			let res = await axios('http://localhost:8080/lemonke/states')
-			setState(res.data)
+			setStateList(res.data)
 		}
 
 		fetchStates();
 	}, [])
+
+
+	async function fetchEnacted(id){
+		let res = await axios('http://localhost:8080/lemonke/districtings/'+id)
+		dispatch(setEnactedDistricting(res.data));
+	}
+
+	function pickState(stateToUse){;
+		dispatch(setSelectedState(stateList[stateToUse]));
+		fetchEnacted(stateList[stateToUse].enacted_districting_id);
+	}
 
 	return (
 		<div>
@@ -29,15 +44,15 @@ function SelectState(props) {
 			<Select
 				labelId="demo-customized-select-label"
 				id="demo-customized-select"
-				value={props.stateIndx}
-				onChange={(e) => props.setState(e.target.value)}
+				value={selectedIndex}
+				onChange={(e) => pickState(e.target.value)}
 			>
 				{/* {data && data.map((d, i) => <MenuItem value={i}>{d.name}</MenuItem>)} */}
 				{/* <MenuItem value={0}>NewYork</MenuItem>
 				<MenuItem value={1}>Florida</MenuItem>
 				<MenuItem value={2}>Texas</MenuItem> */}
-				{state.map((d, i) =>
-					<MenuItem value={i}>{d['name']}</MenuItem>
+				{stateList.map((data, index) =>
+					<MenuItem value={index}>{data['name']}</MenuItem>
 				)}
 			</Select>
 		</div>

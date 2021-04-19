@@ -23,6 +23,8 @@ import CardActions from '@material-ui/core/CardActions';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import { useSelector, useDispatch } from 'react-redux';
+import * as Actions from '../../actions'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -61,14 +63,15 @@ const useStyles = makeStyles((theme) => ({
 function SetConstraints(props) {
 
 	const [incumbentProtection, setIncumbentProtection] = useState(props.incumbentProtection);
-	const [compactness, setCompactness] = useState(props.compactness);
-	const [totalPopulation, setTotalPopulation] = useState(props.totalPopulation)
+	const constraints = useSelector(state => state.constraints);
+	const dispatch = useDispatch();
+
+	const [compactness, setCompactness] = useState(constraints['compactness']);
+	const [popEq, setPopEq] = useState(constraints['populationEq']);
+
 	const [votingAge, setVotingAge] = useState(props.votingAge);
-	const [citizenVotingAge, setCitizenVotingAge] = useState(props.citizenVotingAge)
-	const [valueCompactness, setValueCompactness] = useState('pp');
+	const [citizenVotingAge, setCitizenVotingAge] = useState(props.citizenVotingAge);
 	const [open, setOpen] = useState(false);
-	const [openMinMaxDis, setOpenMinMaxDis] = useState(false);
-	const [minMaxDis, setMinMaxDis] = useState('');
 	// const [totalPopulationAvailable, setTotalPopulationAvailable] = useState(false)
 	const [vtpaAvailable, setVtpaAvailable] = useState(false)
 	const [cvPopulation, setCvPopulation] = useState(false)
@@ -197,9 +200,6 @@ function SetConstraints(props) {
 		)
 	}
 
-	const handleChange = (event) => {
-		setValueCompactness(event.target.value);
-	};
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -218,8 +218,6 @@ function SetConstraints(props) {
 				justify="space-around"
 				alignItems="stretch"
 			>
-				<br />
-				<br />
 				<Grid item xs={12} style={{ padding: '10px' }}>
 					<Typography gutterBottom variant='h4'>Set Protected Incumbents</Typography>
 					<Button variant="outlined" color="primary" onClick={handleClickOpen}>
@@ -234,18 +232,19 @@ function SetConstraints(props) {
 					{/* THe form to select compactness */}
 					<Typography gutterBottom variant='h4'>Select Compactness</Typography>
 					{/* <FormControl component="fieldset"> */}
-					<RadioGroup aria-label="gender" name="gender1" value={valueCompactness} onChange={handleChange}>
+					<RadioGroup aria-label="gender" name="gender1" value={constraints['compactnessType']}
+						onChange={(e) => { dispatch(Actions.setCompactnessType(e.target.value)) }}>
 						<FormControlLabel value="pp" control={<Radio />} label="Polsby-Popper" />
 						<FormControlLabel value="gc" control={<Radio />} label="Graph Compactness" />
 						<FormControlLabel value="fat" control={<Radio />} label="Population Fatness" />
 					</RadioGroup>
 					{/* </FormControl> */}
 					<Slider
-						value={typeof compactness === 'number' ? compactness : 0}
+						value={compactness}
 						onChange={(e, val) => setCompactness(val)}
 						onChangeCommitted={(e, val) => {
 							e.preventDefault();
-							props.setCompactness(val)
+							dispatch(Actions.setCompactnessConstraint(val))
 						}}
 						step={0.01}
 						min={0}
@@ -262,15 +261,13 @@ function SetConstraints(props) {
 						<Select
 							labelId="demo-controlled-open-select-label"
 							id="demo-controlled-open-select"
-							open={openMinMaxDis}
-							onClose={() => setOpenMinMaxDis(false)}
-							onOpen={() => setOpenMinMaxDis(true)}
-							value={minMaxDis}
-							onChange={(e) => setMinMaxDis(e.target.value)}
+							value={constraints['majorityMinority']}
+							onChange={(e) => dispatch(Actions.setMajorityMinorityConstraint(e.target.value))}
 						>
 							<MenuItem value="">
 								<em>None</em>
 							</MenuItem>
+							{/* TODO LOAD THE MM DIFFERENTLY */}
 							{minMaxDisSelection.map(val => (<MenuItem value={val}>{val}</MenuItem>))}
 						</Select>
 					</FormControl>
@@ -280,7 +277,7 @@ function SetConstraints(props) {
 				{/* Population Constraints */}
 				<Grid item xs={12} style={{ padding: '10px' }}>
 					<Typography gutterBottom variant='h4'>Population Constraints</Typography>
-					<Typography gutterBottom>Total Population</Typography>
+					{/* <Typography gutterBottom>Total Population</Typography>
 					<Switch
 						checked={props.totalPopulationAvailable}
 						onChange={() => props.setTotalPopulationAvailable(props.totalPopulationAvailable ? false : true)}
@@ -288,47 +285,21 @@ function SetConstraints(props) {
 						color="primary"
 						name="checkedB"
 						inputProps={{ 'aria-label': 'primary checkbox' }}
-					/>
+					/> */}
+					<RadioGroup aria-label="gender" name="gender1" value={constraints['populationEqType']}
+						onChange={(e) => { dispatch(Actions.setPopulationConstraintType(e.target.value)) }}>
+						<FormControlLabel value="tpop" control={<Radio />} label="Total Population" />
+						<FormControlLabel value="tvap" control={<Radio />} label="Voting Age Population (TVAP)" />
+						<FormControlLabel value="cvap" control={<Radio />} label="Citizen Voting Age Population (CVAP)" />
+					</RadioGroup>
 					<Slider
-						value={totalPopulation}
-						onChange={(e, val) => setTotalPopulation(val)}
+						value={popEq}
+						onChange={(e, val) => setPopEq(val)}
 						onChangeCommitted={(e, val) => {
 							e.preventDefault();
-							props.setTotalPopulation(val)
+							dispatch(Actions.setPopulationConstraint(val))
 						}}
-						step={0.01}
-						min={0}
-						max={100}
-						disabled={!props.totalPopulationAvailable}
-						marks={[
-							{
-								value: 0,
-								label: '0'
-							},
-							{
-								value: 100,
-								label: 'all'
-							}
-						]}
-						valueLabelDisplay="auto"
-					/>
-					<Typography gutterBottom>Voting Age Population (TVAP)</Typography>
-					<Switch
-						checked={props.vtpaAvailable}
-						onChange={() => props.setVtpaAvailable(props.vtpaAvailable ? false : true)}
-						color="primary"
-						name="checkedB"
-						inputProps={{ 'aria-label': 'primary checkbox' }}
-					/>
-					<Slider
-						value={typeof votingAge === 'number' ? votingAge : 0}
-						onChange={(e, val) => setVotingAge(val)}
-						onChangeCommitted={(e, val) => {
-							e.preventDefault();
-							props.setVotingAge(val)
-						}}
-						disabled={!props.vtpaAvailable}
-						step={0.01}
+						step={1}
 						min={0}
 						max={100}
 						marks={[
@@ -343,36 +314,6 @@ function SetConstraints(props) {
 						]}
 						valueLabelDisplay="auto"
 					/>
-					<Typography gutterBottom>Citizen Voting Age Population (CVAP)</Typography>
-					<Switch
-						checked={props.cvPopulation}
-						onChange={() => props.setCvPopulation(props.cvPopulation? false : true)}
-						color="primary"
-						name="checkedB"
-						inputProps={{ 'aria-label': 'primary checkbox' }}
-					/>
-					<Slider
-						value={citizenVotingAge}
-						onChange={(e, val) => setCitizenVotingAge(val)}
-						onChangeCommitted={(e, val) => {
-							e.preventDefault();
-							props.setCitizenVotingAge(val)
-						}}
-						disabled={!props.cvPopulation}
-						step={0.01}
-						min={0}
-						max={100}
-						marks={[{
-							value: 0,
-							label: '0'
-						},
-						{
-							value: 100,
-							label: 'all'
-						}]}
-						valueLabelDisplay="auto"
-					/>
-					{/* </RadioGroup> */}
 				</Grid>
 			</Grid>
 		</div>

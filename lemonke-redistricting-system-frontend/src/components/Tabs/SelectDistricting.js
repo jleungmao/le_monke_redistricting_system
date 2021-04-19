@@ -8,31 +8,36 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import classes from './SelectDistricting.module.css';
 
 
 function SelectDistricting(props) {
 
-    const [districtingSet, setDistrictingSet] = React.useState([]);
-    const [selectedGeoJSON, setSelectedGEOJSON] = React.useState("");
+    const [districtingSet, setDistrictingSet] = useState([]);
+    const [selectedGeoJSON, setSelectedGEOJSON] = useState("");
     //select an item in the list to highlight
     //handles collapsing of the array
-    const [selectedIndex, setSelectedIndex] = React.useState();
-    const [collapseArray, updateCollapseArray] = React.useState(new Array(10).fill(false));
+    const [selectedIndex, setSelectedIndex] = useState();
+    const [collapseArray, updateCollapseArray] = useState(new Array(10).fill(false));
+    const [selectedDistricting, setDistricting] = useState();
     //pick the set to display
-    const [selectedSet, setToChangeTo] = React.useState('bestDistricts');
-    const [newLoad, setNewLoad] = React.useState(true);
+    const [selectedCategory, setCategory] = useState('bestDistricts');
+    const [newLoad, setNewLoad] = useState(true);
 
+
+
+    //TODO set the districting when the item is clicked via the districting ID
     const handleListItemClick = async (index) => {
         setSelectedIndex(index);
         updateCollapseArray(collapseArray => collapseArray.map((item, idx) => idx === index ? !item : false))
         // props.selectedDistrictingId = districtingSet[index][Object.keys(districtingSet)];
-        console.log(districtingSet[selectedSet][index]["GeoJSON"]);
-        props.parentCallback(districtingSet[selectedSet][index]["GeoJSON"]);
+        console.log(districtingSet[selectedCategory][index]["GeoJSON"]);
+        props.parentCallback(districtingSet[selectedCategory][index]["GeoJSON"]);
     };
 
     const handleSetChange = (event) => {
-        setToChangeTo(event.target.value);
+        setCategory(event.target.value);
+        setSelectedIndex();
+        updateCollapseArray(collapseArray => collapseArray.map((item, idx) => false))
     };
 
   
@@ -70,7 +75,7 @@ function SelectDistricting(props) {
     function getList() {
         let listOptions;
         if (Object.keys(districtingSet).length != 0) {
-            switch (selectedSet) {
+            switch (selectedCategory) {
                 case 'bestDistricts':
                     listOptions = sortDistrictings(districtingSet['bestDistricts']);
                     break;
@@ -159,7 +164,7 @@ function SelectDistricting(props) {
             <h2>Select Districting</h2>
             <FormControl>
                 <Select
-                    value={selectedSet}
+                    value={selectedCategory}
                     onChange={handleSetChange}
                 >
                     <MenuItem value={'bestDistricts'}>Best Districtings</MenuItem>

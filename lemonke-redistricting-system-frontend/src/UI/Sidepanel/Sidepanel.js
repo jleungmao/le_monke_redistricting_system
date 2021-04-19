@@ -39,24 +39,33 @@ function Sidepanel(props) {
 		}
 	};
 
-	
 
-	
+
+
 	const setSelectedDistrictingId = (selectedDistrictingId) => {
 		selectedDistricting = selectedDistrictingId;
 		// console.log("saving the value for button" + selectedDistrictingId);
 	}
 
 	// Population equality.
-	// Inccumbent protenction.
-	// Magority/ minority districts.
+	// Incumbent protection.
+	// Majority/ minority districts.
 	// Minimum number of districts where the districts have x population for minority.
 
 
 	function TabPanel(props) {
 		const { index, value, children, ...other } = props;
+
+		let styles = {
+			'display': 'none'
+		};
+
+		if(value === index){
+			styles.display = 'block';
+		}
+
 		return (
-			<div>{value === index && <>{children}</>}</div>
+			<div style = {styles}>{value === index && <>{children}</>}</div>
 		)
 	}
 
@@ -119,7 +128,7 @@ function Sidepanel(props) {
 						</TabPanel>
 						<TabPanel value={activeStep} index={4}>
 							<Container maxWidth="sm">
-								<SelectDistricting 
+								<SelectDistricting
 									parentCallback={setSelectedDistrictingId}
 								/>
 								{/* <Route exact path='/' component={Boxplot}></Route> */}
@@ -131,17 +140,25 @@ function Sidepanel(props) {
 						<div>
 							<Button disabled={activeStep === 0} onClick={() => handleChangeStep(activeStep - 1)} >
 								Back
-		  							</Button>
-							<Button
-								variant="contained"
-								color="primary"
-								onClick={() => handleChangeStep(activeStep + 1)}>
-								{activeStep === steps.length - 1 ? 'Display' : 'Next'}
-							</Button>
+		  					</Button>
 							{activeStep === steps.length - 1 ?
+								<>
+								<Button
+									variant="contained"
+									color="primary"
+									onClick={() => handleChangeStep(activeStep + 1)}>
+									Display
+								</Button>
 								<Button onClick={() => handleChangeStep(0)} >
 									Reset
-								</Button> : ""}
+								</Button>
+								</> : 
+								<Button
+									variant="contained"
+									color="primary"
+									onClick={() => handleChangeStep(activeStep + 1)}>
+									Next
+								</Button>}
 						</div>
 					</div>
 				</div>
@@ -149,7 +166,7 @@ function Sidepanel(props) {
 		} else if (value == 1) {
 			return (
 				<div className={classes.tabContent}>
-					<Route exact path='/' render={(props) => (<ShowData selectedDistrict={selectedDistrictId} homePageCallback = {homePageCallback}/>)}></Route>
+					<Route exact path='/' render={(props) => (<ShowData selectedDistrict={selectedDistrictId} homePageCallback={homePageCallback} />)}></Route>
 				</div>
 			)
 		}
