@@ -27,6 +27,14 @@ export const setEnactedDistricting = (enacted) => {
     };
 }
 
+
+export const setCoordinates = (coordinates) => {
+    return {
+        type: "SET_COORDINATES",
+        payload: coordinates
+    }
+}
+
 //STEPPING
 export const incrementStep = () => {
     return {
@@ -50,7 +58,8 @@ export const resetStep = () => {
 //TODO INCUMBENTS
 export const setIncumbentProtectionConstraint = (incumbentArray) => {
     return {
-        type: ""
+        type: "SET_INCUMBENT_PROTECTION",
+        payload: incumbentArray
     };
 }
 

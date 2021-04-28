@@ -38,9 +38,9 @@ function HomePage() {
 		},
 		{
             stateName: 'startPos',
-            longitude: -85.5975,
-            latitude: 36.4289,
-            zoom: 4.55
+            longitude: -89.8,
+            latitude: 35.8,
+            zoom: 4.36	
         }
 	]
 

@@ -1,4 +1,5 @@
 const constraintsReducer = (constraints = {
+    'protectedIncumbents' : [],
     'compactnessType' : "pp",
     'compactness' : 0,
     'majorityMinority':0,
@@ -8,6 +9,9 @@ const constraintsReducer = (constraints = {
 }, action) => {
     let newConstraints = {...constraints};
     switch (action.type) {
+        case "SET_INCUMBENT_PROTECTION":
+            newConstraints['protectedIncumbents'] = action.payload
+            return newConstraints
         case "SET_COMPACTNESS_TYPE":
             newConstraints['compactnessType'] = action.payload
             return newConstraints

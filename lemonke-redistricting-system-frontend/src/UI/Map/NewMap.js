@@ -1,9 +1,7 @@
-import React, { useRef, useEffect, useState, useCallback, componentDidUpdate } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import mapboxgl, { BoxZoomHandler } from 'mapbox-gl';
-import classes from './Map.module.css';
+import classes from './NewMap.module.css';
 import axios from 'axios';
-import {useSelector} from 'react-redux';
-
 
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -11,23 +9,45 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 function Map(props) {
 	const mapContainer = useRef();
 	console.log(props);
-	const districting = useSelector(state => state.selectedDistricting);
-	const selectedState = useSelector(state => state.selectedState);
-	const [lng, setLng] = useState(-89.8);
-	const [lat, setLat] = useState(35.8);
-	const [zoom, setZoom] = useState(4.36);
+	const [lng, setLng] = useState(props.initialState.longitude);
+	const [lat, setLat] = useState(props.initialState.latitude);
+	const [zoom, setZoom] = useState(props.initialState.zoom);
 	let map;
 	const [geoJSON, setGeoJSON] = useState([]);
+	const [currentState, setCurrentState] = useState("");
 	let stateData;
 	let initialized = 0;
+	let selectedDistrictId = props.selectedDistrictId;
+	let districtingToLoad = props.selectedDistrictingId;
 	let bounds = [
 			[-110, 23], // Southwest coordinates
 			[-64.91058699000139, 47.87764500765852] // Northeast coordinates
 	];
 
 
+	
 
 	useEffect(() => {
+
+		if (!initialized && props.initialState.stateName == 'NewYork'){
+			axios.get('./'+districtingToLoad)
+				.then(res => {
+					stateData = res.data;
+					// preprocessing
+					let i = 1;
+					for (var feature of stateData.features) {
+						feature.properties = {
+							"demographic_data": Math.random() * 30000,
+							"color": addColor(),
+						};
+						feature.id = i;
+						i++;
+					}
+					console.log(stateData);
+				});
+
+			initialized = 1;
+		}
 
 		map = new mapboxgl.Map({
 			container: mapContainer.current,
@@ -62,7 +82,7 @@ function Map(props) {
 
 			// add navigation control (the +/- zoom buttons)
 			map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
-			// populatingLayers(map, stateData, firstSymbolId);
+			populatingLayers(map, stateData, firstSymbolId);
 
 			map.on('click', 'districts', function (e) {
 				if (e.features.length > 0) {
@@ -89,8 +109,6 @@ function Map(props) {
 			});
 		});
 
-
-		
 		// On move
 		map.on('move', () => {
 			console.log("moving")
@@ -150,12 +168,12 @@ function Map(props) {
 			}
 		});
 		//highlight selected one
-		// map.setFeatureState(
-		// 	{
-		// 		source: props.initialState.stateName, id: selectedDistrictId
-		// 	},
-		// 	{ hover: true }
-		// );
+		map.setFeatureState(
+			{
+				source: props.initialState.stateName, id: selectedDistrictId
+			},
+			{ hover: true }
+		);
 	}
 
 	// TODO:

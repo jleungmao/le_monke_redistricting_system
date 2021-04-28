@@ -13,7 +13,7 @@ function SelectState(props) {
 
 	const [stateList, setStateList] = useState([])
 	const selectedState = useSelector(state => state.selectedState);
-	const selectedIndex = selectedState.id;
+	const selectedIndex = selectedState.stateId;
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -33,7 +33,6 @@ function SelectState(props) {
 	}
 
 	function pickState(stateToUse) {
-		;
 		dispatch(setSelectedState(stateList[stateToUse]));
 		fetchEnacted(stateList[stateToUse].enacted_districting_id);
 	}
@@ -55,7 +54,7 @@ function SelectState(props) {
 				<MenuItem value={1}>Florida</MenuItem>
 				<MenuItem value={2}>Texas</MenuItem> */}
 					{stateList.map((data, index) =>
-						<MenuItem value={index}>{data['name']}</MenuItem>
+						<MenuItem value={index} key={data['name']}>{data['name']}</MenuItem>
 					)}
 				</Select>
 			</div>

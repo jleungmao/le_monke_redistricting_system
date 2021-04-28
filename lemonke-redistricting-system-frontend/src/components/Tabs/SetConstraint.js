@@ -67,6 +67,8 @@ function SetConstraints(props) {
 	const constraints = useSelector(state => state.constraints);
 	const dispatch = useDispatch();
 
+	const protectedIncumbents = constraints['protectedIncumbents'];
+	const [tempProtected, setTempProtected] = useState(protectedIncumbents);
 	const [compactness, setCompactness] = useState(constraints['compactness']);
 	const [popEq, setPopEq] = useState(constraints['populationEq']);
 
@@ -76,56 +78,16 @@ function SetConstraints(props) {
 	const [cvPopulation, setCvPopulation] = useState(false)
 	const classes = useStyles();
 
-
-	let incumbents = [{
-		name: 'Jack',
-		last: 'Moron',
-		state: 'NY',
-		district: 1
-	},
-	{
-		name: 'Ben',
-		last: 'Flin',
-		state: 'NY',
-		district: 3
-	},
-	{
-		name: 'Fin',
-		last: 'Butler',
-		state: 'NY',
-		district: 4
-	},
-	{
-		name: 'Leon',
-		last: 'Kak',
-		state: 'NY',
-		district: 9
-	},
-	{
-		name: 'Derek',
-		last: 'Wein',
-		state: 'NY',
-		district: 17
-	},
-	{
-		name: 'George',
-		last: 'Ohot',
-		state: 'NY',
-		district: 6
-	},
-	{
-		name: 'Andrey',
-		last: 'Paley',
-		state: 'NY',
-		district: 7
-	}]
+	const selectedState = useSelector(state => state.selectedState)
+	const incumbents = selectedState.incumbents;
 
 	let minMaxDisSelection = [0, 1, 2, 3, 4]
 	let minorites = ['black', 'asian', 'hispanic']
 
 	// jsut there to update on 'open'
 	useEffect(() => {
-	}, [open])
+		console.log(protectedIncumbents)
+	}, [open, protectedIncumbents])
 
 
 
@@ -140,9 +102,25 @@ function SetConstraints(props) {
 		}
 	]
 
+	function selectIncumbent(incumbentId){
+		if(tempProtected.includes(incumbentId)){
+			let newList = tempProtected;
+			newList.splice(newList.indexOf(incumbentId),1);
+			setTempProtected(newList);
+			console.log(tempProtected);
+		}else{
+			let newList = tempProtected;
+			newList.push(incumbentId);
+			setTempProtected(newList);
+		}
+	}
 
+	function isChecked(id){
+		return protectedIncumbents.includes(id)
+	}
 
 	function FormRow() {
+		
 		return (
 			<React.Fragment>
 				{incumbents.map(inc => (
@@ -150,16 +128,22 @@ function SetConstraints(props) {
 						<Card className={classes.root}>
 							<CardContent>
 								<Typography variant="h5" component="h2">
-									{inc.name + ' ' + inc.last}
+									{inc.firstName + ' ' + inc.lastName}
 								</Typography>
 								<Typography className={classes.pos} color="textSecondary">
-									{inc.state}, district {inc.district}
+									{selectedState.name}
+									{/* , district {inc.district} */}
 								</Typography>
 								<Typography variant="body2" component="p">
 									Keep them safe
 									<Checkbox
 										color="primary"
 										inputProps={{ 'aria-label': 'secondary checkbox' }}
+										checked = {isChecked(inc.incumbentId)}
+										onChange = {(event)=>{
+											selectIncumbent(inc.incumbentId);
+											console.log(isChecked(inc.incumbentId))
+										}}
 									/>
 								</Typography>
 							</CardContent>
@@ -192,7 +176,7 @@ function SetConstraints(props) {
 					<Button onClick={handleClose} color="primary">
 						Cancel
           			</Button>
-					<Button onClick={handleClose} color="primary" autoFocus>
+					<Button onClick={handleApply} color="primary" autoFocus>
 						Apply
           			</Button>
 				</DialogActions>
@@ -205,7 +189,14 @@ function SetConstraints(props) {
 		setOpen(true);
 	};
 
+	const handleApply = () =>{
+		dispatch(Actions.setIncumbentProtectionConstraint(protectedIncumbents));
+		setOpen(false);
+	}
+	
 	const handleClose = () => {
+		setTempProtected(protectedIncumbents);
+		console.log(protectedIncumbents);
 		setOpen(false);
 	};
 
@@ -336,7 +327,10 @@ function SetConstraints(props) {
 			</Grid>
 			<div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
 				<div>
-					<Button onClick={() => dispatch(Actions.decrementStep())} >
+					<Button onClick={() => {
+						dispatch(Actions.setIncumbentProtectionConstraint([]));
+						dispatch(Actions.decrementStep());
+					}} >
 						Back
 		  			</Button>
 					<Button

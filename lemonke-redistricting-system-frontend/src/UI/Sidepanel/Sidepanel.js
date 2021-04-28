@@ -76,7 +76,7 @@ function Sidepanel(props) {
 		if (value == 0) {
 			return (
 				<div className={classes.tabContent}>
-					<ProgressBar stepsList={steps} />
+					<ProgressBar activeStep = {activeStep} stepsList={steps} />
 					<div style={{ marginBottom: '100px' }}>
 						<TabPanel value={activeStep} index={0}>
 							<Container maxWidth="sm">

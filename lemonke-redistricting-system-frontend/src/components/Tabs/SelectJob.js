@@ -13,7 +13,7 @@ function SelectJob(props) {
 
     // const [selectedIndex, setSelectedIndex] = React.useState([0,"# of Districtings: 100,243. (More info about job 1)"]);
     const [selectedIndex, setSelectedIndex] = React.useState();
-    const stateID = useSelector(state => state.selectedState.id)
+    const stateID = useSelector(state => state.selectedState.stateId)
     const [jobList, setJobList] = React.useState([]);
     const dispatch = useDispatch();
 
@@ -31,7 +31,7 @@ function SelectJob(props) {
     return (
         <>
             <h2>Select Job</h2>
-            <List component="nav" aria-labe="job lists">
+            <List component="nav" aria-label="job lists">
                 {/* <ListItem button 
                 selected={selectedIndex[0] === 0} 
                 onClick={(event) => handleSelectedList(event, 0, "# of Districtings: 100,243. (More info about job 1)")}>
@@ -50,13 +50,14 @@ function SelectJob(props) {
                 </ListItem> */}
                 {jobList.map((data, index) =>
                     <ListItem button
+                        key = {jobList[index].jobId}
                         selected={selectedIndex === index}
                         onClick={(event) => {
                             setSelectedIndex(index);
                             dispatch(setSelectedJob(jobList[index]));
                             console.log(jobList);
                         }}>
-                        <ListItemText primary={"Job " + jobList[index].id} secondary=""></ListItemText>
+                        <ListItemText primary={"Job " + jobList[index].jobId} secondary=""></ListItemText>
                     </ListItem>
                 )}
             </List>
