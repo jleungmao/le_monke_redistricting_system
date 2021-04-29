@@ -5,70 +5,81 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { PinDropSharp } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { setSelectedJob, incrementStep, decrementStep } from '../../actions'
+import { setSelectedJob, incrementStep, decrementStep } from '../../actions';
+import * as Actions from '../../actions';
 
 function SelectJob(props) {
 
     // const [selectedIndex, setSelectedIndex] = React.useState([0,"# of Districtings: 100,243. (More info about job 1)"]);
     const [selectedIndex, setSelectedIndex] = React.useState();
-    const stateID = useSelector(state => state.selectedState.stateId)
+    const stateID = useSelector(state => state.selectedState.stateId);
     const [jobList, setJobList] = React.useState([]);
     const dispatch = useDispatch();
+    const [minorities, setMinorities] = React.useState([]);
+    const selectedMinority = useSelector(state => state.selectedMinority);
 
 
 
     useEffect(() => {
 
-        async function fetchJobs() {
-            let res = await axios('http://localhost:8080/lemonke/states/' + stateID + '/jobs')
-            setJobList(res.data);
+        async function fetchData() {
+            let res = await axios(`http://localhost:8080/lemonke/states/${stateID}/available-ethnicities`);
+            setMinorities(res.data);
+
+
+            let res2 = await axios(`http://localhost:8080/lemonke/states/${stateID}/job-summaries`);
+            setJobList(res2.data);
+
+
         }
 
-        fetchJobs();
+        fetchData();
     }, [])
     return (
         <>
+            <h2>Select Minority Group</h2>
+            <Select
+                value={selectedMinority}
+                onChange={(e) => dispatch(Actions.setMinority(e.target.value))}
+            >
+                {minorities.map(val => (<MenuItem value={val}>{val}</MenuItem>))}
+            </Select>
             <h2>Select Job</h2>
             <List component="nav" aria-label="job lists">
-                {/* <ListItem button 
-                selected={selectedIndex[0] === 0} 
-                onClick={(event) => handleSelectedList(event, 0, "# of Districtings: 100,243. (More info about job 1)")}>
-                    <ListItemText primary="Job 1" secondary="New York, 27 districtings, (Some MGGG code param)">
-                    </ListItemText>
-                </ListItem>
-                <ListItem button
-                selected={selectedIndex[0] === 1} 
-                onClick={(event) => handleSelectedList(event, 1, "# of Districtings: 101,632 (More info about job 2)")}>
-                    <ListItemText primary="Job 2" secondary="New York, 28 districtings, (Another MGGG code param)"></ListItemText>
-                </ListItem>
-                <ListItem button
-                selected={selectedIndex[0] === 2} 
-                onClick={(event) => handleSelectedList(event, 2, "# of Districtings: 99,874. (More info about job 3)")}>
-                    <ListItemText primary="Job 3" secondary="New York, 26 districtings, (Another MGGG code param)"></ListItemText>
-                </ListItem> */}
                 {jobList.map((data, index) =>
                     <ListItem button
-                        key = {jobList[index].jobId}
+                        key={jobList[index].jobId}
                         selected={selectedIndex === index}
                         onClick={(event) => {
                             setSelectedIndex(index);
                             dispatch(setSelectedJob(jobList[index]));
                             console.log(jobList);
                         }}>
-                        <ListItemText primary={"Job " + jobList[index].jobId} secondary=""></ListItemText>
+                        <ListItemText
+                            primary={"Job " + jobList[index].jobId}
+                            secondary={<div>
+                                <div>Number of Districtings: {jobList[index].numberDistrictings}</div>
+                                <div>Number of Rounds: {jobList[index].numberRounds}</div>
+                                <div>Cooling period: {jobList[index].coolingPeriod}</div>
+                            </div>
+                            }></ListItemText>
                     </ListItem>
                 )}
             </List>
 
             <div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
                 <div>
-                    <Button onClick={() => dispatch(decrementStep())} >
+                    <Button onClick={() => {
+                        dispatch(decrementStep());
+                    }} >
                         Back
 		  			</Button>
                     <Button
-                        disabled = {selectedIndex == null}
+                        disabled={selectedIndex == null}
                         variant="contained"
                         color="primary"
                         onClick={() => dispatch(incrementStep())}>

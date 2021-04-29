@@ -63,12 +63,10 @@ const useStyles = makeStyles((theme) => ({
 
 function SetConstraints(props) {
 
-	const [incumbentProtection, setIncumbentProtection] = useState(props.incumbentProtection);
 	const constraints = useSelector(state => state.constraints);
 	const dispatch = useDispatch();
 
 	const protectedIncumbents = constraints['protectedIncumbents'];
-	const [tempProtected, setTempProtected] = useState(protectedIncumbents);
 	const [compactness, setCompactness] = useState(constraints['compactness']);
 	const [popEq, setPopEq] = useState(constraints['populationEq']);
 
@@ -79,15 +77,44 @@ function SetConstraints(props) {
 	const classes = useStyles();
 
 	const selectedState = useSelector(state => state.selectedState)
-	const incumbents = selectedState.incumbents;
+	const [incumbents, setIncumbents] = useState([]);
+	const [checked, setChecked] = useState([]);
+	const selectedMinority = useSelector(state => state.selectedMinority);
+	const [maxMMDistricts, setMaxMMDistricts] = useState([]);
+	const [availPopConstraints, setAvailPopConstraints] = useState([])
 
-	let minMaxDisSelection = [0, 1, 2, 3, 4]
-	let minorites = ['black', 'asian', 'hispanic']
+
+
+	useEffect(() => {
+		async function fetchIncumbents() {
+			let res = await axios.get(`http://localhost:8080/lemonke/states/${selectedState.stateId}/incumbents`);
+			setIncumbents(res.data);
+
+			// let res2 = await axios.get(`http://localhost:8080/lemonke/districtings/${selectedState.enacted_districting_id}/max-mm-districts/${selectedMinority}`);
+			let res2 = await axios.get(`http://localhost:8080/lemonke/districtings/48/max-mm-districts/${selectedMinority}`);
+			let mmOptions = []
+			for (let i = 0; i <= res2.data; i++) {
+				mmOptions.push(i);
+			}
+			setMaxMMDistricts(mmOptions);
+
+			// let res3 = await axios.get(`http://localhost:8080/lemonke/districtings/${selectedState.enacted_districting_id}/population-type-availability`);
+			let res3 = await axios.get(`http://localhost:8080/lemonke/districtings/48/population-type-availability`);
+			setAvailPopConstraints(res3.data)
+
+
+
+		}
+
+		fetchIncumbents();
+
+
+	}, [])
 
 	// jsut there to update on 'open'
 	useEffect(() => {
-		console.log(protectedIncumbents)
-	}, [open, protectedIncumbents])
+		// console.log(protectedIncumbents)
+	}, [open, checked])
 
 
 
@@ -102,31 +129,41 @@ function SetConstraints(props) {
 		}
 	]
 
-	function selectIncumbent(incumbentId){
-		if(tempProtected.includes(incumbentId)){
-			let newList = tempProtected;
-			newList.splice(newList.indexOf(incumbentId),1);
-			setTempProtected(newList);
-			console.log(tempProtected);
-		}else{
-			let newList = tempProtected;
-			newList.push(incumbentId);
-			setTempProtected(newList);
-		}
-	}
-
-	function isChecked(id){
+	function isChecked(id) {
 		return protectedIncumbents.includes(id)
 	}
 
+
+
+	function MyCheckbox(inc, index) {
+		const [myChecked, setMyChecked] = useState(checked[index])
+
+		const handleChange = (event, index) => {
+			let newArray = checked;
+			newArray[index] = !newArray[index];
+			setChecked(newArray);
+			setMyChecked(newArray[index]);
+			// console.log(availPopConstraints);
+		};
+
+		return <Checkbox
+			key={Math.random()}
+			color="primary"
+			inputProps={{ 'aria-label': 'secondary checkbox' }}
+			checked={myChecked}
+			value={inc.incumbentId}
+			onChange={(event) => {
+				handleChange(event, index);
+			}} />
+	}
+
 	function FormRow() {
-		
 		return (
 			<React.Fragment>
-				{incumbents.map(inc => (
-					<Grid item xl={4}>
-						<Card className={classes.root}>
-							<CardContent>
+				{incumbents.map((inc, index) => (
+					<Grid key={index} item xl={4}>
+						<Card key={index} className={classes.root}>
+							<CardContent  >
 								<Typography variant="h5" component="h2">
 									{inc.firstName + ' ' + inc.lastName}
 								</Typography>
@@ -134,17 +171,9 @@ function SetConstraints(props) {
 									{selectedState.name}
 									{/* , district {inc.district} */}
 								</Typography>
-								<Typography variant="body2" component="p">
+								<Typography variant="body2" component="div">
 									Keep them safe
-									<Checkbox
-										color="primary"
-										inputProps={{ 'aria-label': 'secondary checkbox' }}
-										checked = {isChecked(inc.incumbentId)}
-										onChange = {(event)=>{
-											selectIncumbent(inc.incumbentId);
-											console.log(isChecked(inc.incumbentId))
-										}}
-									/>
+									{MyCheckbox(inc, index)}
 								</Typography>
 							</CardContent>
 							<CardActions>
@@ -184,19 +213,32 @@ function SetConstraints(props) {
 		)
 	}
 
+	const getCheckedArray = () => {
+		let newArray = []
+		incumbents.forEach(element => {
+			newArray.push(isChecked(element.incumbentId))
+		});
+		return newArray;
+	}
 
 	const handleClickOpen = () => {
 		setOpen(true);
+		setChecked(getCheckedArray)
 	};
 
-	const handleApply = () =>{
-		dispatch(Actions.setIncumbentProtectionConstraint(protectedIncumbents));
+	const handleApply = () => {
+		let protectedList = [];
+		checked.forEach((element, index) => {
+			if (element) {
+				protectedList.push(incumbents[index].incumbentId)
+			}
+		});
+		dispatch(Actions.setIncumbentProtectionConstraint(protectedList));
 		setOpen(false);
 	}
-	
+
 	const handleClose = () => {
-		setTempProtected(protectedIncumbents);
-		console.log(protectedIncumbents);
+		// console.log(protectedIncumbents);
 		setOpen(false);
 	};
 
@@ -259,7 +301,7 @@ function SetConstraints(props) {
 								<em>None</em>
 							</MenuItem>
 							{/* TODO LOAD THE MM DIFFERENTLY */}
-							{minMaxDisSelection.map(val => (<MenuItem value={val}>{val}</MenuItem>))}
+							{maxMMDistricts.map(val => (<MenuItem value={val}>{val}</MenuItem>))}
 						</Select>
 					</FormControl>
 				</Grid>
@@ -268,20 +310,11 @@ function SetConstraints(props) {
 				{/* Population Constraints */}
 				<Grid item xs={12} style={{ padding: '10px' }}>
 					<Typography gutterBottom variant='h4'>Population Constraints</Typography>
-					{/* <Typography gutterBottom>Total Population</Typography>
-					<Switch
-						checked={props.totalPopulationAvailable}
-						onChange={() => props.setTotalPopulationAvailable(props.totalPopulationAvailable ? false : true)}
-						disabled={true}
-						color="primary"
-						name="checkedB"
-						inputProps={{ 'aria-label': 'primary checkbox' }}
-					/> */}
 					<RadioGroup aria-label="gender" name="gender1" value={constraints['populationEqType']}
 						onChange={(e) => { dispatch(Actions.setPopulationConstraintType(e.target.value)) }}>
-						<FormControlLabel value="tpop" control={<Radio />} label="Total Population" />
-						<FormControlLabel value="tvap" control={<Radio />} label="Voting Age Population (TVAP)" />
-						<FormControlLabel value="cvap" control={<Radio />} label="Citizen Voting Age Population (CVAP)" />
+						<FormControlLabel value="TOTAL_POPULATION" control={<Radio disabled={!availPopConstraints["TOTAL_POPULATION"]} />} label="Total Population" />
+						<FormControlLabel value="VOTING_AGE_POPULATION" control={<Radio disabled={!availPopConstraints["VOTING_AGE_POPULATION"]} />} label="Voting Age Population (TVAP)" />
+						<FormControlLabel value="CITIZEN_VOTING_AGE_POPULATION" control={<Radio disabled={!availPopConstraints["CITIZEN_VOTING_AGE_POPULATION"]} />} label="Citizen Voting Age Population (CVAP)" />
 					</RadioGroup>
 					<Slider
 						value={popEq}
@@ -290,9 +323,9 @@ function SetConstraints(props) {
 							e.preventDefault();
 							dispatch(Actions.setPopulationConstraint(val))
 						}}
-						step={1}
+						step={.01}
 						min={0}
-						max={100}
+						max={1}
 						marks={[
 							{
 								value: 0,
@@ -306,24 +339,7 @@ function SetConstraints(props) {
 						valueLabelDisplay="auto"
 					/>
 				</Grid>
-				<br />
-				<br />
-				<Grid item xs={12} style={{ padding: '10px' }}>
-					<Typography gutterBottom variant='h4'>Select Minority Group</Typography>
-					<FormControl className={classes.formControl}>
-						<Select
-							labelId="demo-controlled-open-select-label"
-							id="demo-controlled-open-select"
-							value={constraints['minority']}
-							onChange={(e) => dispatch(Actions.setMinority(e.target.value))}
-						>
-							{/* <MenuItem value="Black">
-							<em>Black</em>
-						</MenuItem> */}
-							{minorites.map(val => (<MenuItem value={val}>{val}</MenuItem>))}
-						</Select>
-					</FormControl>
-				</Grid>
+
 			</Grid>
 			<div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
 				<div>
@@ -337,11 +353,11 @@ function SetConstraints(props) {
 						variant="contained"
 						color="primary"
 						onClick={() => {
-							axios.post('http://localhost:8080/lemonke/setConstraints', {
-								constraints
-							}).then(function (response) {
-								console.log(response);
-							});
+							// axios.post('http://localhost:8080/lemonke/setConstraints', {
+							// 	constraints
+							// }).then(function (response) {
+							// 	console.log(response);
+							// });
 							dispatch(Actions.incrementStep());
 						}}>
 						Next

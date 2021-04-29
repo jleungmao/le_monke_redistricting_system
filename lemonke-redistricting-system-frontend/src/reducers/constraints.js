@@ -1,11 +1,10 @@
 const constraintsReducer = (constraints = {
     'protectedIncumbents' : [],
     'compactnessType' : "pp",
-    'compactness' : 0,
+    'compactness' : .5,
     'majorityMinority':0,
-    'populationEqType' : 'tpop',
-    'populationEq':0,
-    'minority':"black"
+    'populationEqType' : 'TOTAL_POPULATION',
+    'populationEq':.5
 }, action) => {
     let newConstraints = {...constraints};
     switch (action.type) {
@@ -24,9 +23,6 @@ const constraintsReducer = (constraints = {
         case "SET_POPULATION_CONSTRAINT":
             newConstraints['populationEq'] = action.payload
             return newConstraints
-        case "SET_MINORITY":
-            newConstraints['minority'] = action.payload
-            return newConstraints
         case "SET_MM":
             newConstraints['majorityMinority'] = action.payload
             return newConstraints
@@ -34,11 +30,10 @@ const constraintsReducer = (constraints = {
             return {
                 'protectedIncumbents' : [],
                 'compactnessType' : "pp",
-                'compactness' : 0,
+                'compactness' : .5,
                 'majorityMinority':0,
-                'populationEqType' : 'tpop',
-                'populationEq':0,
-                'minority':"black"
+                'populationEqType' : 'TOTAL_POPULATION',
+                'populationEq':.5,
             }
         default:
             return newConstraints

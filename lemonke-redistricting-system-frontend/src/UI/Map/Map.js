@@ -27,8 +27,8 @@ function Map(props) {
 				center: [lng, lat],
 				zoom: zoom,
 				maxBounds: [
-					[-110, 23], // Southwest coordinates
-					[-64.91058699000139, 47.87764500765852] // Northeast coordinates
+					[-140, 10], // Southwest coordinates
+					[-65, 50] // Northeast coordinates
 				]
 			});
 

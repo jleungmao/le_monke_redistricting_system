@@ -5,6 +5,19 @@ export const setSelectedState = (state) => {
     };
 }
 
+export const resetSelectedState = () => {
+    return {
+        type: "RESET_STATE"
+    }
+}
+
+export const setMinority = (minority) => {
+    return {
+        type: "SET_MINORITY",
+        payload:minority
+    }
+}
+
 export const setSelectedJob = (job) => {
     return {
         type: "SET_JOB",
@@ -91,12 +104,6 @@ export const setPopulationConstraint = (populationEquality) => {
     };
 }
 
-export const setMinority = (minority) => {
-    return {
-        type: "SET_MINORITY",
-        payload:minority
-    }
-}
 
 export const setMajorityMinorityConstraint = (mm) => {
     return {

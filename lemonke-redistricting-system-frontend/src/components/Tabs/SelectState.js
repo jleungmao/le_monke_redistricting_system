@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import { useSelector, useDispatch } from 'react-redux';
-import { setEnactedDistricting, setSelectedState, incrementStep } from '../../actions'
+import { setEnactedDistricting, setSelectedState, incrementStep , resetSelectedState} from '../../actions'
 import { StarRateSharp } from '@material-ui/icons';
 
 
@@ -33,8 +33,12 @@ function SelectState(props) {
 	}
 
 	function pickState(stateToUse) {
-		dispatch(setSelectedState(stateList[stateToUse]));
-		fetchEnacted(stateList[stateToUse].enacted_districting_id);
+		if (stateToUse != -1) {
+			dispatch(setSelectedState(stateList[stateToUse]));
+			// fetchEnacted(stateList[stateToUse].enacted_districting_id);
+		}else{
+			dispatch(resetSelectedState());
+		}
 	}
 
 	return (
@@ -49,10 +53,9 @@ function SelectState(props) {
 					value={selectedIndex}
 					onChange={(e) => pickState(e.target.value)}
 				>
-					{/* {data && data.map((d, i) => <MenuItem value={i}>{d.name}</MenuItem>)} */}
-					{/* <MenuItem value={0}>NewYork</MenuItem>
-				<MenuItem value={1}>Florida</MenuItem>
-				<MenuItem value={2}>Texas</MenuItem> */}
+					<MenuItem value={-1}>
+						<em>None</em>
+					</MenuItem>
 					{stateList.map((data, index) =>
 						<MenuItem value={index} key={data['name']}>{data['name']}</MenuItem>
 					)}
@@ -62,7 +65,7 @@ function SelectState(props) {
 				<div>
 					<Button disabled={true}>Back</Button>
 					<Button
-						disabled = {selectedIndex == null}
+						disabled={selectedIndex == -1}
 						variant="contained"
 						color="primary"
 						onClick={() => dispatch(incrementStep())}>
