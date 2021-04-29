@@ -30,6 +30,16 @@ const constraintsReducer = (constraints = {
         case "SET_MM":
             newConstraints['majorityMinority'] = action.payload
             return newConstraints
+        case "RESET":
+            return {
+                'protectedIncumbents' : [],
+                'compactnessType' : "pp",
+                'compactness' : 0,
+                'majorityMinority':0,
+                'populationEqType' : 'tpop',
+                'populationEq':0,
+                'minority':"black"
+            }
         default:
             return newConstraints
     }

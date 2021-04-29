@@ -106,6 +106,11 @@ export const setMajorityMinorityConstraint = (mm) => {
 }
 
 
+export const resetConstraints = (mm) => {
+    return {
+        type: "RESET"
+    }
+}
 
 
 //SET MEASURES ACTIONS

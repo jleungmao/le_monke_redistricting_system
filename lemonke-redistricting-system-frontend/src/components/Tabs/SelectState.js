@@ -28,7 +28,7 @@ function SelectState(props) {
 
 
 	async function fetchEnacted(id) {
-		let res = await axios('http://localhost:8080/lemonke/districtings/' + id)
+		let res = await axios(`http://localhost:8080/lemonke/districtings/${id}`)
 		dispatch(setEnactedDistricting(res.data));
 	}
 

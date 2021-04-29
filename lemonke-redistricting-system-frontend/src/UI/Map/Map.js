@@ -1,109 +1,120 @@
-import React, { useRef, useEffect, useState, useCallback, componentDidUpdate } from 'react';
+import React, { useRef, useLayoutEffect, useEffect, useState, useCallback, componentDidUpdate } from 'react';
 import mapboxgl, { BoxZoomHandler } from 'mapbox-gl';
 import classes from './Map.module.css';
 import axios from 'axios';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 function Map(props) {
-	const mapContainer = useRef();
-	console.log(props);
 	const districting = useSelector(state => state.selectedDistricting);
 	const selectedState = useSelector(state => state.selectedState);
 	const [lng, setLng] = useState(-89.8);
 	const [lat, setLat] = useState(35.8);
 	const [zoom, setZoom] = useState(4.36);
-	let map;
-	const [geoJSON, setGeoJSON] = useState([]);
-	let stateData;
-	let initialized = 0;
-	let bounds = [
-			[-110, 23], // Southwest coordinates
-			[-64.91058699000139, 47.87764500765852] // Northeast coordinates
-	];
+	const mapContainer = useRef();
+	const [map, setMap] = useState(null);
 
 
 
 	useEffect(() => {
-
-		map = new mapboxgl.Map({
-			container: mapContainer.current,
-			style: 'mapbox://styles/mapbox/streets-v11',
-			center: [lng, lat],
-			zoom: zoom,
-			maxBounds: bounds
-		});
-		map.dragRotate.disable();
-		
-		// On load
-		map.on('load', () => {
-			console.log("onload")
-			var layers = map.getStyle().layers;
-			// Find the index of the first symbol layer in the map style
-			var firstSymbolId;
-			for (var i = 0; i < layers.length; i++) {
-				if (layers[i].type === 'symbol') {
-					firstSymbolId = layers[i].id;
-					break;
-				}
-			}
-
-			// Setting all the highway laeyrs to visilibilty none
-			for (let i = 35; i < 59; i++) {
-				let level_name = layers[i].id;
-				map.setLayoutProperty(level_name, 'visibility', 'none');
-			}
-
-			map.setLayoutProperty('road-label', 'visibility', 'none');
-			map.setLayoutProperty('road-number-shield', 'visibility', 'none');
-
-			// add navigation control (the +/- zoom buttons)
-			map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
-			// populatingLayers(map, stateData, firstSymbolId);
-
-			map.on('click', 'districts', function (e) {
-				if (e.features.length > 0) {
-					props.parentCallback(e.features[0].id);
-					// if (selectedDistrictId) {
-					// 	map.setFeatureState(
-					// 		{
-					// 			source: props.initialState.stateName, id: selectedDistrictId
-					// 		},
-					// 		{ hover: false }
-					// 	);
-					// }
-					// console.log(e.features);
-					// props.parentCallback(e.features[0].id);
-					// map.setFeatureState(
-					// 	{
-					// 		source: props.initialState.stateName, id: selectedDistrictId
-					// 	},
-					// 	{ hover: true }
-					// );
-					//send this to homepage homepage send to selectDistrictings
-					// setSelectedDistrict(selectedDistrictId);
-				}
+		const initializeMap = ({ setMap, mapContainer }) => {
+			const map = new mapboxgl.Map({
+				container: mapContainer.current,
+				style: 'mapbox://styles/mapbox/streets-v11',
+				center: [lng, lat],
+				zoom: zoom,
+				maxBounds: [
+					[-110, 23], // Southwest coordinates
+					[-64.91058699000139, 47.87764500765852] // Northeast coordinates
+				]
 			});
-		});
+
+			map.on("load", () => {
+				console.log("onload")
+				var layers = map.getStyle().layers;
+				// Find the index of the first symbol layer in the map style
+				var firstSymbolId;
+				for (var i = 0; i < layers.length; i++) {
+					if (layers[i].type === 'symbol') {
+						firstSymbolId = layers[i].id;
+						break;
+					}
+				}
+
+				// Setting all the highway laeyrs to visilibilty none
+				for (let i = 35; i < 59; i++) {
+					let level_name = layers[i].id;
+					map.setLayoutProperty(level_name, 'visibility', 'none');
+				}
+
+				map.setLayoutProperty('road-label', 'visibility', 'none');
+				map.setLayoutProperty('road-number-shield', 'visibility', 'none');
+
+				// add navigation control (the +/- zoom buttons)
+				map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+				// populatingLayers(map, stateData, firstSymbolId);
+
+				map.on('click', 'districts', function (e) {
+					if (e.features.length > 0) {
+						props.parentCallback(e.features[0].id);
+						// if (selectedDistrictId) {
+						// 	map.setFeatureState(
+						// 		{
+						// 			source: props.initialState.stateName, id: selectedDistrictId
+						// 		},
+						// 		{ hover: false }
+						// 	);
+						// }
+						// console.log(e.features);
+						// props.parentCallback(e.features[0].id);
+						// map.setFeatureState(
+						// 	{
+						// 		source: props.initialState.stateName, id: selectedDistrictId
+						// 	},
+						// 	{ hover: true }
+						// );
+						//send this to homepage homepage send to selectDistrictings
+						// setSelectedDistrict(selectedDistrictId);
+					}
+				});
+				setMap(map);
+				map.resize();
+			});
+			map.dragRotate.disable();
 
 
-		
-		// On move
-		map.on('move', () => {
-			console.log("moving")
-			setLng(map.getCenter().lng.toFixed(4));
-			setLat(map.getCenter().lat.toFixed(4));
-			setZoom(map.getZoom().toFixed(2));
-		});
+			// On move
+			map.on('move', () => {
+				setLng(map.getCenter().lng.toFixed(4));
+				setLat(map.getCenter().lat.toFixed(4));
+				setZoom(map.getZoom().toFixed(2));
+			});
+		}
+		if (!map) initializeMap({ setMap, mapContainer });
 
-		map.setCenter([props.initialState.longitude, props.initialState.latitude])
-		map.setZoom(props.initialState.zoom)
+	}, [map]); // eslint-disable-line react-hooks/exhaustive-deps
 
-		return () => map.remove();
-	}, [props.initialState]); // eslint-disable-line react-hooks/exhaustive-deps
+	useEffect(() => {
+		flyToMethod([selectedState.longitude, selectedState.latitude], selectedState.zoom)
+	}, [selectedState])
+
+
+	function flyToMethod(center, zoom) {
+		if (map) {
+			map.flyTo({
+				center: center,
+				zoom: zoom
+			})
+		}
+	}
+
+
+
+
+
 
 	// TODO:
 	// Add all districts onto the map
@@ -143,7 +154,7 @@ function Map(props) {
 				'line-color': 'black',
 				'line-width': [
 					'case',
-					['boolean',['feature-state', 'hover'], false],
+					['boolean', ['feature-state', 'hover'], false],
 					2,
 					0.5
 				]

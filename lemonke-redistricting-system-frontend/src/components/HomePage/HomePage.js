@@ -12,7 +12,7 @@ function HomePage() {
 	// These are just other cool things I found on ther Website.
 	// https://material-ui.com/components/tabs/
 
-	const [state, setState] = useState(3);
+	const [location, setLocation] = useState({center: [-89.8,35.8],zoom: 4.36});
 	const [selectedDistrict, setSelectedDistrict] = useState(1);
 	const [selectedDistricting, setSelectedDistricting] = useState("2012_Congress.geojson");
 
@@ -58,17 +58,13 @@ function HomePage() {
 	return (
 		<>
 			<Paper style={{ width: '30%', height: '100%', overflow: 'auto', position: 'fixed' }}>
-				<Sidepanel stateIndx={state}
-					setState={setState}
+				<Sidepanel
+					setLocation={setLocation}
 					parentCallback={setSelectedDistrictingId} 
 					selectedDistrictId = {selectedDistrict}
 					homePageCallback = {getSelectedDistrict} />
 			</Paper>
-			<Map initialState={stateLocations[state]}
-				parentCallback={getSelectedDistrict}
-				selectedDistrictId={selectedDistrict}
-				selectedDistrictingId = {selectedDistricting}
-			/>
+			<Map flyToCallback ={getSelectedDistrict}/>
 		</>
 	)
 }

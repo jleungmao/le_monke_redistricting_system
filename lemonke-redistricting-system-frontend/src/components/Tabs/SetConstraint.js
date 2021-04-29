@@ -328,7 +328,7 @@ function SetConstraints(props) {
 			<div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
 				<div>
 					<Button onClick={() => {
-						dispatch(Actions.setIncumbentProtectionConstraint([]));
+						dispatch(Actions.resetConstraints());
 						dispatch(Actions.decrementStep());
 					}} >
 						Back
