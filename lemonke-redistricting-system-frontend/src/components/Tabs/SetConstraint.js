@@ -101,21 +101,14 @@ function SetConstraints(props) {
 			// let res3 = await axios.get(`http://localhost:8080/lemonke/districtings/${selectedState.enacted_districting_id}/population-type-availability`);
 			let res3 = await axios.get(`http://localhost:8080/lemonke/districtings/48/population-type-availability`);
 			setAvailPopConstraints(res3.data)
-
-
-
 		}
-
 		fetchIncumbents();
-
-
 	}, [])
 
 	// jsut there to update on 'open'
 	useEffect(() => {
 		// console.log(protectedIncumbents)
 	}, [open, checked])
-
 
 
 	const marks = [
@@ -129,9 +122,38 @@ function SetConstraints(props) {
 		}
 	]
 
-	function isChecked(id) {
+	const isChecked = (id) => {
 		return protectedIncumbents.includes(id)
 	}
+
+	const getCheckedArray = () => {
+		let newArray = []
+		incumbents.forEach(element => {
+			newArray.push(isChecked(element.incumbentId))
+		});
+		return newArray;
+	}
+
+	const handleClickOpen = () => {
+		setOpen(true);
+		setChecked(getCheckedArray)
+	};
+
+	const handleApply = () => {
+		let protectedList = [];
+		checked.forEach((element, index) => {
+			if (element) {
+				protectedList.push(incumbents[index].incumbentId)
+			}
+		});
+		dispatch(Actions.setIncumbentProtectionConstraint(protectedList));
+		setOpen(false);
+	}
+
+	const handleClose = () => {
+		// console.log(protectedIncumbents);
+		setOpen(false);
+	};
 
 
 
@@ -213,34 +235,7 @@ function SetConstraints(props) {
 		)
 	}
 
-	const getCheckedArray = () => {
-		let newArray = []
-		incumbents.forEach(element => {
-			newArray.push(isChecked(element.incumbentId))
-		});
-		return newArray;
-	}
-
-	const handleClickOpen = () => {
-		setOpen(true);
-		setChecked(getCheckedArray)
-	};
-
-	const handleApply = () => {
-		let protectedList = [];
-		checked.forEach((element, index) => {
-			if (element) {
-				protectedList.push(incumbents[index].incumbentId)
-			}
-		});
-		dispatch(Actions.setIncumbentProtectionConstraint(protectedList));
-		setOpen(false);
-	}
-
-	const handleClose = () => {
-		// console.log(protectedIncumbents);
-		setOpen(false);
-	};
+	
 
 	return (
 		<div className={classes.root}>
