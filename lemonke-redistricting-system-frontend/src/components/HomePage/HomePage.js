@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Sidepanel from '../../UI/Sidepanel/Sidepanel';
 import Paper from '@material-ui/core/Paper'
 import Map from '../../UI/Map/Map';
+import DataDrawer from '../../UI/DataDrawer/DataDrawer.js';
 
 function HomePage() {
 
@@ -12,59 +13,14 @@ function HomePage() {
 	// These are just other cool things I found on ther Website.
 	// https://material-ui.com/components/tabs/
 
-	const [location, setLocation] = useState({center: [-89.8,35.8],zoom: 4.36});
-	const [selectedDistrict, setSelectedDistrict] = useState(1);
-	const [selectedDistricting, setSelectedDistricting] = useState("2012_Congress.geojson");
-
-
-	let stateLocations = [
-		{
-			stateName: 'NewYork',
-			longitude: -75.7240,
-			latitude: 42.9109,
-			zoom: 6.58
-		},
-		{
-			stateName: 'Florida',
-			longitude: -83.6942,
-			latitude: 28.5269,
-			zoom: 6.75
-		},
-		{
-			stateName: 'Texas',
-			longitude: -99.2290,
-			latitude: 31.4927,
-			zoom: 6.24
-		},
-		{
-            stateName: 'startPos',
-            longitude: -89.8,
-            latitude: 35.8,
-            zoom: 4.36	
-        }
-	]
-
-	const getSelectedDistrict = (selectedDistrictId) => {
-		setSelectedDistrict(selectedDistrictId);
-		console.log("hi" + selectedDistrict);
-	}
-
-	const setSelectedDistrictingId = (selectedDistrictingId) => {
-		setSelectedDistricting(selectedDistrictingId);
-
-		console.log("sending to map" + selectedDistrictingId);
-	}
 
 	return (
 		<>
-			<Paper style={{ width: '30%', height: '100%', overflow: 'auto', position: 'fixed' }}>
-				<Sidepanel
-					setLocation={setLocation}
-					parentCallback={setSelectedDistrictingId} 
-					selectedDistrictId = {selectedDistrict}
-					homePageCallback = {getSelectedDistrict} />
+			<Paper style={{ width: '25%', height: '100%', overflow: 'auto', position: 'fixed' }}>
+				<Sidepanel />
 			</Paper>
-			<Map flyToCallback ={getSelectedDistrict}/>
+			<Map />
+			<DataDrawer />
 		</>
 	)
 }

@@ -5,13 +5,13 @@ import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import { useSelector, useDispatch } from 'react-redux';
-import { setEnactedDistricting, setSelectedState, incrementStep , resetSelectedState} from '../../actions'
+import { setEnactedDistricting, setSelectedState, incrementStep , resetSelectedState, setStateList} from '../../actions'
 import { StarRateSharp } from '@material-ui/icons';
 
 
 function SelectState(props) {
 
-	const [stateList, setStateList] = useState([])
+	const stateList = useSelector(state => state.stateList);
 	const selectedState = useSelector(state => state.selectedState);
 	const selectedIndex = selectedState.stateId;
 	const dispatch = useDispatch();
@@ -20,7 +20,7 @@ function SelectState(props) {
 
 		async function fetchStates() {
 			let res = await axios('http://localhost:8080/lemonke/states')
-			setStateList(res.data)
+			dispatch(setStateList(res.data));
 		}
 
 		fetchStates();

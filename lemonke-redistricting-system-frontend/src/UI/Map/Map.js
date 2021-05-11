@@ -11,6 +11,7 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 function Map(props) {
 	const districting = useSelector(state => state.selectedDistricting);
 	const selectedState = useSelector(state => state.selectedState);
+	const stateList = useSelector(state => state.stateList);
 	const [lng, setLng] = useState(-89.8);
 	const [lat, setLat] = useState(35.8);
 	const [zoom, setZoom] = useState(4.36);
@@ -19,16 +20,19 @@ function Map(props) {
 
 
 
+
 	useEffect(() => {
+
 		const initializeMap = ({ setMap, mapContainer }) => {
+
 			const map = new mapboxgl.Map({
 				container: mapContainer.current,
 				style: 'mapbox://styles/mapbox/streets-v11',
 				center: [lng, lat],
 				zoom: zoom,
 				maxBounds: [
-					[-140, 10], // Southwest coordinates
-					[-65, 50] // Northeast coordinates
+					[-125, 20], // Southwest coordinates
+					[-65, 55] // Northeast coordinates
 				]
 			});
 
@@ -36,7 +40,7 @@ function Map(props) {
 				console.log("onload")
 				var layers = map.getStyle().layers;
 				// Find the index of the first symbol layer in the map style
-				var firstSymbolId;
+				let firstSymbolId;
 				for (var i = 0; i < layers.length; i++) {
 					if (layers[i].type === 'symbol') {
 						firstSymbolId = layers[i].id;
@@ -44,7 +48,7 @@ function Map(props) {
 					}
 				}
 
-				// Setting all the highway laeyrs to visilibilty none
+				// Setting all the highway layer to visilibilty none
 				for (let i = 35; i < 59; i++) {
 					let level_name = layers[i].id;
 					map.setLayoutProperty(level_name, 'visibility', 'none');
@@ -55,7 +59,22 @@ function Map(props) {
 
 				// add navigation control (the +/- zoom buttons)
 				map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
-				// populatingLayers(map, stateData, firstSymbolId);
+
+
+
+				//OUTLINE THE STATES
+				// async function getOutline() {
+				// 	let res = await axios('./unionOfNY.json')
+				// 	return res.data
+				// }
+				// let geometry = getOutline();
+				axios.get('./unionOfNY.json').then(res => {
+					outlineStates(map, 'newyork', res.data);
+				});
+				axios.get('./unionOfNV.json').then(res => {
+					outlineStates(map, 'nevada', res.data);
+				});
+
 
 				map.on('click', 'districts', function (e) {
 					if (e.features.length > 0) {
@@ -113,7 +132,74 @@ function Map(props) {
 
 
 
+	var hoveredStateId = null;
+	const outlineStates = (map, stateName, geometry) => {
+		map.addSource(stateName, {
+			'type': 'geojson',
+			'data': {
+				'type': 'Feature',
+				'geometry': geometry
+			}
+		});
 
+		map.addLayer({
+			'id': stateName,
+			'type': 'fill',
+			'source': stateName, // reference the data source
+			'layout': {},
+			'paint': {
+				'fill-color': '#0080ff', // blue color fill
+				'fill-opacity': [
+					'case',
+					['boolean', ['feature-state', 'hover'], false],
+					1,
+					0.5
+				]
+			}
+		});
+
+		map.addLayer({
+			'id': stateName + 'outline',
+			'type': 'line',
+			'source': stateName,
+			'layout': {},
+			'paint': {
+				'line-color': '#000',
+				'line-width': 1
+			}
+		});
+
+
+		map.on('mousemove', stateName, function (e) {
+			if (e.features.length > 0) {
+				if (hoveredStateId !== null) {
+					map.setFeatureState(
+						{ source: stateName, id: hoveredStateId },
+						{ hover: false }
+					);
+				}
+				// console.log(e.features[0]);
+				hoveredStateId = e.features[0].layer.id;
+				map.setFeatureState(
+					{ source: stateName, id: hoveredStateId },
+					{ hover: true }
+				);
+			}
+		});
+
+		// When the mouse leaves the state-fill layer, update the feature state of the
+		// previously hovered feature.
+		map.on('mouseleave', stateName, function () {
+			if (hoveredStateId !== null) {
+				map.setFeatureState(
+					{ source: stateName, id: hoveredStateId },
+					{ hover: false }
+				);
+			}
+			hoveredStateId = null;
+		});
+
+	}
 
 
 	// TODO:

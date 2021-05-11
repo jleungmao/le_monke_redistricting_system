@@ -3,8 +3,8 @@
 .map_container {
     height: 100%;
     position: fixed;
-    width: 70%;
-    margin-left: 30%;
+    width: 75%;
+    margin-left: 25%;
 }
 
 /* the little indicator for Longitude and Latitude. */
@@ -15,8 +15,8 @@
     font: 15px/24px monospace;
     z-index: 1;
     position: absolute;
-    top: 0;
-    right: 0;
+    bottom: 0;
+    left: 25%;
     margin: 12px;
     border-radius: 4px;
 }
