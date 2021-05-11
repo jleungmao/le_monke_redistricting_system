@@ -9,7 +9,7 @@ import SetConstraints from '../../components/Tabs/SetConstraint';
 import SelectJob from '../../components/Tabs/SelectJob';
 import SelectDistricting from '../../components/Tabs/SelectDistricting';
 import SelectState from '../../components/Tabs/SelectState';
-import ShowData from '../../components/Tabs/ShowData';
+import ShowData from '../DataDrawer/ShowData';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { Route } from 'react-router-dom';
@@ -64,11 +64,12 @@ function Sidepanel(props) {
 	return (
 		<div className={classes.sidepanel}>
 			{/* Progress component is responsible for displaying the current step */}
-			<Tabs value={value} onChange={handleTabChange}>
+			{/* <Tabs value={value} onChange={handleTabChange}>
 				<Tab label="Controls" />
 				<Tab label="Data" />
 			</Tabs>
-			<div>{getTab(value)}</div>
+			<div>{getTab(value)}</div> */}
+			{<div>{getTab(0)}</div>}
 		</div>
 	)
 
@@ -138,7 +139,7 @@ function Sidepanel(props) {
 		} else if (value == 1) {
 			return (
 				<div className={classes.tabContent}>
-					<Route exact path='/' render={(props) => (<ShowData selectedDistrict={selectedDistrictId} homePageCallback={homePageCallback} />)}></Route>
+					<ShowData selectedDistrict={selectedDistrictId} homePageCallback={homePageCallback} />
 				</div>
 			)
 		}

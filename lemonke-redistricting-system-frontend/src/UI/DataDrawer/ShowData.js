@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Boxplot from '../Boxplot';
+import Boxplot from '../../components/Boxplot';
 import { Route } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import axios from 'axios';
@@ -27,43 +27,43 @@ function ShowData(props) {
 
     console.log(props);
     const [districtSet, setDistrictSet] = React.useState([]);
-    const [selectedSet, setToChangeTo] = React.useState('district' + props.selectedDistrict.toString());
+    const [selectedSet, setToChangeTo] = React.useState('district1');
 
-    useEffect(() => {
-        axios.get('./fakeDistrictSets.json').then(res => {
-            let districtsData = [];
-            districtsData['district1'] = res.data.district1
-            districtsData['district2'] = res.data.district2
-            districtsData['district3'] = res.data.district3
-            districtsData['district4'] = res.data.district4
-            districtsData['district5'] = res.data.district5
-            districtsData['district6'] = res.data.district6
-            districtsData['district7'] = res.data.district7
-            districtsData['district8'] = res.data.district8
-            districtsData['district9'] = res.data.district9
-            districtsData['district10'] = res.data.district10
-            districtsData['district11'] = res.data.district11
-            districtsData['district12'] = res.data.district12
-            districtsData['district13'] = res.data.district13
-            districtsData['district14'] = res.data.district14
-            districtsData['district15'] = res.data.district15
-            districtsData['district16'] = res.data.district16
-            districtsData['district17'] = res.data.district17
-            districtsData['district18'] = res.data.district18
-            districtsData['district19'] = res.data.district19
-            districtsData['district20'] = res.data.district20
-            districtsData['district21'] = res.data.district21
-            districtsData['district22'] = res.data.district22
-            districtsData['district23'] = res.data.district23
-            districtsData['district24'] = res.data.district24
-            districtsData['district25'] = res.data.district25
-            districtsData['district26'] = res.data.district26
-            districtsData['district27'] = res.data.district27
+    // useEffect(() => {
+    //     axios.get('../../public/fakeDistrictSets.json').then(res => {
+    //         let districtsData = [];
+    //         districtsData['district1'] = res.data.district1
+    //         districtsData['district2'] = res.data.district2
+    //         districtsData['district3'] = res.data.district3
+    //         districtsData['district4'] = res.data.district4
+    //         districtsData['district5'] = res.data.district5
+    //         districtsData['district6'] = res.data.district6
+    //         districtsData['district7'] = res.data.district7
+    //         districtsData['district8'] = res.data.district8
+    //         districtsData['district9'] = res.data.district9
+    //         districtsData['district10'] = res.data.district10
+    //         districtsData['district11'] = res.data.district11
+    //         districtsData['district12'] = res.data.district12
+    //         districtsData['district13'] = res.data.district13
+    //         districtsData['district14'] = res.data.district14
+    //         districtsData['district15'] = res.data.district15
+    //         districtsData['district16'] = res.data.district16
+    //         districtsData['district17'] = res.data.district17
+    //         districtsData['district18'] = res.data.district18
+    //         districtsData['district19'] = res.data.district19
+    //         districtsData['district20'] = res.data.district20
+    //         districtsData['district21'] = res.data.district21
+    //         districtsData['district22'] = res.data.district22
+    //         districtsData['district23'] = res.data.district23
+    //         districtsData['district24'] = res.data.district24
+    //         districtsData['district25'] = res.data.district25
+    //         districtsData['district26'] = res.data.district26
+    //         districtsData['district27'] = res.data.district27
 
-            setDistrictSet(districtsData);
-        });
-        // return () => { }
-    }, [selectedSet])
+    //         setDistrictSet(districtsData);
+    //     });
+    //     // return () => { }
+    // }, [selectedSet])
 
     const [selectedIndex, setSelectedIndex] = React.useState();
     const [collapseArray, updateCollapseArray] = React.useState(new Array(27).fill(false));

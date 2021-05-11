@@ -1,3 +1,18 @@
+
+//STATES
+export const setStateList = (stateList) => {
+    return {
+        type: "SET_STATE_LIST",
+        payload: stateList
+    };
+}
+
+export const resetStateList = () => {
+    return {
+        type: "RESET_STATE_LIST"
+    }
+}
+
 export const setSelectedState = (state) => {
     return {
         type: "SET_STATE",
@@ -11,6 +26,7 @@ export const resetSelectedState = () => {
     }
 }
 
+//JOBS
 export const setMinority = (minority) => {
     return {
         type: "SET_MINORITY",
@@ -40,7 +56,7 @@ export const setEnactedDistricting = (enacted) => {
     };
 }
 
-
+//MAP
 export const setCoordinates = (coordinates) => {
     return {
         type: "SET_COORDINATES",
