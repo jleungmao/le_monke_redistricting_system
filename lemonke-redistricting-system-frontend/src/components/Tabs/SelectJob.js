@@ -34,7 +34,6 @@ function SelectJob(props) {
             let res2 = await axios(`http://localhost:8080/lemonke/states/${stateID}/job-summaries`);
             setJobList(res2.data);
 
-
         }
 
         fetchData();
@@ -60,7 +59,7 @@ function SelectJob(props) {
                             console.log(jobList);
                         }}>
                         <ListItemText
-                            primary={"Job " + jobList[index].jobId}
+                            primary={"Name: " + jobList[index].name}
                             secondary={<div>
                                 <div>Number of Districtings: {jobList[index].numberDistrictings}</div>
                                 <div>Number of Rounds: {jobList[index].numberRounds}</div>

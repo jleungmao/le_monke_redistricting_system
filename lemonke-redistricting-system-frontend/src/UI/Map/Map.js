@@ -26,10 +26,10 @@ function Map(props) {
 				style: 'mapbox://styles/mapbox/streets-v11',
 				center: [lng, lat],
 				zoom: zoom,
-				maxBounds: [
-					[-140, 10], // Southwest coordinates
-					[-65, 50] // Northeast coordinates
-				]
+				// maxBounds: [
+				// 	[-140, 10], // Southwest coordinates
+				// 	[-65, 50] // Northeast coordinates
+				// ]
 			});
 
 			map.on("load", () => {
