@@ -22,6 +22,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
+import RadvizD3 from '../../D3/RadvizD3';
 
 function ShowData(props) {
 
@@ -279,6 +280,7 @@ function ShowData(props) {
                         <MenuItem value={'district27'}>District 27</MenuItem>
                     </Select>
                 </FormControl>
+                <RadvizD3 labels={null} content={null} colorAccessor={null} textLabel={null} zoom={true} />
                 {getDistricts()}
             </Grid>
         </>
