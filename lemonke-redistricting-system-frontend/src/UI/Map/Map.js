@@ -2,14 +2,16 @@ import React, { useRef, useLayoutEffect, useEffect, useState, useCallback, compo
 import mapboxgl, { BoxZoomHandler } from 'mapbox-gl';
 import classes from './Map.module.css';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setEnactedDistricting, setSelectedDistricting, setSelectedState } from '../../actions';
+import { Checkbox, FormControlLabel, FormGroup } from '@material-ui/core';
 
 
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 function Map(props) {
-	const districting = useSelector(state => state.selectedDistricting);
+	const selectedDistricting = useSelector(state => state.selectedDistricting);
 	const selectedState = useSelector(state => state.selectedState);
 	const stateList = useSelector(state => state.stateList);
 	const [lng, setLng] = useState(-89.8);
@@ -17,14 +19,67 @@ function Map(props) {
 	const [zoom, setZoom] = useState(4.36);
 	const mapContainer = useRef();
 	const [map, setMap] = useState(null);
+	const dispatch = useDispatch();
+	const [layersToDisplay, setLayersToDisplay] = useState({
+		districts: true,
+		precincts: true,
+		counties: false
+	}) // [districts, precincts, counties]
+	var featureId = 0;
+	var hoveredStateId = null;
+	var selectedFeatureId = null;
+
 
 
 
 
 	useEffect(() => {
+		if (map) {
+			flyToMethod([selectedState.longitude, selectedState.latitude], selectedState.zoom);
+			fetchEnacted(selectedState.enacted_districting_id);
+			let visibility = map.getLayoutProperty(
+				selectedState.name,
+				'visibility'
+			);
+			console.log(visibility);
+			// for(let i = 0; i<stateList.length; i++){
+			// 	map.setLayoutProperty(
+			// 		stateList[i].name,
+			// 		'visibility',
+			// 		'visible'
+			// 	);
+			// 	if(selectedState.name == stateList[i].name){
+			// 		map.setLayoutProperty(
+			// 			selectedState.name,
+			// 			'visibility',
+			// 			'none'
+			// 		);
+			// 	}
+			// }
+			if (visibility === 'visible') {
+				map.setLayoutProperty(
+					selectedState.name,
+					'visibility',
+					'none'
+				);
+			} else {
+				map.setLayoutProperty(
+					selectedState.name,
+					'visibility',
+					'visible'
+				);
+			}
+		}
+	}, [selectedState]);
 
-		const initializeMap = ({ setMap, mapContainer }) => {
+	useEffect(() => {
+		if (map) {
+			console.log(layersToDisplay)
+		}
+	}, [selectedDistricting])
 
+	useEffect(() => {
+		function initializeMap(setMap, mapContainer) {
 			const map = new mapboxgl.Map({
 				container: mapContainer.current,
 				style: 'mapbox://styles/mapbox/streets-v11',
@@ -48,56 +103,30 @@ function Map(props) {
 						break;
 					}
 				}
-
 				// Setting all the highway layer to visilibilty none
 				for (let i = 35; i < 59; i++) {
 					let level_name = layers[i].id;
 					map.setLayoutProperty(level_name, 'visibility', 'none');
 				}
-
 				map.setLayoutProperty('road-label', 'visibility', 'none');
 				map.setLayoutProperty('road-number-shield', 'visibility', 'none');
+
+				//OUTLINE THE STATES
+				if (stateList && stateList != []) {
+					axios.get('./unionOfNY.json').then(res => {
+						outlineStates(map, 'New York', res.data, stateList);
+					});
+					axios.get('./unionOfNV.json').then(res => {
+						outlineStates(map, 'Nevada', res.data, stateList);
+					});
+				}
 
 				// add navigation control (the +/- zoom buttons)
 				map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
-
-
-				//OUTLINE THE STATES
-				// async function getOutline() {
-				// 	let res = await axios('./unionOfNY.json')
-				// 	return res.data
-				// }
-				// let geometry = getOutline();
-				axios.get('./unionOfNY.json').then(res => {
-					outlineStates(map, 'newyork', res.data);
-				});
-				axios.get('./unionOfNV.json').then(res => {
-					outlineStates(map, 'nevada', res.data);
-				});
-
-
 				map.on('click', 'districts', function (e) {
 					if (e.features.length > 0) {
 						props.parentCallback(e.features[0].id);
-						// if (selectedDistrictId) {
-						// 	map.setFeatureState(
-						// 		{
-						// 			source: props.initialState.stateName, id: selectedDistrictId
-						// 		},
-						// 		{ hover: false }
-						// 	);
-						// }
-						// console.log(e.features);
-						// props.parentCallback(e.features[0].id);
-						// map.setFeatureState(
-						// 	{
-						// 		source: props.initialState.stateName, id: selectedDistrictId
-						// 	},
-						// 	{ hover: true }
-						// );
-						//send this to homepage homepage send to selectDistrictings
-						// setSelectedDistrict(selectedDistrictId);
 					}
 				});
 				setMap(map);
@@ -113,41 +142,46 @@ function Map(props) {
 				setZoom(map.getZoom().toFixed(2));
 			});
 		}
-		if (!map) initializeMap({ setMap, mapContainer });
-
-	}, [map]); // eslint-disable-line react-hooks/exhaustive-deps
-
-	useEffect(() => {
-		flyToMethod([selectedState.longitude, selectedState.latitude], selectedState.zoom)
-	}, [selectedState])
+		if (!map) {
+			initializeMap(setMap, mapContainer);
+			console.log(stateList);
+		}
+	}, [stateList, map])
 
 
 	function flyToMethod(center, zoom) {
-		if (map) {
-			map.flyTo({
-				center: center,
-				zoom: zoom
-			})
-		}
+		map.flyTo({
+			center: center,
+			zoom: zoom
+		})
 	}
 
+	async function fetchEnacted(id) {
+		let res = await axios(`http://localhost:8080/lemonke/districtings/${id}`)
+		let districting = res.data;
+		let res2 = await axios(`http://localhost:8080/lemonke/districtings/${id}/geometry`)
+		districting.geometry = res2.data;
+		dispatch(setEnactedDistricting(districting));
+		dispatch(setSelectedDistricting(districting));
+	}
+	
 
-
-	var hoveredStateId = null;
-	const outlineStates = (map, stateName, geometry) => {
+	function outlineStates(map, stateName, geometry) {
 		map.addSource(stateName, {
 			'type': 'geojson',
 			'data': {
 				'type': 'Feature',
+				'id': getNewFeatureId(),
 				'geometry': geometry
 			}
 		});
-
 		map.addLayer({
 			'id': stateName,
 			'type': 'fill',
 			'source': stateName, // reference the data source
-			'layout': {},
+			'layout': {
+				'visibility': 'visible'
+			},
 			'paint': {
 				'fill-color': '#0080ff', // blue color fill
 				'fill-opacity': [
@@ -170,7 +204,21 @@ function Map(props) {
 			}
 		});
 
+		// When the mouse leaves the state-fill layer, update the feature state of the
+		// previously hovered feature.
+		map.on('click', stateName, function (e) {
+			if (hoveredStateId !== null) {
+				console.log('clicked ' + stateName);
+				for (let i = 0; i < stateList.length; i++) {
+					if (stateList[i].name == stateName) {
+						dispatch(setSelectedState(stateList[i]));
+						break;
+					}
+				}
+			}
+		});
 
+		//if hovering a feature, set its hover to true
 		map.on('mousemove', stateName, function (e) {
 			if (e.features.length > 0) {
 				if (hoveredStateId !== null) {
@@ -180,14 +228,13 @@ function Map(props) {
 					);
 				}
 				// console.log(e.features[0]);
-				hoveredStateId = e.features[0].layer.id;
+				hoveredStateId = e.features[0].id;
 				map.setFeatureState(
 					{ source: stateName, id: hoveredStateId },
 					{ hover: true }
 				);
 			}
 		});
-
 		// When the mouse leaves the state-fill layer, update the feature state of the
 		// previously hovered feature.
 		map.on('mouseleave', stateName, function () {
@@ -200,6 +247,11 @@ function Map(props) {
 			hoveredStateId = null;
 		});
 
+	}
+
+	const getNewFeatureId = () => {
+		featureId += 1;
+		return featureId - 1;
 	}
 
 
@@ -268,10 +320,46 @@ function Map(props) {
 		return '#' + ('000000' + color).slice(-6);
 	}
 
+	const selectDisplayLayer = (event) => {
+		let newDisplay = layersToDisplay;
+		switch (event.target.name) {
+			case 'districts':
+				newDisplay[0] = !newDisplay[0]
+				break;
+			case 'precincts':
+				newDisplay[1] = !newDisplay[1]
+				break;
+			case 'counties':
+				newDisplay[2] = !newDisplay[2]
+				break;
+			default:
+				break;
+		}
+		setLayersToDisplay(newDisplay, console.log(layersToDisplay));
+	};
 
+	const handleChange = (event) => {
+		setLayersToDisplay({ ...layersToDisplay, [event.target.name]: event.target.checked });
+	};
 
 	return (
 		<div>
+			<div className={classes.filter}>
+				<FormGroup>
+					<FormControlLabel
+						control={<Checkbox key={0} checked={layersToDisplay.districts} onChange={handleChange} name="districts" />}
+						label="Districts"
+					/>
+					<FormControlLabel
+						control={<Checkbox key={1} checked={layersToDisplay.precincts} onChange={handleChange} name="precincts" />}
+						label="Precincts"
+					/>
+					<FormControlLabel
+						control={<Checkbox key={2} onChange={handleChange} name="counties" disabled={true} />}
+						label="Counties"
+					/>
+				</FormGroup>
+			</div>
 			<div className={classes.sidebar}>
 				Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
 			</div>

@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import { useSelector, useDispatch } from 'react-redux';
-import { setEnactedDistricting, setSelectedState, incrementStep , resetSelectedState, setStateList} from '../../actions'
+import { setEnactedDistricting, setSelectedState, incrementStep , resetSelectedState, setStateList, setSelectedDistricting} from '../../actions'
 import { StarRateSharp } from '@material-ui/icons';
 
 
@@ -29,13 +29,23 @@ function SelectState(props) {
 
 	async function fetchEnacted(id) {
 		let res = await axios(`http://localhost:8080/lemonke/districtings/${id}`)
+		let districting = res.data;
+		let res2 = await axios(`http://localhost:8080/lemonke/districtings/${id}/geometry`)
+		districting.geometry = res2.data;
+		dispatch(setEnactedDistricting(districting));
+		dispatch(setSelectedDistricting(districting));
+	}
+
+	async function fetchEnactedGeometry(id) {
+		let res = await axios(`http://localhost:8080/lemonke/districtings/${id}/geometry`)
 		dispatch(setEnactedDistricting(res.data));
 	}
+
 
 	function pickState(stateToUse) {
 		if (stateToUse != -1) {
 			dispatch(setSelectedState(stateList[stateToUse]));
-			// fetchEnacted(stateList[stateToUse].enacted_districting_id);
+			fetchEnacted(stateList[stateToUse].enacted_districting_id);
 		}else{
 			dispatch(resetSelectedState());
 		}
@@ -57,7 +67,7 @@ function SelectState(props) {
 						<em>None</em>
 					</MenuItem>
 					{stateList.map((data, index) =>
-						<MenuItem value={index} key={data['name']}>{data['name']}</MenuItem>
+						<MenuItem value={data['stateId']} key={data['name']}>{data['name']}</MenuItem>
 					)}
 				</Select>
 			</div>
