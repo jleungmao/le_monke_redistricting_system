@@ -27,6 +27,13 @@ function SelectState(props) {
 	}, [])
 
 
+	async function fetchEnactedGeometry(id) {
+		let res = await axios(`http://localhost:8080/lemonke/districtings/${id}/geometry`)
+		dispatch(setEnactedDistricting(res.data));
+	}
+
+
+
 	async function fetchEnacted(id) {
 		let res = await axios(`http://localhost:8080/lemonke/districtings/${id}`)
 		let districting = res.data;
@@ -35,13 +42,7 @@ function SelectState(props) {
 		dispatch(setEnactedDistricting(districting));
 		dispatch(setSelectedDistricting(districting));
 	}
-
-	async function fetchEnactedGeometry(id) {
-		let res = await axios(`http://localhost:8080/lemonke/districtings/${id}/geometry`)
-		dispatch(setEnactedDistricting(res.data));
-	}
-
-
+	
 	function pickState(stateToUse) {
 		if (stateToUse != -1) {
 			dispatch(setSelectedState(stateList[stateToUse]));

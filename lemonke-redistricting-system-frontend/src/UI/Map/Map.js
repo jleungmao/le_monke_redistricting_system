@@ -27,15 +27,19 @@ function Map(props) {
 	}) // [districts, precincts, counties]
 	var featureId = 0;
 	var hoveredStateId = null;
+	var hoveredDistrictId = null;
 	var selectedFeatureId = null;
-
-
-
 
 
 	useEffect(() => {
 		if (map) {
 			flyToMethod([selectedState.longitude, selectedState.latitude], selectedState.zoom);
+			
+			if (map.getLayer('districts')) {
+				map.removeLayer('districts');
+				map.removeLayer('districts outline');
+			}
+
 			fetchEnacted(selectedState.enacted_districting_id);
 			let visibility = map.getLayoutProperty(
 				selectedState.name,
@@ -74,9 +78,93 @@ function Map(props) {
 
 	useEffect(() => {
 		if (map) {
-			console.log(layersToDisplay)
+			displayingDistricting();
 		}
-	}, [selectedDistricting])
+	}, [layersToDisplay]);
+
+	useEffect(() => {
+		if (map) {
+			for (let i = 0; i < selectedDistricting.districts.length; i++) {
+				selectedDistricting.geometry.features[i].id = selectedDistricting.districts[i].districtId;
+				selectedDistricting.geometry.features[i].properties = {
+					"color": addColor(),
+				};
+			}
+			displayingDistricting();
+		}
+	}, [selectedDistricting]);
+
+	function displayingDistricting() {
+		console.log(layersToDisplay)
+		if (layersToDisplay.districts) {
+			map.getSource("districts").setData(selectedDistricting.geometry)
+			if (!map.getLayer('districts')) {
+				map.addLayer({
+					'id': "districts",
+					'type': 'fill',
+					'source': "districts", // reference the data source
+					'layout': {
+						'visibility': 'visible'
+					},
+					'paint': {
+						'fill-color': ['get', 'color'],
+						'fill-opacity': [
+							'case',
+							['boolean', ['feature-state', 'hover'], false],
+							1,
+							0.5
+						]
+					}
+				});
+				map.addLayer({
+					'id': "districts outline",
+					'type': 'line',
+					'source': "districts",
+					'layout': {
+						'visibility': 'visible'
+					},
+					'paint': {
+						'line-color': '#000',
+						'line-width': 1
+					}
+				});
+
+				map.on('mousemove', "districts", function (e) {
+					if (e.features.length > 0) {
+						if (hoveredDistrictId !== null) {
+							map.setFeatureState(
+								{ source: "districts", id: hoveredDistrictId },
+								{ hover: false }
+							);
+						}
+						// console.log(e.features[0]);
+						hoveredDistrictId = e.features[0].id;
+						map.setFeatureState(
+							{ source: "districts", id: hoveredDistrictId },
+							{ hover: true }
+						);
+					}
+				});
+
+				map.on('mouseleave', "districts", function () {
+					if (hoveredDistrictId !== null) {
+						map.setFeatureState(
+							{ source: "districts", id: hoveredDistrictId },
+							{ hover: false }
+						);
+					}
+					hoveredDistrictId = null;
+				});
+			}
+			map.setLayoutProperty(selectedState.name, 'visibility', 'none');
+			map.setLayoutProperty("districts", 'visibility', 'visible');
+			map.setLayoutProperty("districts outline", 'visibility', 'visible');
+		} else {
+			map.setLayoutProperty(selectedState.name, 'visibility', 'visible');
+			map.setLayoutProperty("districts", 'visibility', 'none');
+			map.setLayoutProperty("districts outline", 'visibility', 'none');
+		}
+	}
 
 	useEffect(() => {
 		function initializeMap(setMap, mapContainer) {
@@ -114,21 +202,29 @@ function Map(props) {
 				//OUTLINE THE STATES
 				if (stateList && stateList != []) {
 					axios.get('./unionOfNY.json').then(res => {
-						outlineStates(map, 'New York', res.data, stateList);
+						let geometry = res.data;
+						geometry.id = getNewFeatureId();
+						outlineStates(map, 'New York', geometry, stateList);
 					});
 					axios.get('./unionOfNV.json').then(res => {
-						outlineStates(map, 'Nevada', res.data, stateList);
+						let geometry = res.data;
+						geometry.id = getNewFeatureId();
+						outlineStates(map, 'Nevada', geometry, stateList);
 					});
 				}
+
+				//create districts source to be edited later
+				map.addSource("districts", {
+					type: 'geojson',
+					data: {
+						"type": "FeatureCollection",
+						"features": []
+					}
+				});
 
 				// add navigation control (the +/- zoom buttons)
 				map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
-				map.on('click', 'districts', function (e) {
-					if (e.features.length > 0) {
-						props.parentCallback(e.features[0].id);
-					}
-				});
 				setMap(map);
 				map.resize();
 			});
@@ -164,16 +260,12 @@ function Map(props) {
 		dispatch(setEnactedDistricting(districting));
 		dispatch(setSelectedDistricting(districting));
 	}
-	
+
 
 	function outlineStates(map, stateName, geometry) {
 		map.addSource(stateName, {
 			'type': 'geojson',
-			'data': {
-				'type': 'Feature',
-				'id': getNewFeatureId(),
-				'geometry': geometry
-			}
+			'data': geometry,
 		});
 		map.addLayer({
 			'id': stateName,
@@ -183,7 +275,7 @@ function Map(props) {
 				'visibility': 'visible'
 			},
 			'paint': {
-				'fill-color': '#0080ff', // blue color fill
+				'fill-color': addColor(),
 				'fill-opacity': [
 					'case',
 					['boolean', ['feature-state', 'hover'], false],
@@ -200,7 +292,7 @@ function Map(props) {
 			'layout': {},
 			'paint': {
 				'line-color': '#000',
-				'line-width': 1
+				'line-width': 2
 			}
 		});
 
@@ -351,7 +443,7 @@ function Map(props) {
 						label="Districts"
 					/>
 					<FormControlLabel
-						control={<Checkbox key={1} checked={layersToDisplay.precincts} onChange={handleChange} name="precincts" />}
+						control={<Checkbox key={1} onChange={handleChange} name="precincts" disabled={true} />}
 						label="Precincts"
 					/>
 					<FormControlLabel

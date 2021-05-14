@@ -2,8 +2,6 @@ import React, { useEffect } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import { PinDropSharp } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -38,14 +36,34 @@ function SelectJob(props) {
 
         fetchData();
     }, [])
+
+    const minorityEnumToDisplay = (minority) => {
+        switch (minority) {
+            case 'BLACK':
+                return 'Black';
+            case 'WHITE':
+                return 'White';
+            case 'HISPANIC':
+                return 'Hispanic';
+            case 'ASIAN':
+                return 'Asian';
+            case 'AMERICAN_INDIAN':
+                return 'American Indian';
+            case 'OTHER':
+                return 'Other';
+            default:
+                break;
+        }
+    }
+
     return (
-        <>
+        <div>
             <h2>Select Minority Group</h2>
             <Select
                 value={selectedMinority}
                 onChange={(e) => dispatch(Actions.setMinority(e.target.value))}
             >
-                {minorities.map(val => (<MenuItem value={val}>{val}</MenuItem>))}
+                {minorities.map(val => (<MenuItem value={val}>{minorityEnumToDisplay(val)}</MenuItem>))}
             </Select>
             <h2>Select Job</h2>
             <List component="nav" aria-label="job lists">
@@ -59,11 +77,12 @@ function SelectJob(props) {
                             console.log(jobList);
                         }}>
                         <ListItemText
+                            key={jobList[index].jobId}
                             primary={"Name: " + jobList[index].name}
                             secondary={<div>
                                 <div>Number of Districtings: {jobList[index].numberDistrictings}</div>
                                 <div>Number of Rounds: {jobList[index].numberRounds}</div>
-                                <div>Cooling period: {jobList[index].coolingPeriod}</div>
+                                <div>Cooling periods: {jobList[index].coolingPeriods}</div>
                             </div>
                             }></ListItemText>
                     </ListItem>
@@ -86,7 +105,7 @@ function SelectJob(props) {
                     </Button>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 
