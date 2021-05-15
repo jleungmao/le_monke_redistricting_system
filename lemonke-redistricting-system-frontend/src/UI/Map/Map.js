@@ -33,26 +33,30 @@ function Map(props) {
 
 	useEffect(() => {
 		if (map) {
+			console.log('flying to ' + [selectedState.longitude, selectedState.latitude])
 			flyToMethod([selectedState.longitude, selectedState.latitude], selectedState.zoom);
-			
+
 			if (map.getLayer('districts')) {
 				map.removeLayer('districts');
 				map.removeLayer('districts outline');
 			}
 
-			fetchEnacted(selectedState.enacted_districting_id);
-			let visibility = map.getLayoutProperty(
-				selectedState.name,
-				'visibility'
-			);
-			console.log(visibility);
-			// for(let i = 0; i<stateList.length; i++){
-			// 	map.setLayoutProperty(
-			// 		stateList[i].name,
-			// 		'visibility',
-			// 		'visible'
-			// 	);
-			// 	if(selectedState.name == stateList[i].name){
+			if (selectedState.enacted_districting_id) {
+				fetchEnacted(selectedState.enacted_districting_id);
+			}
+			// let visibility = map.getLayoutProperty(
+			// 	selectedState.name,
+			// 	'visibility'
+			// );
+			// console.log(visibility);
+			for (let i = 0; i < stateList.length; i++) {
+				map.setLayoutProperty(
+					stateList[i].name,
+					'visibility',
+					'visible'
+				);
+			}
+			// 	if (selectedState.name == stateList[i].name) {
 			// 		map.setLayoutProperty(
 			// 			selectedState.name,
 			// 			'visibility',
@@ -60,19 +64,19 @@ function Map(props) {
 			// 		);
 			// 	}
 			// }
-			if (visibility === 'visible') {
-				map.setLayoutProperty(
-					selectedState.name,
-					'visibility',
-					'none'
-				);
-			} else {
-				map.setLayoutProperty(
-					selectedState.name,
-					'visibility',
-					'visible'
-				);
-			}
+			// if (visibility === 'visible') {
+			// 	map.setLayoutProperty(
+			// 		selectedState.name,
+			// 		'visibility',
+			// 		'none'
+			// 	);
+			// } else {
+			// 	map.setLayoutProperty(
+			// 		selectedState.name,
+			// 		'visibility',
+			// 		'visible'
+			// 	);
+			// }
 		}
 	}, [selectedState]);
 
@@ -84,13 +88,19 @@ function Map(props) {
 
 	useEffect(() => {
 		if (map) {
-			for (let i = 0; i < selectedDistricting.districts.length; i++) {
-				selectedDistricting.geometry.features[i].id = selectedDistricting.districts[i].districtId;
-				selectedDistricting.geometry.features[i].properties = {
-					"color": addColor(),
-				};
+			console.log(selectedDistricting)
+			if (selectedDistricting.districts) {
+				for (let i = 0; i < selectedDistricting.districts.length; i++) {
+					selectedDistricting.geometry.features[i].id = selectedDistricting.districts[i].districtId;
+					let color = addColor();
+					console.log(color)
+					selectedDistricting.geometry.features[i].properties = {
+						"color": color,
+					};
+				}
+				displayingDistricting();
 			}
-			displayingDistricting();
+
 		}
 	}, [selectedDistricting]);
 
@@ -128,6 +138,14 @@ function Map(props) {
 						'line-width': 1
 					}
 				});
+
+				map.on('click', 'districts', function (e) {
+					if (e.features.length > 0) {
+						if (hoveredDistrictId !== null) {
+							console.log(hoveredDistrictId);
+						}
+					}
+				})
 
 				map.on('mousemove', "districts", function (e) {
 					if (e.features.length > 0) {
@@ -201,15 +219,27 @@ function Map(props) {
 
 				//OUTLINE THE STATES
 				if (stateList && stateList != []) {
-					axios.get('./unionOfNY.json').then(res => {
+					// for (let i = 0; i < stateList.length; i++) {
+					// 	axios.get(`http://localhost:8080/lemonke/states/${stateList[i].stateId}/geometry-union`).then(res => {
+					// 		let geometry = res.data;
+					// 		geometry.id = getNewFeatureId();
+					// 		outlineStates(map, stateList[i].name, geometry, stateList);
+					// 	});
+					// }
+					axios.get(`./unionOfNV.json`).then(res => {
+						let geometry = res.data;
+						geometry.id = getNewFeatureId();
+						outlineStates(map, 'Nevada', geometry, stateList);
+					});
+					axios.get(`./unionOfNY.json`).then(res => {
 						let geometry = res.data;
 						geometry.id = getNewFeatureId();
 						outlineStates(map, 'New York', geometry, stateList);
 					});
-					axios.get('./unionOfNV.json').then(res => {
+					axios.get(`./unionOfFL.json`).then(res => {
 						let geometry = res.data;
 						geometry.id = getNewFeatureId();
-						outlineStates(map, 'Nevada', geometry, stateList);
+						outlineStates(map, 'Florida', geometry, stateList);
 					});
 				}
 
@@ -408,8 +438,14 @@ function Map(props) {
 	// https://www.geeksforgeeks.org/graph-coloring-applications/#:~:text=Graph%20coloring%20problem%20is%20to,are%20colored%20using%20same%20color.
 	const addColor = () => {
 		//very quick one-liner, doesn't necesarilly spit nice colors
-		var color = Math.floor(0x1000000 * Math.random()).toString(16);
-		return '#' + ('000000' + color).slice(-6);
+		// let color = Math.floor(0x1000000 * Math.random()).toString(16);
+		// return '#' + ('000000' + color).slice(-6);
+		let letters = '0123456789ABCDEF';
+		let color = '#';
+		for (let i = 0; i < 6; i++) {
+			color += letters[Math.floor(Math.random() * 16)];
+		}
+		return color;
 	}
 
 	const selectDisplayLayer = (event) => {

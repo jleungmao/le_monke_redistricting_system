@@ -64,7 +64,7 @@ function SetMeasures() {
 
 
     return (
-        <>
+        <div>
             <div className={classes.root}>
                 <h2>Set Objective Function Weight</h2>
                 <h3>Remaining: 1000</h3>
@@ -179,9 +179,22 @@ function SetMeasures() {
 						}}>
                         Next
                     </Button>
+                    <Button onClick={() => {
+                        dispatch(Actions.resetConstraints());
+                        dispatch(Actions.resetCoordinates());
+                        dispatch(Actions.resetMeasures());
+                        dispatch(Actions.resetMinority());
+                        dispatch(Actions.resetSelectedJob());
+                        dispatch(Actions.resetSelectedState());
+                        dispatch(Actions.resetStep());
+                        dispatch(Actions.resetSelectedDistricting());
+                        dispatch(Actions.resetEnactedDistricting());
+                    }} >
+                        Reset
+					</Button>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

@@ -33,19 +33,35 @@ export const setMinority = (minority) => {
         payload:minority
     }
 }
+export const resetMinority = () => {
+    return {
+        type: "RESET_MINORITY"
+    }
+}
 
+//JOBS
 export const setSelectedJob = (job) => {
     return {
         type: "SET_JOB",
         payload: job
     };
 }
+export const resetSelectedJob = () => {
+    return {
+        type: "RESET_JOB"
+    }
+}
 
-
+//DISTRICTINGS  
 export const setSelectedDistricting = (districting) => {
     return {
         type: "SET_DISTRICTING",
         payload: districting
+    };
+}
+export const resetSelectedDistricting = () => {
+    return {
+        type: "RESET_DISTRICTING"
     };
 }
 
@@ -53,6 +69,11 @@ export const setEnactedDistricting = (enacted) => {
     return {
         type: "SET_ENACTED",
         payload: enacted
+    };
+}
+export const resetEnactedDistricting = () => {
+    return {
+        type: "RESET_ENACTED"
     };
 }
 
@@ -63,6 +84,12 @@ export const setCoordinates = (coordinates) => {
         payload: coordinates
     }
 }
+export const resetCoordinates = () => {
+    return {
+        type: "RESET_COORDINATES"
+    }
+}
+
 
 //STEPPING
 export const incrementStep = () => {
@@ -129,9 +156,9 @@ export const setMajorityMinorityConstraint = (mm) => {
 }
 
 
-export const resetConstraints = (mm) => {
+export const resetConstraints = () => {
     return {
-        type: "RESET"
+        type: "RESET_CONSTRAINTS"
     }
 }
 
@@ -185,5 +212,11 @@ export const setPoliticalFairnessWeight = (weight) => {
     return {
         type: "SET_POL_FAIR_WEIGHT",
         payload: weight
+    }
+}
+
+export const resetMeasures = () => {
+    return {
+        type: "RESET_MEASURES"
     }
 }

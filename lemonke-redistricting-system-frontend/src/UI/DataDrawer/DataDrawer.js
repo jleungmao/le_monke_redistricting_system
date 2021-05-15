@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -10,6 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ShowData from './ShowData';
+import {useSelector} from 'react-redux';
 
 const drawerWidth = '20%';
 
@@ -49,7 +50,8 @@ const useStyles = makeStyles((theme) => ({
 export default function DataDrawer() {
     const classes = useStyles();
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const selectedDistricting = useSelector(state => state.selectedDistricting)
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -84,7 +86,7 @@ export default function DataDrawer() {
                 }}
             >
                 <div className={classes.drawerHeader}>
-                    <IconButton onClick={handleDrawerClose}>
+                    <IconButton onClick={handleDrawerClose} disabled = {selectedDistricting=={}}>
                         {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                     <h2>Districting Data</h2>

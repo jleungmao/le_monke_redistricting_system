@@ -104,7 +104,7 @@ function SelectDistricting(props) {
     function createDistrictingList(listOfDistrictings) {
         let listItems = [];
         for (let i = 0; i < listOfDistrictings.length; i++) {
-            let item = <>
+            let item = <div>
                 <ListItem button
                     selected={selectedIndex === i}
                     onClick={() => {
@@ -120,7 +120,7 @@ function SelectDistricting(props) {
                         {createDistrictingListItems(listOfDistrictings[i])}
                     </List>
                 </Collapse>
-            </>
+            </div>
 
             listItems.push(item);
             if (i != listOfDistrictings.length - 1) {
@@ -195,7 +195,17 @@ function SelectDistricting(props) {
                         onClick={() => console.log("TODO")}>
                         Display
 					</Button>
-                    <Button onClick={() => dispatch(Actions.resetStep())} >
+                    <Button onClick={() => {
+                        dispatch(Actions.resetConstraints());
+                        dispatch(Actions.resetCoordinates());
+                        dispatch(Actions.resetMeasures());
+                        dispatch(Actions.resetMinority());
+                        dispatch(Actions.resetSelectedJob());
+                        dispatch(Actions.resetSelectedState());
+                        dispatch(Actions.resetStep());
+                        dispatch(Actions.resetSelectedDistricting());
+                        dispatch(Actions.resetEnactedDistricting());
+                    }} >
                         Reset
 					</Button>
                 </div>

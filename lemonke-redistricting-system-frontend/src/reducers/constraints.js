@@ -1,6 +1,6 @@
 const constraintsReducer = (constraints = {
     'protectedIncumbents' : [],
-    'compactnessType' : "pp",
+    'compactnessType' : "GEOMETRIC",
     'compactness' : .5,
     'majorityMinority':0,
     'populationEqType' : 'TOTAL_POPULATION',
@@ -26,10 +26,10 @@ const constraintsReducer = (constraints = {
         case "SET_MM":
             newConstraints['majorityMinority'] = action.payload
             return newConstraints
-        case "RESET":
+        case "RESET_CONSTRAINTS":
             return {
                 'protectedIncumbents' : [],
-                'compactnessType' : "pp",
+                'compactnessType' : "GEOMETRIC",
                 'compactness' : .5,
                 'majorityMinority':0,
                 'populationEqType' : 'TOTAL_POPULATION',

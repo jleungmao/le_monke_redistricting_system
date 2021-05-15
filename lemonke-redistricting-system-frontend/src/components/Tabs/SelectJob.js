@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -9,16 +9,18 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSelectedJob, incrementStep, decrementStep } from '../../actions';
 import * as Actions from '../../actions';
+import { Collapse } from '@material-ui/core';
 
 function SelectJob(props) {
 
-    // const [selectedIndex, setSelectedIndex] = React.useState([0,"# of Districtings: 100,243. (More info about job 1)"]);
-    const [selectedIndex, setSelectedIndex] = React.useState();
+    // const [selectedIndex, setSelectedIndex] = useState([0,"# of Districtings: 100,243. (More info about job 1)"]);
+    const [selectedIndex, setSelectedIndex] = useState();
     const stateID = useSelector(state => state.selectedState.stateId);
-    const [jobList, setJobList] = React.useState([]);
+    const [jobList, setJobList] = useState([]);
     const dispatch = useDispatch();
-    const [minorities, setMinorities] = React.useState([]);
+    const [minorities, setMinorities] = useState([]);
     const selectedMinority = useSelector(state => state.selectedMinority);
+    const [collapseArray, updateCollapseArray] = useState([false]);
 
 
 
@@ -30,12 +32,15 @@ function SelectJob(props) {
 
 
             let res2 = await axios(`http://localhost:8080/lemonke/states/${stateID}/job-summaries`);
-            setJobList(res2.data);
+            let joblist = res2.data;
+            setJobList(joblist);
+            updateCollapseArray(new Array(joblist.length).fill(false));
 
         }
 
         fetchData();
     }, [])
+
 
     const minorityEnumToDisplay = (minority) => {
         switch (minority) {
@@ -56,6 +61,14 @@ function SelectJob(props) {
         }
     }
 
+
+    const handleSelectJob = (event, index) => {
+        setSelectedIndex(index);
+        dispatch(setSelectedJob(jobList[index]));
+        updateCollapseArray(collapseArray => collapseArray.map((item, idx) => idx === index ? !item : false));
+        console.log(collapseArray);
+    }
+
     return (
         <div>
             <h2>Select Minority Group</h2>
@@ -72,17 +85,19 @@ function SelectJob(props) {
                         key={jobList[index].jobId}
                         selected={selectedIndex === index}
                         onClick={(event) => {
-                            setSelectedIndex(index);
-                            dispatch(setSelectedJob(jobList[index]));
-                            console.log(jobList);
+                            handleSelectJob(event, index)
                         }}>
                         <ListItemText
                             key={jobList[index].jobId}
                             primary={"Name: " + jobList[index].name}
                             secondary={<div>
                                 <div>Number of Districtings: {jobList[index].numberDistrictings}</div>
-                                <div>Number of Rounds: {jobList[index].numberRounds}</div>
-                                <div>Cooling periods: {jobList[index].coolingPeriods}</div>
+                                <Collapse in={collapseArray[index]}>
+                                    <div>Number of Rounds: {jobList[index].numberRounds}</div>
+                                    <div>Cooling periods: {jobList[index].coolingPeriods}</div>
+                                    <div>Number of Runs: {jobList[index].numberRuns}</div>
+                                    <div>Maximum Population Difference: {jobList[index].maxPopDiffPercentage}%</div>
+                                </Collapse>
                             </div>
                             }></ListItemText>
                     </ListItem>
@@ -103,6 +118,19 @@ function SelectJob(props) {
                         onClick={() => dispatch(incrementStep())}>
                         Next
                     </Button>
+                    <Button onClick={() => {
+                        dispatch(Actions.resetConstraints());
+                        dispatch(Actions.resetCoordinates());
+                        dispatch(Actions.resetMeasures());
+                        dispatch(Actions.resetMinority());
+                        dispatch(Actions.resetSelectedJob());
+                        dispatch(Actions.resetSelectedState());
+                        dispatch(Actions.resetStep());
+                        dispatch(Actions.resetSelectedDistricting());
+                        dispatch(Actions.resetEnactedDistricting());
+                    }} >
+                        Reset
+					</Button>
                 </div>
             </div>
         </div>

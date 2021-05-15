@@ -90,16 +90,14 @@ function SetConstraints(props) {
 			let res = await axios.get(`http://localhost:8080/lemonke/states/${selectedState.stateId}/incumbents`);
 			setIncumbents(res.data);
 
-			// let res2 = await axios.get(`http://localhost:8080/lemonke/districtings/${selectedState.enacted_districting_id}/max-mm-districts/${selectedMinority}`);
-			let res2 = await axios.get(`http://localhost:8080/lemonke/districtings/48/max-mm-districts/${selectedMinority}`);
+			let res2 = await axios.get(`http://localhost:8080/lemonke/districtings/${selectedState.enacted_districting_id}/max-mm-districts/${selectedMinority}`);
 			let mmOptions = []
 			for (let i = 0; i <= res2.data; i++) {
 				mmOptions.push(i);
 			}
 			setMaxMMDistricts(mmOptions);
 
-			// let res3 = await axios.get(`http://localhost:8080/lemonke/districtings/${selectedState.enacted_districting_id}/population-type-availability`);
-			let res3 = await axios.get(`http://localhost:8080/lemonke/districtings/48/population-type-availability`);
+			let res3 = await axios.get(`http://localhost:8080/lemonke/districtings/${selectedState.enacted_districting_id}/population-type-availability`);
 			setAvailPopConstraints(res3.data)
 		}
 		fetchIncumbents();
@@ -262,9 +260,9 @@ function SetConstraints(props) {
 					{/* <FormControl component="fieldset"> */}
 					<RadioGroup aria-label="gender" name="gender1" value={constraints['compactnessType']}
 						onChange={(e) => { dispatch(Actions.setCompactnessType(e.target.value)) }}>
-						<FormControlLabel value="pp" control={<Radio />} label="Polsby-Popper" />
-						<FormControlLabel value="gc" control={<Radio />} label="Graph Compactness" />
-						<FormControlLabel value="fat" control={<Radio />} label="Population Fatness" />
+						<FormControlLabel value="GEOMETRIC" control={<Radio />} label="Polsby-Popper" />
+						<FormControlLabel value="GRAPH" control={<Radio disabled/>} label="Graph Compactness" />
+						<FormControlLabel value="POPULATION" control={<Radio disabled/>} label="Population Fatness" />
 					</RadioGroup>
 					{/* </FormControl> */}
 					<Slider
@@ -357,6 +355,19 @@ function SetConstraints(props) {
 						}}>
 						Next
                     </Button>
+                    <Button onClick={() => {
+                        dispatch(Actions.resetConstraints());
+                        dispatch(Actions.resetCoordinates());
+                        dispatch(Actions.resetMeasures());
+                        dispatch(Actions.resetMinority());
+                        dispatch(Actions.resetSelectedJob());
+                        dispatch(Actions.resetSelectedState());
+                        dispatch(Actions.resetStep());
+                        dispatch(Actions.resetSelectedDistricting());
+                        dispatch(Actions.resetEnactedDistricting());
+                    }} >
+                        Reset
+					</Button>
 				</div>
 			</div>
 		</div>

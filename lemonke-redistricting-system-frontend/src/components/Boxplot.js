@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 // import Plot from 'react-plotly.js';
 
 function Boxplot(props) {
@@ -35,7 +35,7 @@ function Boxplot(props) {
         showlegend: false
     };
 
-    const [boxPlotSet, setBoxPlotSet] = React.useState([]);
+    const [boxPlotSet, setBoxPlotSet] = useState([]);
 
     useEffect(() => {
 
@@ -132,9 +132,9 @@ function Boxplot(props) {
 
 
     return (
-        <>
+        <div>
             {/* <Plot data={boxPlotSet} layout={layout}></Plot> */}
-        </>
+        </div>
     )
 }
 

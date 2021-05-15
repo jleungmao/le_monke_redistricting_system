@@ -30,6 +30,16 @@ const measuresReducer = (measures = {
         case "SET_POL_FAIR_WEIGHT":
             newMeasures["polFairness"] = action.payload
             return newMeasures
+        case "RESET_MEASURES":
+            return {
+                'popEq': 0.5,
+                'splitCounty': 0.5,
+                'devFromAvg': 0.5,
+                'devFromEnactedArea': 0.5,
+                'devFromEnactedPop': 0.5,
+                'compactness': 0.5,
+                'polFairness': 0.5
+            };
         default:
             return newMeasures
     }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import classes from './Sidepanel.module.css';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -13,7 +13,7 @@ import ShowData from '../DataDrawer/ShowData';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { Route } from 'react-router-dom';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as Actions from '../../actions';
 
 function Sidepanel(props) {
@@ -47,16 +47,16 @@ function Sidepanel(props) {
 			'display': 'none'
 		};
 
-		if(value === index){
+		if (value === index) {
 			styles.display = 'block';
 		}
 
 		return (
-			<div style = {styles}>{value === index && <>{children}</>}</div>
+			<div style={styles}>{value === index && <div>{ children }</div>}</div>
 		)
 	}
 
-	const [value, setValue] = React.useState(0);
+	const [value, setValue] = useState(0);
 	const handleTabChange = (event, newValue) => {
 		setValue(newValue);
 	};
@@ -77,11 +77,11 @@ function Sidepanel(props) {
 		if (value == 0) {
 			return (
 				<div className={classes.tabContent}>
-					<ProgressBar activeStep = {activeStep} stepsList={steps} />
+					<ProgressBar activeStep={activeStep} stepsList={steps} />
 					<div style={{ marginBottom: '100px' }}>
 						<TabPanel value={activeStep} index={0}>
 							<Container maxWidth="sm">
-								<SelectState/>
+								<SelectState />
 							</Container>
 						</TabPanel>
 						<TabPanel value={activeStep} index={1}>
@@ -91,7 +91,7 @@ function Sidepanel(props) {
 						</TabPanel>
 						<TabPanel value={activeStep} index={2}>
 							<Container maxWidth="sm">
-								<SetConstraints/>
+								<SetConstraints />
 							</Container>
 						</TabPanel>
 						<TabPanel value={activeStep} index={3}>
@@ -107,33 +107,7 @@ function Sidepanel(props) {
 								{/* <Route exact path='/' component={Boxplot}></Route> */}
 							</Container>
 						</TabPanel>
-						{/* Button Next, Back and Finish  */}
 					</div>
-					{/* <div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
-						<div>
-							<Button disabled={activeStep === 0} onClick={() => handleChangeStep(activeStep - 1)} >
-								Back
-		  					</Button>
-							{activeStep === steps.length - 1 ?
-								<>
-								<Button
-									variant="contained"
-									color="primary"
-									onClick={() => handleChangeStep(activeStep + 1)}>
-									Display
-								</Button>
-								<Button onClick={() => handleChangeStep(0)} >
-									Reset
-								</Button>
-								</> : 
-								<Button
-									variant="contained"
-									color="primary"
-									onClick={() => handleChangeStep(activeStep + 1)}>
-									Next
-								</Button>}
-						</div>
-					</div> */}
 				</div>
 			)
 		} else if (value == 1) {
