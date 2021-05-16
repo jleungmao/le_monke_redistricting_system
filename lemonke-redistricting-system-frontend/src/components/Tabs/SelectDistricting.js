@@ -79,7 +79,7 @@ function SelectDistricting(props) {
     //creates the JSX list of districtings
     function getList() {
         let listOptions;
-        if (Object.keys(districtingSet).length != 0) {
+        if (Object.keys(districtingSet).length !== 0) {
             switch (selectedCategory) {
                 case 'bestDistricts':
                     listOptions = sortDistrictings(districtingSet['bestDistricts']);
@@ -123,7 +123,7 @@ function SelectDistricting(props) {
             </div>
 
             listItems.push(item);
-            if (i != listOfDistrictings.length - 1) {
+            if (i !== listOfDistrictings.length - 1) {
                 listItems.push(<Divider />);
             }
         }
@@ -135,7 +135,7 @@ function SelectDistricting(props) {
         let container = []
         // console.log(categories)
         for (let i = 0; i < categories.length - 1; i++) {
-            if (categories[i] == "OFScore") {
+            if (categories[i] === "OFScore") {
                 continue;
             }
             container.push(<ListItem>

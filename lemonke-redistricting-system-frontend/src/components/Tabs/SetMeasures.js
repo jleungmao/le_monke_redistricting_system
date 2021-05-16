@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
@@ -39,6 +39,12 @@ const useStyles = makeStyles((theme) => ({
         width: "14px !important",
         borderRadius: 24,
         opacity: 1,
+    },
+    districtingCount: {
+        background: 'linear-gradient(45deg, #4863A0 30%,#98AFC7  90%)',
+        color: 'white',
+        padding: '5px',
+        borderRadius: 5,
     }
 }));
 
@@ -48,6 +54,8 @@ function SetMeasures() {
     const classes = useStyles();
     const measures = useSelector(state => state.measures);
     const dispatch = useDispatch();
+    const [remainingDistrictings, setRemainingDistrictings] = useState('...');
+    const constrainedSet = useSelector(state => state.constrainedSet);
 
 
     const marks = [
@@ -61,13 +69,18 @@ function SetMeasures() {
         }
     ]
 
+    useEffect(() => {
+        if (constrainedSet) {
+            setRemainingDistrictings(constrainedSet.length);
+        }
+    }, [constrainedSet])
 
 
     return (
         <div>
+            <h2 className = {classes.districtingCount}>Remaining Districtings: {remainingDistrictings}</h2>
             <div className={classes.root}>
                 <h2>Set Objective Function Weight</h2>
-                <h3>Remaining: 1000</h3>
                 {/* <Grid
                 container
                 direction="column"
@@ -169,14 +182,14 @@ function SetMeasures() {
                     <Button
                         variant="contained"
                         color="primary"
-						onClick={() => {
-							axios.post('http://localhost:8080/lemonke/setMeasures', {
-								measures
-							}).then(function (response) {
-								console.log(response);
-							});
-							dispatch(Actions.incrementStep());
-						}}>
+                        onClick={() => {
+                            // axios.post('http://localhost:8080/lemonke/setMeasures', {
+                            // 	measures
+                            // }).then(function (response) {
+                            // 	console.log(response);
+                            // });
+                            dispatch(Actions.incrementStep());
+                        }}>
                         Next
                     </Button>
                     <Button onClick={() => {

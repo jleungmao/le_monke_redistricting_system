@@ -23,15 +23,18 @@ import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
 import RadvizD3 from '../../D3/RadvizD3';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch} from 'react-redux';
+import * as Actions from '../../actions';
 
 function ShowData(props) {
 
-    const [selectedDistrict, setSelectedDistrict] = useState('none')
+    const [selectedDistrictId, setSelectedDistrictId] = useState('none')
     const selectedDistricting = useSelector(state => state.selectedDistricting)
+    const selectedDistrict = useSelector(state => state.selectedDistrict);
     const [selectedIndex, setSelectedIndex] = useState();
     const [collapseArray, updateCollapseArray] = useState(new Array(27).fill(false));
     const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
 
 
 
@@ -40,57 +43,84 @@ function ShowData(props) {
         if (selectedDistricting.districts) {
             updateCollapseArray(new Array(selectedDistricting.districts.length).fill(false));
         }
-
+        setSelectedDistrictId('none');
         return () => {
             //cleanup
         }
     }, [selectedDistricting])
 
-    const handleSetChange = (event) => {
-        console.log(event);
-        setSelectedDistrict(event.target.value);
-    }
-
-    function getDistricts() {
-        // if (selectedDistricting.districts) {
-        //     console.log(selectedDistricting.districts);
-        //     let districtObject = selectedDistricting.districts;
-        //     return createDistrictListItems(districtObject);
-        // }
-    }
-
-    function createDistrictListItems(district) {
-        let categories = Object.keys(district)
+    function getDistrictingInfo(){
         let container = [];
-        for (let i = 0; i < categories.length - 1; i++) {
+        
+
+        if (selectedDistricting) {
+            return (
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Measure</TableCell>
+                                <TableCell>Score</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {container}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            );
+        }
+
+    }
+
+
+
+    const selectDistrict = (event) => {
+        console.log(event);
+        setSelectedDistrictId(event.target.value);
+        dispatch(Actions.setSelectedDistrict(findDistrictById(event.target.value)));
+    }
+
+    const findDistrictById = (id) => {
+        for (let district of selectedDistricting.districts){
+            if(district.districtId === id){
+                return district;
+            }
+        }
+    }
+    function getDistricts() {
+        let container = [];
+        for(let district in selectedDistricting.districts){
             container.push(
                 <TableRow>
                     <TableCell align="left">
-                        {categories[i]}
+                        {}
                     </TableCell>
                     <TableCell align="left">
-                        {district[categories[i]]}
+                        {}
                     </TableCell>
                 </TableRow>
             );
         }
 
-        return (
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Data Names</TableCell>
-                            <TableCell>Values</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {container}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        );
-
+        if (selectedDistricting.districts) {
+            return (
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Property</TableCell>
+                                <TableCell>Values</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {container}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            );
+        }
+        
     }
 
 
@@ -100,6 +130,14 @@ function ShowData(props) {
 
     const handleClose = () => {
         setOpen(false);
+    }
+
+    function getMenuItems(){
+        if (selectedDistricting.districts) {
+            return selectedDistricting.districts.map((data, index) => <MenuItem value={data.districtId}>
+                District {index+1}
+            </MenuItem>)
+        }
     }
 
     function DialogContainer() {
@@ -134,15 +172,21 @@ function ShowData(props) {
                     Display Box & whisker Plot.
                 </Button>
             </Grid>
+
+            {/* <Grid item xs={12} style={{ padding: '10px' }}>
+                <h1>Districting Information</h1>
+                {getDistrictingInfo()}
+            </Grid> */}
+
             <Grid item xs={12} style={{ padding: '10px' }}>
                 <DialogContainer />
                 <FormControl>
                     <Select
-                        value={selectedDistrict}
-                        onChange={handleSetChange}
+                        value={selectedDistrictId}
+                        onChange={selectDistrict}
                     >
                         <MenuItem value={'none'}>None</MenuItem>
-                        <MenuItem value={'district1'}>District 1</MenuItem>
+                        {getMenuItems()}
                     </Select>
                 </FormControl>
                 <RadvizD3 labels={null} content={null} colorAccessor={null} textLabel={null} zoom={true} />

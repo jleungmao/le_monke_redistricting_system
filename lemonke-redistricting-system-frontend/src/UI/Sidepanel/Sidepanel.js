@@ -74,7 +74,7 @@ function Sidepanel(props) {
 	)
 
 	function getTab(value) {
-		if (value == 0) {
+		if (value === 0) {
 			return (
 				<div className={classes.tabContent}>
 					<ProgressBar activeStep={activeStep} stepsList={steps} />
@@ -110,7 +110,7 @@ function Sidepanel(props) {
 					</div>
 				</div>
 			)
-		} else if (value == 1) {
+		} else if (value === 1) {
 			return (
 				<div className={classes.tabContent}>
 					<ShowData selectedDistrict={selectedDistrictId} homePageCallback={homePageCallback} />

@@ -44,7 +44,7 @@ function SelectState(props) {
 	}
 	
 	function pickState(stateToUse) {
-		if (stateToUse != -1) {
+		if (stateToUse !== -1) {
 			dispatch(setSelectedState(stateList[stateToUse]));
 			fetchEnacted(stateList[stateToUse].enacted_districting_id);
 		}else{
@@ -53,7 +53,7 @@ function SelectState(props) {
 	}
 
 	return (
-		<>
+		<div>
 			<div>
 				<br />
 				<br />
@@ -76,7 +76,7 @@ function SelectState(props) {
 				<div>
 					<Button disabled={true}>Back</Button>
 					<Button
-						disabled={selectedIndex == -1}
+						disabled={selectedIndex === -1}
 						variant="contained"
 						color="primary"
 						onClick={() => dispatch(incrementStep())}>
@@ -84,7 +84,7 @@ function SelectState(props) {
 					</Button>
 				</div>
 			</div>
-		</>
+		</div>
 	)
 }
 

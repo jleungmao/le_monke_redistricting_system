@@ -64,6 +64,17 @@ export const resetSelectedDistricting = () => {
         type: "RESET_DISTRICTING"
     };
 }
+export const setSelectedDistrict = (district) => {
+    return {
+        type: "SET_DISTRICT",
+        payload: district
+    };
+}
+export const resetSelectedDistrict = () => {
+    return {
+        type: "RESET_DISTRICT"
+    };
+}
 
 export const setEnactedDistricting = (enacted) => {
     return {
@@ -159,6 +170,17 @@ export const setMajorityMinorityConstraint = (mm) => {
 export const resetConstraints = () => {
     return {
         type: "RESET_CONSTRAINTS"
+    }
+}
+export const setConstrainedSet = (constrainedSet) => {
+    return {
+        type: "SET_CONSTRAINED_SET",
+        payload: constrainedSet
+    }
+}
+export const resetConstrainedSet = () => {
+    return {
+        type: "RESET_CONSTRAINED_SET"
     }
 }
 

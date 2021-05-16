@@ -3,7 +3,7 @@ import mapboxgl, { BoxZoomHandler } from 'mapbox-gl';
 import classes from './Map.module.css';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { setEnactedDistricting, setSelectedDistricting, setSelectedState } from '../../actions';
+import { setEnactedDistricting, setSelectedDistricting, setSelectedState, setSelectedDistrict, resetSelectedDistrict } from '../../actions';
 import { Checkbox, FormControlLabel, FormGroup } from '@material-ui/core';
 
 
@@ -13,6 +13,7 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 function Map(props) {
 	const selectedDistricting = useSelector(state => state.selectedDistricting);
 	const selectedState = useSelector(state => state.selectedState);
+	const selectedDistrict = useSelector(state => state.selectedDistrict);
 	const stateList = useSelector(state => state.stateList);
 	const [lng, setLng] = useState(-89.8);
 	const [lat, setLat] = useState(35.8);
@@ -28,7 +29,8 @@ function Map(props) {
 	var featureId = 0;
 	var hoveredStateId = null;
 	var hoveredDistrictId = null;
-	var selectedFeatureId = null;
+	var selectedDistrictId = null;
+	var fromThis = false;
 
 
 	useEffect(() => {
@@ -88,12 +90,32 @@ function Map(props) {
 
 	useEffect(() => {
 		if (map) {
-			console.log(selectedDistricting)
+			if (!fromThis) {
+				console.log(selectedDistrictId, selectedDistrict.districtId)
+				map.setFeatureState(
+					{ source: "districts", id: selectedDistrictId },
+					{ selected: false }
+				);
+				map.setFeatureState(
+					{ source: "districts", id: selectedDistrict.districtId },
+					{ selected: true }
+				);
+				selectedDistrictId = selectedDistrict.id;
+			}
+			fromThis = false;
+		}
+	}, [selectedDistrict]);
+
+	useEffect(() => {
+		if (map) {
+			selectedDistrictId = null;
+			dispatch(resetSelectedDistrict());
+			// console.log(selectedDistricting)
 			if (selectedDistricting.districts) {
 				for (let i = 0; i < selectedDistricting.districts.length; i++) {
 					selectedDistricting.geometry.features[i].id = selectedDistricting.districts[i].districtId;
 					let color = addColor();
-					console.log(color)
+					// console.log(color)
 					selectedDistricting.geometry.features[i].properties = {
 						"color": color,
 					};
@@ -104,8 +126,16 @@ function Map(props) {
 		}
 	}, [selectedDistricting]);
 
+	const findDistrictById = (id) => {
+		for (let district of selectedDistricting.districts) {
+			if (district.districtId === id) {
+				return district;
+			}
+		}
+	}
+
 	function displayingDistricting() {
-		console.log(layersToDisplay)
+		// console.log(layersToDisplay)
 		if (layersToDisplay.districts) {
 			map.getSource("districts").setData(selectedDistricting.geometry)
 			if (!map.getLayer('districts')) {
@@ -120,9 +150,9 @@ function Map(props) {
 						'fill-color': ['get', 'color'],
 						'fill-opacity': [
 							'case',
-							['boolean', ['feature-state', 'hover'], false],
+							['boolean', ['feature-state', 'selected'], ['feature-state', 'hover'], false],
 							1,
-							0.5
+							0.35
 						]
 					}
 				});
@@ -135,14 +165,29 @@ function Map(props) {
 					},
 					'paint': {
 						'line-color': '#000',
-						'line-width': 1
+						'line-width': [
+							'case',
+							['boolean', ['feature-state', 'selected'], ['feature-state', 'hover'], false],
+							3,
+							1
+						]
 					}
 				});
 
 				map.on('click', 'districts', function (e) {
 					if (e.features.length > 0) {
 						if (hoveredDistrictId !== null) {
-							console.log(hoveredDistrictId);
+							map.setFeatureState(
+								{ source: "districts", id: hoveredDistrictId },
+								{ selected: true }
+							);
+							map.setFeatureState(
+								{ source: "districts", id: selectedDistrictId },
+								{ selected: false }
+							);
+							selectedDistrictId = hoveredDistrictId;
+							fromThis = true;
+							dispatch(setSelectedDistrict(findDistrictById(selectedDistrictId)));
 						}
 					}
 				})
@@ -322,7 +367,7 @@ function Map(props) {
 			'layout': {},
 			'paint': {
 				'line-color': '#000',
-				'line-width': 2
+				'line-width': 4
 			}
 		});
 
@@ -463,7 +508,7 @@ function Map(props) {
 			default:
 				break;
 		}
-		setLayersToDisplay(newDisplay, console.log(layersToDisplay));
+		setLayersToDisplay(newDisplay);
 	};
 
 	const handleChange = (event) => {

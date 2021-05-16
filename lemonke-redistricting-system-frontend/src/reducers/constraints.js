@@ -1,10 +1,10 @@
 const constraintsReducer = (constraints = {
     'protectedIncumbents' : [],
     'compactnessType' : "GEOMETRIC",
-    'compactness' : .5,
+    'compactnessValue' : .5,
     'majorityMinority':0,
-    'populationEqType' : 'TOTAL_POPULATION',
-    'populationEq':.5
+    'populationType' : 'TOTAL_POPULATION',
+    'populationValue':.5
 }, action) => {
     let newConstraints = {...constraints};
     switch (action.type) {
@@ -15,13 +15,13 @@ const constraintsReducer = (constraints = {
             newConstraints['compactnessType'] = action.payload
             return newConstraints
         case "SET_COMPACTNESS_CONSTRAINT":
-            newConstraints['compactness'] = action.payload
+            newConstraints['compactnessValue'] = action.payload
             return newConstraints
         case "SET_POPULATION_CONSTRAINT_TYPE":
-            newConstraints['populationEqType'] = action.payload
+            newConstraints['populationType'] = action.payload
             return newConstraints
         case "SET_POPULATION_CONSTRAINT":
-            newConstraints['populationEq'] = action.payload
+            newConstraints['populationValue'] = action.payload
             return newConstraints
         case "SET_MM":
             newConstraints['majorityMinority'] = action.payload
@@ -30,10 +30,10 @@ const constraintsReducer = (constraints = {
             return {
                 'protectedIncumbents' : [],
                 'compactnessType' : "GEOMETRIC",
-                'compactness' : .5,
+                'compactnessValue' : .5,
                 'majorityMinority':0,
-                'populationEqType' : 'TOTAL_POPULATION',
-                'populationEq':.5,
+                'populationType' : 'TOTAL_POPULATION',
+                'populationValue':.5,
             }
         default:
             return newConstraints

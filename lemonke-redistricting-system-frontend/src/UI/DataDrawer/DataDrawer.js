@@ -86,7 +86,7 @@ export default function DataDrawer() {
                 }}
             >
                 <div className={classes.drawerHeader}>
-                    <IconButton onClick={handleDrawerClose} disabled = {selectedDistricting=={}}>
+                    <IconButton onClick={handleDrawerClose} disabled = {selectedDistricting==={}}>
                         {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                     <h2>Districting Data</h2>

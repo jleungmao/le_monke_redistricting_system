@@ -67,13 +67,12 @@ function SetConstraints(props) {
 	const dispatch = useDispatch();
 
 	const protectedIncumbents = constraints['protectedIncumbents'];
-	const [compactness, setCompactness] = useState(constraints['compactness']);
-	const [popEq, setPopEq] = useState(constraints['populationEq']);
+	const [compactness, setCompactness] = useState(constraints['compactnessValue']);
+	const [popEq, setPopEq] = useState(constraints['populationValue']);
 
 	const [open, setOpen] = useState(false);
 	// const [totalPopulationAvailable, setTotalPopulationAvailable] = useState(false)
-	const [vtpaAvailable, setVtpaAvailable] = useState(false)
-	const [cvPopulation, setCvPopulation] = useState(false)
+	const job = useSelector(state => state.selectedJobSummary)
 	const classes = useStyles();
 
 	const selectedState = useSelector(state => state.selectedState)
@@ -303,7 +302,7 @@ function SetConstraints(props) {
 				{/* Population Constraints */}
 				<Grid item xs={12} style={{ padding: '10px' }}>
 					<Typography gutterBottom variant='h4'>Population Constraints</Typography>
-					<RadioGroup aria-label="gender" name="gender1" value={constraints['populationEqType']}
+					<RadioGroup aria-label="gender" name="gender1" value={constraints['populationType']}
 						onChange={(e) => { dispatch(Actions.setPopulationConstraintType(e.target.value)) }}>
 						<FormControlLabel value="TOTAL_POPULATION" control={<Radio disabled={!availPopConstraints["TOTAL_POPULATION"]} />} label="Total Population" />
 						<FormControlLabel value="VOTING_AGE_POPULATION" control={<Radio disabled={!availPopConstraints["VOTING_AGE_POPULATION"]} />} label="Voting Age Population (TVAP)" />
@@ -346,11 +345,18 @@ function SetConstraints(props) {
 						variant="contained"
 						color="primary"
 						onClick={() => {
-							// axios.post('http://localhost:8080/lemonke/setConstraints', {
-							// 	constraints
-							// }).then(function (response) {
-							// 	console.log(response);
-							// });
+							axios.get(`http://localhost:8080/lemonke/jobs/${job.jobId}/constrain-job`, {
+								params : {
+									compactnessType: constraints.compactnessType,
+									compactnessValue:constraints.compactnessValue,
+									jobId:job.jobId,
+									mmDistricts:constraints.majorityMinority,
+									populationType:constraints.populationType,
+									populationValue:constraints.populationValue,
+								}
+							}).then(function (response) {
+								dispatch(Actions.setConstrainedSet(response.data));
+							});
 							dispatch(Actions.incrementStep());
 						}}>
 						Next

@@ -3,7 +3,9 @@ import stepperReducer from './stepper.js';
 import stateListReducer from './stateList.js';
 import selectedStateReducer from './selectedState.js';
 import selectedDistrictingReducer from './selectedDistricting.js';
+import selectedDistrictReducer from './selectedDistrict.js';
 import selectedJobReducer from './selectedJob.js';
+import constrainedDistrictingsReducer from './constrainedDistrictings.js'
 import constraintsReducer from './constraints.js';
 import enactedDistrictingReducer from './enactedDistricting.js';
 import measuresReducer from './measures.js';
@@ -17,8 +19,10 @@ const allReducers = combineReducers({
     selectedMinority: minorityReducer,
     selectedJobSummary: selectedJobReducer,
     constraints: constraintsReducer,
+    constrainedSet: constrainedDistrictingsReducer,
     measures: measuresReducer,
-    selectedDistricting: selectedDistrictingReducer
+    selectedDistricting: selectedDistrictingReducer,
+    selectedDistrict: selectedDistrictReducer
 })
 
 export default allReducers;
