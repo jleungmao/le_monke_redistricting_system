@@ -3,7 +3,7 @@ import mapboxgl, { BoxZoomHandler } from 'mapbox-gl';
 import classes from './Map.module.css';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { setEnactedDistricting, setSelectedDistricting, setSelectedState, setSelectedDistrict, resetSelectedDistrict } from '../../actions';
+import { setEnactedDistricting, setDisplayedDistricting, setSelectedState, setSelectedDistrict, resetSelectedDistrict } from '../../actions';
 import { Checkbox, FormControlLabel, FormGroup } from '@material-ui/core';
 
 
@@ -11,7 +11,7 @@ import { Checkbox, FormControlLabel, FormGroup } from '@material-ui/core';
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 function Map(props) {
-	const selectedDistricting = useSelector(state => state.selectedDistricting);
+	const displayedDistricting = useSelector(state => state.displayedDistricting);
 	const selectedState = useSelector(state => state.selectedState);
 	const selectedDistrict = useSelector(state => state.selectedDistrict);
 	const stateList = useSelector(state => state.stateList);
@@ -90,19 +90,20 @@ function Map(props) {
 
 	useEffect(() => {
 		if (map) {
-			if (!fromThis) {
-				console.log(selectedDistrictId, selectedDistrict.districtId)
-				map.setFeatureState(
-					{ source: "districts", id: selectedDistrictId },
-					{ selected: false }
-				);
+			if (selectedDistrict.districtId && selectedDistrict.districtId !== 'none') {
+				console.log(selectedDistrict.districtId, displayedDistricting)
+				for(let i = 0; i< displayedDistricting.districts.length; i++){
+					map.setFeatureState(
+						{ source: "districts", id: displayedDistricting.districts[i].districtId },
+						{ selected: null }
+					);
+				}
 				map.setFeatureState(
 					{ source: "districts", id: selectedDistrict.districtId },
 					{ selected: true }
 				);
-				selectedDistrictId = selectedDistrict.id;
 			}
-			fromThis = false;
+
 		}
 	}, [selectedDistrict]);
 
@@ -110,13 +111,13 @@ function Map(props) {
 		if (map) {
 			selectedDistrictId = null;
 			dispatch(resetSelectedDistrict());
-			// console.log(selectedDistricting)
-			if (selectedDistricting.districts) {
-				for (let i = 0; i < selectedDistricting.districts.length; i++) {
-					selectedDistricting.geometry.features[i].id = selectedDistricting.districts[i].districtId;
+			// console.log(displayedDistricting)
+			if (displayedDistricting.districts) {
+				for (let i = 0; i < displayedDistricting.districts.length; i++) {
+					displayedDistricting.geometry.features[i].id = displayedDistricting.districts[i].districtId;
 					let color = addColor();
 					// console.log(color)
-					selectedDistricting.geometry.features[i].properties = {
+					displayedDistricting.geometry.features[i].properties = {
 						"color": color,
 					};
 				}
@@ -124,10 +125,10 @@ function Map(props) {
 			}
 
 		}
-	}, [selectedDistricting]);
+	}, [displayedDistricting]);
 
 	const findDistrictById = (id) => {
-		for (let district of selectedDistricting.districts) {
+		for (let district of displayedDistricting.districts) {
 			if (district.districtId === id) {
 				return district;
 			}
@@ -137,7 +138,7 @@ function Map(props) {
 	function displayingDistricting() {
 		// console.log(layersToDisplay)
 		if (layersToDisplay.districts) {
-			map.getSource("districts").setData(selectedDistricting.geometry)
+			map.getSource("districts").setData(displayedDistricting.geometry)
 			if (!map.getLayer('districts')) {
 				map.addLayer({
 					'id': "districts",
@@ -177,17 +178,7 @@ function Map(props) {
 				map.on('click', 'districts', function (e) {
 					if (e.features.length > 0) {
 						if (hoveredDistrictId !== null) {
-							map.setFeatureState(
-								{ source: "districts", id: hoveredDistrictId },
-								{ selected: true }
-							);
-							map.setFeatureState(
-								{ source: "districts", id: selectedDistrictId },
-								{ selected: false }
-							);
-							selectedDistrictId = hoveredDistrictId;
-							fromThis = true;
-							dispatch(setSelectedDistrict(findDistrictById(selectedDistrictId)));
+							dispatch(setSelectedDistrict(findDistrictById(hoveredDistrictId)));
 						}
 					}
 				})
@@ -200,7 +191,6 @@ function Map(props) {
 								{ hover: false }
 							);
 						}
-						// console.log(e.features[0]);
 						hoveredDistrictId = e.features[0].id;
 						map.setFeatureState(
 							{ source: "districts", id: hoveredDistrictId },
@@ -333,7 +323,7 @@ function Map(props) {
 		let res2 = await axios(`http://localhost:8080/lemonke/districtings/${id}/geometry`)
 		districting.geometry = res2.data;
 		dispatch(setEnactedDistricting(districting));
-		dispatch(setSelectedDistricting(districting));
+		dispatch(setDisplayedDistricting(districting));
 	}
 
 

@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import { useSelector, useDispatch } from 'react-redux';
-import { setEnactedDistricting, setSelectedState, incrementStep , resetSelectedState, setStateList, setSelectedDistricting} from '../../actions'
+import { setEnactedDistricting, setSelectedState, incrementStep , resetSelectedState, setStateList, setDisplayedDistricting} from '../../actions'
 import { StarRateSharp } from '@material-ui/icons';
 
 
@@ -40,7 +40,7 @@ function SelectState(props) {
 		let res2 = await axios(`http://localhost:8080/lemonke/districtings/${id}/geometry`)
 		districting.geometry = res2.data;
 		dispatch(setEnactedDistricting(districting));
-		dispatch(setSelectedDistricting(districting));
+		dispatch(setDisplayedDistricting(districting));
 	}
 	
 	function pickState(stateToUse) {

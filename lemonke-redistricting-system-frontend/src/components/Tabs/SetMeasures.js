@@ -201,7 +201,10 @@ function SetMeasures() {
                         dispatch(Actions.resetSelectedState());
                         dispatch(Actions.resetStep());
                         dispatch(Actions.resetSelectedDistricting());
+                        dispatch(Actions.resetDisplayedDistricting());
+                        dispatch(Actions.resetSelectedDistrict());
                         dispatch(Actions.resetEnactedDistricting());
+                        dispatch(Actions.resetConstrainedSet())
                     }} >
                         Reset
 					</Button>

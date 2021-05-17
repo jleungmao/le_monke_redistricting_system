@@ -51,7 +51,7 @@ export default function DataDrawer() {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = useState(false);
-    const selectedDistricting = useSelector(state => state.selectedDistricting)
+    const displayedDistricting = useSelector(state => state.displayedDistricting)
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -86,7 +86,7 @@ export default function DataDrawer() {
                 }}
             >
                 <div className={classes.drawerHeader}>
-                    <IconButton onClick={handleDrawerClose} disabled = {selectedDistricting==={}}>
+                    <IconButton onClick={handleDrawerClose} disabled = {displayedDistricting==={}}>
                         {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                     <h2>Districting Data</h2>
