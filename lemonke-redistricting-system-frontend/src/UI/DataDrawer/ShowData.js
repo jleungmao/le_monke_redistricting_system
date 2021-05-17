@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Boxplot from '../../components/Boxplot';
 import { Route } from 'react-router-dom';
 import List from '@material-ui/core/List';
@@ -35,8 +35,7 @@ function ShowData(props) {
     const [collapseArray, updateCollapseArray] = useState(new Array(27).fill(false));
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
-
-
+    const radvizData = useSelector(state => state.constrainedSet)
 
 
     useEffect(() => {
@@ -52,7 +51,6 @@ function ShowData(props) {
     function getDistrictingInfo(){
         let container = [];
         
-
         if (selectedDistricting) {
             return (
                 <TableContainer component={Paper}>
@@ -165,6 +163,24 @@ function ShowData(props) {
         )
     }
 
+    let labelsMappings = {
+        'geometricCompactness': 'Compactness',
+        'totalPopulation': 'Total Pop',
+        'totalPopulationEquality': 'Total Pop Eq'
+    }
+
+    async function handleClick(i, d) {
+		let original = d['data']
+        console.log(original['districtingSummaryId'])
+        let id = original['districtingSummaryId']
+		let res = await axios(`http://localhost:8080/lemonke/districtings/${id}`)
+		let districting = res.data;
+		let res2 = await axios(`http://localhost:8080/lemonke/districtings/${id}/geometry`)
+		districting.geometry = res2.data;
+		dispatch(Actions.setSelectedDistricting(districting));
+        dispatch(Actions.setDisplayed(districting));
+	}
+
     return (
         <div>
             <Grid item xs={12} style={{ padding: '10px' }}>
@@ -189,7 +205,7 @@ function ShowData(props) {
                         {getMenuItems()}
                     </Select>
                 </FormControl>
-                <RadvizD3 labels={null} content={null} colorAccessor={null} textLabel={null} zoom={true} />
+                {useMemo(() => <RadvizD3 labels={labelsMappings} content={radvizData} handleMouseClick={handleClick} zoom={true} colorAccessor={null} textLabel={null} />, [radvizData])}
                 {getDistricts()}
             </Grid>
         </div>

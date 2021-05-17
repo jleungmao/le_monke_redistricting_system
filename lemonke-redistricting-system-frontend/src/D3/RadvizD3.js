@@ -14,6 +14,7 @@ function RadvizD3(props) {
 	let HEMI_BOTTOM = 1;
 	let EPSILON = 0.0001;
 	let BORDER_BUFF = 10;
+	let DOT_SIZE = 4;
 
 	let theta;
 	let anti_theta;
@@ -164,7 +165,7 @@ function RadvizD3(props) {
 			.append('circle')
 			.attr('cx', d => d.coordinates.x)
 			.attr('cy', d => d.coordinates.y)
-			.attr('r', 2.5)
+			.attr('r', DOT_SIZE)
 			.attr('id', (_, i) => `dot${i}`)
 			.style('fill', d => d.fill)
 			.style('fill-opacity', 0.9)
@@ -195,7 +196,7 @@ function RadvizD3(props) {
 
 		select(this)
 			.style('fill', i.fill)
-			.attr('r', 2.5)
+			.attr('r', DOT_SIZE)
 
 		let dial = select('.canvas').select('svg').select('#dataWheel')
 

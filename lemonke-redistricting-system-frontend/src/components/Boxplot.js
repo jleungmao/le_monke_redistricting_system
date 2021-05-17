@@ -1,5 +1,6 @@
+import axios from 'axios';
 import { useState, useEffect } from 'react';
-// import Plot from 'react-plotly.js';
+import Plot from 'react-plotly.js';
 
 function Boxplot(props) {
 
@@ -36,6 +37,9 @@ function Boxplot(props) {
     };
 
     const [boxPlotSet, setBoxPlotSet] = useState([]);
+    // const [xData, setXData] = useState([])
+    const [dotData, setDotData] = useState([])
+    // const [yData, setYData] = useState([])
 
     useEffect(() => {
 
@@ -52,62 +56,59 @@ function Boxplot(props) {
             'District 24', 'District 25', 'District 26', 'District 27'
         ];
 
-        var yData = [
-            getrandom(30, 2),
-            getrandom(30, 6),
-            getrandom(30, 10),
-
-            getrandom(30, 14),
-            getrandom(30, 18),
-            getrandom(30, 22),
-
-            getrandom(30, 26),
-            getrandom(30, 30),
-            getrandom(30, 34),
-
-            getrandom(30, 38),
-            getrandom(30, 42),
-            getrandom(30, 46),
-
-            getrandom(30, 50),
-            getrandom(30, 54),
-            getrandom(30, 59),
-
-            getrandom(30, 63),
-            getrandom(30, 67),
-            getrandom(30, 71),
-
-            getrandom(30, 75),
-            getrandom(30, 79),
-            getrandom(30, 83),
-
-            getrandom(30, 87),
-            getrandom(30, 91),
-            getrandom(30, 95),
-
-            getrandom(30, 97),
-            getrandom(30, 98),
-            getrandom(30, 99),
-        ];
-
         var data = [];
 
-        for (var i = 0; i < xData.length; i++) {
-            var result = {
-                type: 'box',
-                y: yData[i],
-                name: xData[i],
-                jitter: 0.5,
-                whiskerwidth: 0.2,
-                marker: {
-                    size: 2
-                },
-                line: {
-                    width: 1
-                }
+
+        async function fetchData() {
+            let res1 = await axios(`http://localhost:8080/lemonke/box-whisker/${[5, 6, 7]}/${'WHITE'}/background`);
+            let yData = res1.data
+            console.log(yData)
+            for (var i = 0; i < xData.length; i++) {
+                var result = {
+                    type: 'box',
+                    y: yData[i],
+                    name: xData[i],
+                    jitter: 0.5,
+                    whiskerwidth: 0.2,
+                    marker: {
+                        size: 2
+                    },
+                    line: {
+                        width: 1
+                    }
+                };
+                data.push(result);
             };
-            data.push(result);
-        };
+
+            // setYData(res1.data);
+
+
+            let res2 = await axios(`http://localhost:8080/lemonke/box-whisker/${6}/${'WHITE'}/dots`);
+            console.log(res2.data)
+            setDotData(res2.data);
+
+        }
+
+        fetchData();
+
+
+
+        // for (var i = 0; i < xData.length; i++) {
+        //     var result = {
+        //         type: 'box',
+        //         y: yData[i],
+        //         name: xData[i],
+        //         jitter: 0.5,
+        //         whiskerwidth: 0.2,
+        //         marker: {
+        //             size: 2
+        //         },
+        //         line: {
+        //             width: 1
+        //         }
+        //     };
+        //     data.push(result);
+        // };
 
 
 
@@ -133,7 +134,7 @@ function Boxplot(props) {
 
     return (
         <div>
-            {/* <Plot data={boxPlotSet} layout={layout}></Plot> */}
+            <Plot data={boxPlotSet} layout={layout}></Plot>
         </div>
     )
 }
