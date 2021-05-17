@@ -103,6 +103,7 @@ function SetMeasures() {
                     <Grid item xs={12} style={{ padding: '10px' }}>
                         <Typography gutterBottom>Split counties</Typography>
                         <Slider
+                            disabled={true}
                             defaultValue={measures['splitCounty']}
                             step={0.01}
                             min={0}
@@ -163,6 +164,7 @@ function SetMeasures() {
                     <Grid item xs={12} style={{ padding: '10px' }}>
                         <Typography gutterBottom>Political Fairness</Typography>
                         <Slider
+                            disabled={true}
                             defaultValue={measures['polFairness']}
                             step={0.01}
                             min={0}

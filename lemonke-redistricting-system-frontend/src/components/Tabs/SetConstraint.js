@@ -349,6 +349,7 @@ function SetConstraints(props) {
 								params : {
 									compactnessType: constraints.compactnessType,
 									compactnessValue:constraints.compactnessValue,
+									incumbents: constraints.incumbents,
 									jobId:job.jobId,
 									mmDistricts:constraints.majorityMinority,
 									populationType:constraints.populationType,
