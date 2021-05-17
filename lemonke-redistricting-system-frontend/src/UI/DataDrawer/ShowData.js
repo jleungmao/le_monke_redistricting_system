@@ -168,7 +168,7 @@ function ShowData(props) {
 
     let labelsMappings = {
         'geometricCompactness': 'Compactness',
-        'totalPopulation': 'Total Pop',
+        'totalPopulation': 'Total Pop Diff',
         'totalPopulationEquality': 'Total Pop Eq'
     }
 
@@ -208,7 +208,8 @@ function ShowData(props) {
                         {getMenuItems()}
                     </Select>
                 </FormControl>
-                {useMemo(() => <RadvizD3 labels={labelsMappings} content={radvizData} handleMouseClick={handleClick} zoom={true} colorAccessor={null} textLabel={null} />, [radvizData])}
+                {useMemo(() => (<RadvizD3 labels={labelsMappings} content={radvizData} handleMouseClick={handleClick} zoom={true} colorAccessor={null} textLabel={null} />), [radvizData])}
+                <div>{(radvizData != null) && radvizData.length}</div>
                 {getDistricts()}
             </Grid>
         </div>
