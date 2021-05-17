@@ -181,7 +181,7 @@ function ShowData(props) {
 		let res2 = await axios(`http://localhost:8080/lemonke/districtings/${id}/geometry`)
 		districting.geometry = res2.data;
 		dispatch(Actions.setSelectedDistricting(districting));
-        dispatch(Actions.setDisplayed(districting));
+        dispatch(Actions.setDisplayedDistricting(districting));
 	}
 
     return (
