@@ -349,6 +349,7 @@ function SetConstraints(props) {
 								params : {
 									compactnessType: constraints.compactnessType,
 									compactnessValue:constraints.compactnessValue,
+									incumbents: constraints.incumbents,
 									jobId:job.jobId,
 									mmDistricts:constraints.majorityMinority,
 									populationType:constraints.populationType,
@@ -370,7 +371,10 @@ function SetConstraints(props) {
                         dispatch(Actions.resetSelectedState());
                         dispatch(Actions.resetStep());
                         dispatch(Actions.resetSelectedDistricting());
+                        dispatch(Actions.resetDisplayedDistricting());
+                        dispatch(Actions.resetSelectedDistrict());
                         dispatch(Actions.resetEnactedDistricting());
+                        dispatch(Actions.resetConstrainedSet())
                     }} >
                         Reset
 					</Button>

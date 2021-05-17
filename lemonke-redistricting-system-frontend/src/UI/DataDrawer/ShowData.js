@@ -23,13 +23,12 @@ import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
 import RadvizD3 from '../../D3/RadvizD3';
-import { useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as Actions from '../../actions';
 
 function ShowData(props) {
 
-    const [selectedDistrictId, setSelectedDistrictId] = useState('none')
-    const selectedDistricting = useSelector(state => state.selectedDistricting)
+    const displayedDistricting = useSelector(state => state.displayedDistricting)
     const selectedDistrict = useSelector(state => state.selectedDistrict);
     const [selectedIndex, setSelectedIndex] = useState();
     const [collapseArray, updateCollapseArray] = useState(new Array(27).fill(false));
@@ -39,19 +38,20 @@ function ShowData(props) {
 
 
     useEffect(() => {
-        if (selectedDistricting.districts) {
-            updateCollapseArray(new Array(selectedDistricting.districts.length).fill(false));
+        if (displayedDistricting.districts) {
+            updateCollapseArray(new Array(displayedDistricting.districts.length).fill(false));
         }
-        setSelectedDistrictId('none');
+        dispatch(Actions.resetSelectedDistrict())
         return () => {
             //cleanup
         }
-    }, [selectedDistricting])
+    }, [displayedDistricting])
 
-    function getDistrictingInfo(){
+    function getDistrictingInfo() {
         let container = [];
-        
-        if (selectedDistricting) {
+
+
+        if (displayedDistricting) {
             return (
                 <TableContainer component={Paper}>
                     <Table>
@@ -75,33 +75,36 @@ function ShowData(props) {
 
     const selectDistrict = (event) => {
         console.log(event);
-        setSelectedDistrictId(event.target.value);
-        dispatch(Actions.setSelectedDistrict(findDistrictById(event.target.value)));
+        if (event.target.value === 'none') {
+            dispatch(Actions.resetSelectedDistrict());
+        } else {
+            dispatch(Actions.setSelectedDistrict(findDistrictById(event.target.value)));
+        }
     }
 
     const findDistrictById = (id) => {
-        for (let district of selectedDistricting.districts){
-            if(district.districtId === id){
+        for (let district of displayedDistricting.districts) {
+            if (district.districtId === id) {
                 return district;
             }
         }
     }
     function getDistricts() {
         let container = [];
-        for(let district in selectedDistricting.districts){
+        for (let district in displayedDistricting.districts) {
             container.push(
                 <TableRow>
                     <TableCell align="left">
-                        {}
+                        { }
                     </TableCell>
                     <TableCell align="left">
-                        {}
+                        { }
                     </TableCell>
                 </TableRow>
             );
         }
 
-        if (selectedDistricting.districts) {
+        if (displayedDistricting.districts) {
             return (
                 <TableContainer component={Paper}>
                     <Table>
@@ -118,7 +121,7 @@ function ShowData(props) {
                 </TableContainer>
             );
         }
-        
+
     }
 
 
@@ -130,10 +133,10 @@ function ShowData(props) {
         setOpen(false);
     }
 
-    function getMenuItems(){
-        if (selectedDistricting.districts) {
-            return selectedDistricting.districts.map((data, index) => <MenuItem value={data.districtId}>
-                District {index+1}
+    function getMenuItems() {
+        if (displayedDistricting.districts) {
+            return displayedDistricting.districts.map((data, index) => <MenuItem value={data.districtId}>
+                District {index + 1}
             </MenuItem>)
         }
     }
@@ -198,7 +201,7 @@ function ShowData(props) {
                 <DialogContainer />
                 <FormControl>
                     <Select
-                        value={selectedDistrictId}
+                        value={selectedDistrict.districtId}
                         onChange={selectDistrict}
                     >
                         <MenuItem value={'none'}>None</MenuItem>

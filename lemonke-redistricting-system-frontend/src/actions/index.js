@@ -53,6 +53,17 @@ export const resetSelectedJob = () => {
 }
 
 //DISTRICTINGS  
+export const setDisplayedDistricting = (districting) => {
+    return {
+        type: "SET_DISPLAYED_DISTRICTING",
+        payload: districting
+    }
+}
+export const resetDisplayedDistricting = () => {
+    return {
+        type: "RESET_DISPLAYED_DISTRICTING"
+    }
+}
 export const setSelectedDistricting = (districting) => {
     return {
         type: "SET_DISTRICTING",

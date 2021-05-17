@@ -23,7 +23,6 @@ function SelectDistricting(props) {
     //handles collapsing of the array
     const [selectedIndex, setSelectedIndex] = useState();
     const [collapseArray, updateCollapseArray] = useState(new Array(10).fill(false));
-    const [selectedDistricting, setDistricting] = useState();
     //pick the set to display
     const [selectedCategory, setCategory] = useState('bestDistricts');
     const [newLoad, setNewLoad] = useState(true);
@@ -204,7 +203,10 @@ function SelectDistricting(props) {
                         dispatch(Actions.resetSelectedState());
                         dispatch(Actions.resetStep());
                         dispatch(Actions.resetSelectedDistricting());
+                        dispatch(Actions.resetDisplayedDistricting());
+                        dispatch(Actions.resetSelectedDistrict());
                         dispatch(Actions.resetEnactedDistricting());
+                        dispatch(Actions.resetConstrainedSet())
                     }} >
                         Reset
 					</Button>
