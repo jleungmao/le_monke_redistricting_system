@@ -43,30 +43,32 @@ function Boxplot(props) {
 
     useEffect(() => {
 
-        var xData = ['District 1', 'District 2',
-            'District 3', 'District 4', 'District 5',
-            'District 6', 'District 7', 'District 8',
-
-            'District 9', 'District 10', 'District 11',
-            'District 12', 'District 13', 'District 14',
-            'District 15', 'District 16', 'District 17',
-
-            'District 18', 'District 19', 'District 20',
-            'District 21', 'District 22', 'District 23',
-            'District 24', 'District 25', 'District 26', 'District 27'
-        ];
-
         var data = [];
 
 
         async function fetchData() {
-            let res1 = await axios(`http://localhost:8080/lemonke/box-whisker/${[5, 6, 7]}/${'WHITE'}/background`);
-            let yData = res1.data
+            let res1 = await axios(`http://localhost:8080/lemonke/box-whisker/${[46, 47, 49]}/${'WHITE'}/background`);
+            let res2 = await axios(`http://localhost:8080/lemonke/box-whisker/${45}/${'WHITE'}/dots`);
+            
+            var yData = res1.data
+            let yDot = res2.data
+            
+            var xData = [];
+            for (var i = 1; i <= yData.length; i++)
+            {
+                xData.push("District "+i)
+            }
+
             console.log(yData)
             for (var i = 0; i < xData.length; i++) {
+                let yd = yData[i]
+                for(var j = 0; j < yData[i].length; j++)
+                {
+                    yd[j] = yd[j]*100
+                }
                 var result = {
                     type: 'box',
-                    y: yData[i],
+                    y: yd,
                     name: xData[i],
                     jitter: 0.5,
                     whiskerwidth: 0.2,
@@ -81,16 +83,28 @@ function Boxplot(props) {
             };
 
             // setYData(res1.data);
+            //setDotData(res2.data);
 
+            for (var i = 0; i < xData.length; i++) {
+                var yd = yDot[i]*100
+                console.log(yd);
+                console.log(xData[i]);
+                var result = {
+                    x: [xData[i-1]],
+                    y: [yd],
+                    name: 'Selected Districting',
+                    marker: {
+                        size: 5,
+                        color: 'rgb(0,0,0)'
+                    }
+                };
+                data.push(result);
+            };
 
-            let res2 = await axios(`http://localhost:8080/lemonke/box-whisker/${6}/${'WHITE'}/dots`);
-            console.log(res2.data)
-            setDotData(res2.data);
-
+            setBoxPlotSet(data)
         }
 
         fetchData();
-
 
 
         // for (var i = 0; i < xData.length; i++) {
@@ -108,29 +122,10 @@ function Boxplot(props) {
         //         }
         //     };
         //     data.push(result);
-        // };
-
-
-
-        for (var i = 0; i < xData.length; i++) {
-            var result = {
-                x: ['District ' + (i + 1)],
-                y: [Math.random() * i * 3],
-                name: 'Selected Districting',
-                marker: {
-                    size: 5,
-                    color: 'rgb(0,0,0)'
-                }
-            };
-            data.push(result);
-        };
-
-        setBoxPlotSet(data)
+        // };        
 
         return () => { }
     }, [])
-
-
 
     return (
         <div>
