@@ -13,7 +13,7 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 function Map(props) {
 	const displayedDistricting = useSelector(state => state.displayedDistricting);
 	const selectedState = useSelector(state => state.selectedState);
-	const selectedDistrict = useSelector(state => state.selectedDistrictId);
+	const selectedDistrict = useSelector(state => state.selectedDistrict);
 	const stateList = useSelector(state => state.stateList);
 	const [lng, setLng] = useState(-89.8);
 	const [lat, setLat] = useState(35.8);
@@ -21,6 +21,7 @@ function Map(props) {
 	const mapContainer = useRef();
 	const [map, setMap] = useState(null);
 	const dispatch = useDispatch();
+	const [colors, setColors] = useState([]); 
 	const [layersToDisplay, setLayersToDisplay] = useState({
 		districts: true,
 		precincts: true,
@@ -30,6 +31,7 @@ function Map(props) {
 	var hoveredStateId = null;
 	var hoveredDistrictId = null;
 	var selectedDistrictId = null;
+	var fromThis = false;
 
 
 	useEffect(() => {
@@ -88,24 +90,31 @@ function Map(props) {
 	}, [layersToDisplay]);
 
 	useEffect(() => {
-		console.log(selectedDistrict, displayedDistricting)
 		if (map) {
-			if (selectedDistrict && selectedDistrict !== 'none' && selectedDistrictId != selectedDistrict) {
+			if (selectedDistrict.districtId && selectedDistrict.districtId !== 'none') {
+				console.log(selectedDistrict.districtId, displayedDistricting)
 				for(let i = 0; i< displayedDistricting.districts.length; i++){
 					map.setFeatureState(
 						{ source: "districts", id: displayedDistricting.districts[i].districtId },
-						{ selected: false }
+						{ selected: null }
 					);
 				}
 				map.setFeatureState(
-					{ source: "districts", id: selectedDistrict },
+					{ source: "districts", id: selectedDistrict.districtId },
 					{ selected: true }
 				);
-				selectedDistrictId = selectedDistrict;
 			}
 
 		}
 	}, [selectedDistrict]);
+
+	useEffect(() =>{
+		let randColors = [];
+		for(let i = 0; i < 30; i ++){
+			randColors.push(addColor());
+		}
+		setColors(randColors);
+	}, []);
 
 	useEffect(() => {
 		if (map) {
@@ -115,10 +124,9 @@ function Map(props) {
 			if (displayedDistricting.districts) {
 				for (let i = 0; i < displayedDistricting.districts.length; i++) {
 					displayedDistricting.geometry.features[i].id = displayedDistricting.districts[i].districtId;
-					let color = addColor();
 					// console.log(color)
 					displayedDistricting.geometry.features[i].properties = {
-						"color": color,
+						"color": colors[i],
 					};
 				}
 				displayingDistricting();
@@ -178,10 +186,10 @@ function Map(props) {
 				map.on('click', 'districts', function (e) {
 					if (e.features.length > 0) {
 						if (hoveredDistrictId !== null) {
-							dispatch(setSelectedDistrict(hoveredDistrictId));
+							dispatch(setSelectedDistrict(findDistrictById(hoveredDistrictId)));
 						}
 					}
-				});
+				})
 
 				map.on('mousemove', "districts", function (e) {
 					if (e.features.length > 0) {
