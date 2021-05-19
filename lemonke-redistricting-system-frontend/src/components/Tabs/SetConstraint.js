@@ -333,7 +333,7 @@ function SetConstraints(props) {
 				</Grid>
 
 			</Grid>
-			<div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
+			<div style={{ left: '5%', bottom: '2%', position: 'fixed', backgroundColor: 'white' }}>
 				<div>
 					<Button onClick={() => {
 						dispatch(Actions.resetConstraints());

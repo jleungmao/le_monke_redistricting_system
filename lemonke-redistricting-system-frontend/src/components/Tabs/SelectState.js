@@ -72,7 +72,7 @@ function SelectState(props) {
 					)}
 				</Select>
 			</div>
-			<div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
+			<div style={{ left: '5%', bottom: '2%', position: 'fixed', backgroundColor: 'white' }}>
 				<div>
 					<Button disabled={true}>Back</Button>
 					<Button
