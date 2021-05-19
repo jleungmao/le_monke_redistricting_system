@@ -85,9 +85,11 @@ function ShowData(props) {
     function BasicDemographicInfo() {
         if (selectedDistrict !== 'none') {
             let district;
-            for (let i = 0; i < displayedDistricting.districts.length; i++) {
-                if (displayedDistricting.districts[i].districtId === selectedDistrict) {
-                    district = displayedDistricting.districts[i];
+            if(displayedDistricting.districts){
+                for (let i = 0; i < displayedDistricting.districts.length; i++) {
+                    if (displayedDistricting.districts[i].districtId === selectedDistrict) {
+                        district = displayedDistricting.districts[i];
+                    }
                 }
             }
             if (district) {
