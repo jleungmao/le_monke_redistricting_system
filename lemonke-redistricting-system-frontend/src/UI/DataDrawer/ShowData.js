@@ -22,7 +22,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
-import RadvizD3 from '../../D3/RadvizD3';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Actions from '../../actions';
 
@@ -34,7 +33,6 @@ function ShowData(props) {
     const [collapseArray, updateCollapseArray] = useState(new Array(27).fill(false));
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
-    const radvizData = useSelector(state => state.constrainedSet)
 
 
     useEffect(() => {
@@ -81,14 +79,48 @@ function ShowData(props) {
             dispatch(Actions.setSelectedDistrict(event.target.value));
         }
     }
-
-    const findDistrictById = (id) => {
-        for (let district of displayedDistricting.districts) {
-            if (district.districtId === id) {
-                return district;
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    function BasicDemographicInfo() {
+        if (selectedDistrict !== 'none') {
+            let district;
+            for (let i = 0; i < displayedDistricting.districts.length; i++) {
+                if (displayedDistricting.districts[i].districtId === selectedDistrict) {
+                    district = displayedDistricting.districts[i];
+                }
             }
+            if (district) {
+                let populations = [0, 0, 0, 0, 0, 0, 0]
+                let percentages = [0, 0, 0, 0, 0, 0]
+                for (let i = 0; i < district.precincts.length; i++) {
+                    populations[1] += district.precincts[i].totWhite;
+                    populations[2] += district.precincts[i].totBlack;
+                    populations[3] += district.precincts[i].totHisp;
+                    populations[4] += district.precincts[i].totAsian;
+                    populations[5] += district.precincts[i].totAIndian;
+                    populations[6] += district.precincts[i].totOther;
+                }
+                populations[0] = populations[1] + populations[2] + populations[3] + populations[4] + populations[5] + populations[6];
+                for (let i = 0; i < percentages.length; i++) {
+                    percentages[i] = Math.round((populations[i + 1] / populations[0] * 100 + Number.EPSILON) * 100) / 100;
+                }
+                return <div>
+                    <div>Total Population: {numberWithCommas(populations[0])}</div>
+                    <div>White Population: {numberWithCommas(populations[1])}  ({percentages[0]}%)</div>
+                    <div>Black Population: {numberWithCommas(populations[2])}  ({percentages[1]}%)</div>
+                    <div>Hispanic Population: {numberWithCommas(populations[3])}  ({percentages[2]}%)</div>
+                    <div>Asian Population: {numberWithCommas(populations[4])}  ({percentages[3]}%)</div>
+                    <div>American Indian Population: {numberWithCommas(populations[5])}  ({percentages[4]}%)</div>
+                    <div>Other Population: {numberWithCommas(populations[6])}  ({percentages[5]}%)</div>
+                </div>
+            }
+
+        } else {
+            return null
         }
     }
+
     function getDistricts() {
         let container = [];
         for (let district in displayedDistricting.districts) {
@@ -166,24 +198,6 @@ function ShowData(props) {
         )
     }
 
-    let labelsMappings = {
-        'geometricCompactness': 'Compactness',
-        'totalPopulation': 'Total Pop Diff',
-        'totalPopulationEquality': 'Total Pop Eq'
-    }
-
-    async function handleClick(i, d) {
-		let original = d['data']
-        console.log(original['districtingSummaryId'])
-        let id = original['districtingSummaryId']
-		let res = await axios(`http://localhost:8080/lemonke/districtings/${id}`)
-		let districting = res.data;
-		let res2 = await axios(`http://localhost:8080/lemonke/districtings/${id}/geometry`)
-		districting.geometry = res2.data;
-		dispatch(Actions.setSelectedDistricting(districting));
-        dispatch(Actions.setDisplayedDistricting(districting));
-	}
-
     return (
         <div>
             <Grid item xs={12} style={{ padding: '10px' }}>
@@ -208,8 +222,9 @@ function ShowData(props) {
                         {getMenuItems()}
                     </Select>
                 </FormControl>
-                {useMemo(() => (<RadvizD3 labels={labelsMappings} content={radvizData} handleMouseClick={handleClick} zoom={true} colorAccessor={null} textLabel={null} />), [radvizData])}
-                <div>{(radvizData != null) && radvizData.length}</div>
+                <BasicDemographicInfo></BasicDemographicInfo>
+            </Grid>
+            <Grid item xs={12} style={{ padding: '10px' }}>
                 {getDistricts()}
             </Grid>
         </div>

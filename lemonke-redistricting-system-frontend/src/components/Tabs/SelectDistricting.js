@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import axios from 'axios';
 import Collapse from '@material-ui/core/Collapse';
 import Divider from '@material-ui/core/Divider';
@@ -9,7 +9,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
-import {useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import RadvizD3 from '../../D3/RadvizD3';
 import * as Actions from '../../actions';
 
 
@@ -26,6 +27,7 @@ function SelectDistricting(props) {
     //pick the set to display
     const [selectedCategory, setCategory] = useState('bestDistricts');
     const [newLoad, setNewLoad] = useState(true);
+    const radvizData = useSelector(state => state.constrainedSet)
 
 
 
@@ -162,10 +164,28 @@ function SelectDistricting(props) {
         return districtings
     }
 
+    let labelsMappings = {
+        'geometricCompactness': 'Compactness',
+        'totalPopulation': 'Total Pop Diff',
+        'totalPopulationEquality': 'Total Pop Eq'
+    }
 
+    async function handleClick(i, d) {
+        let original = d['data']
+        console.log(original['districtingSummaryId'])
+        let id = original['districtingSummaryId']
+        let res = await axios(`http://localhost:8080/lemonke/districtings/${id}`)
+        let districting = res.data;
+        let res2 = await axios(`http://localhost:8080/lemonke/districtings/${id}/geometry`)
+        districting.geometry = res2.data;
+        dispatch(Actions.setSelectedDistricting(districting));
+        dispatch(Actions.setDisplayedDistricting(districting));
+    }
     return (
-        <>
+        <div style={{ overflow: 'auto'}}>
             <h2>Select Districting</h2>
+            {useMemo(() => (<RadvizD3 labels={labelsMappings} content={radvizData} handleMouseClick={handleClick} zoom={true} colorAccessor={null} textLabel={null} />), [radvizData])}
+            <div>{(radvizData != null) && radvizData.length}</div>
             <FormControl>
                 <Select
                     value={selectedCategory}
@@ -177,18 +197,16 @@ function SelectDistricting(props) {
                     <MenuItem value={'areaPairDeviation'}>Different Area Pair-Deviations</MenuItem>
                 </Select>
             </FormControl>
-            {/* <List component="nav" aria-label="main mailbox folders"> */}
-            <List style={{ width: '27%', maxHeight: '55%', overflow: 'auto', position: 'fixed' }} >
+            <List style = {{ overflow :'auto' , maxHeight : '50%'}} >
                 {getList()}
             </List>
-
             <div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
                 <div>
                     <Button onClick={() => dispatch(Actions.decrementStep())} >
                         Back
 		  			</Button>
                     <Button
-                        disabled = {selectedIndex == null}
+                        disabled={selectedIndex == null}
                         variant="contained"
                         color="primary"
                         onClick={() => console.log("TODO")}>
@@ -212,7 +230,7 @@ function SelectDistricting(props) {
 					</Button>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 
