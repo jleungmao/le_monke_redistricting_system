@@ -1,6 +1,9 @@
+import { QueueSharp } from '@material-ui/icons';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
+import {useSelector} from 'react-redux';
+import qs from 'qs';
 
 function Boxplot(props) {
 
@@ -41,14 +44,38 @@ function Boxplot(props) {
     const [dotData, setDotData] = useState([])
     // const [yData, setYData] = useState([])
 
+    const constrainedSet = useSelector(state => state.constrainedSet);
+    const selectedMinority = useSelector(state => state.selectedMinority);
+    const selectedDistricting = useSelector(state => state.selectedDistricting);
+
+    var ids = constrainedSet.map(x => x.districtingSummaryId);
+
     useEffect(() => {
 
         var data = [];
 
 
         async function fetchData() {
-            let res1 = await axios(`http://localhost:8080/lemonke/box-whisker/${[46, 47, 49]}/${'WHITE'}/background`);
-            let res2 = await axios(`http://localhost:8080/lemonke/box-whisker/${45}/${'WHITE'}/dots`);
+
+            console.log(ids);
+            console.log(selectedMinority);
+
+            let res1 = await axios(`http://localhost:8080/lemonke/box-whisker/${selectedMinority}/background`, {
+                params: {
+                    districtingIds: ids
+                },
+                paramsSerializer: params => {
+                    retrun qs.stringify(params);
+                }
+            });
+            
+            
+            let res2 = await axios(`http://localhost:8080/lemonke/box-whisker/${selectedDistricting}/${selectedMinority}/dots`);
+            
+            if(selectedDistricting == null) {
+                res2 = await axios(`http://localhost:8080/lemonke/box-whisker/${45}/${selectedMinority}/dots`);
+            }
+
             
             var yData = res1.data
             let yDot = res2.data

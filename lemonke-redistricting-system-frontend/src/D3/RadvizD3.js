@@ -28,14 +28,15 @@ function RadvizD3(props) {
 
 	// React Hook.
 	useEffect(() => {
-		if (initialized.current) {
-			updateGraph();
-		} else {
+		// if (initialized.current) {
+			
+		// } else {
 
-			initialize();
-			initialized.current = true;
-		}
-
+			
+		// 	initialized.current = true;
+		// }
+		initialize();
+		updateGraph();	
 		// eslint-disable-next-line
 	}, [props.content])
 

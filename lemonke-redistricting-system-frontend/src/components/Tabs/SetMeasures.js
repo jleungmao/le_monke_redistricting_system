@@ -71,6 +71,7 @@ function SetMeasures() {
 
     useEffect(() => {
         if (constrainedSet) {
+            console.log("set: "+constrainedSet[0]);
             setRemainingDistrictings(constrainedSet.length);
         }
     }, [constrainedSet])
