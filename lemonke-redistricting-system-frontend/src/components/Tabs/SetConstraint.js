@@ -69,6 +69,7 @@ function SetConstraints(props) {
 	const protectedIncumbents = constraints['protectedIncumbents'];
 	const [compactness, setCompactness] = useState(constraints['compactnessValue']);
 	const [popEq, setPopEq] = useState(constraints['populationValue']);
+	const [popThreshold, setPopThreshold] = useState(constraints['populationThreshold']);
 
 	const [open, setOpen] = useState(false);
 	// const [totalPopulationAvailable, setTotalPopulationAvailable] = useState(false)
@@ -298,6 +299,22 @@ function SetConstraints(props) {
 					</FormControl>
 				</Grid>
 				<br />
+				<Grid item xs={12} style={{ padding: '10px' }}>
+					<Typography gutterBottom variant='h4'>Population Threshold</Typography>
+					<Slider
+						value={popThreshold}
+						onChange={(e, val) => setPopThreshold(val)}
+						onChangeCommitted={(e, val) => {
+							e.preventDefault();
+							dispatch(Actions.setPopulationThreshold(val))
+						}}
+						step={0.01}
+						min={0}
+						max={1}
+						marks={marks}
+						valueLabelDisplay="auto"
+					/>
+				</Grid>
 				<br />
 				{/* Population Constraints */}
 				<Grid item xs={12} style={{ padding: '10px' }}>
@@ -333,7 +350,7 @@ function SetConstraints(props) {
 				</Grid>
 
 			</Grid>
-			<div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
+			<div style={{ left: '5%', bottom: '2%', position: 'fixed', backgroundColor: 'white' }}>
 				<div>
 					<Button onClick={() => {
 						dispatch(Actions.resetConstraints());
@@ -350,10 +367,12 @@ function SetConstraints(props) {
 									compactnessType: constraints.compactnessType,
 									compactnessValue:constraints.compactnessValue,
 									incumbents: constraints.incumbents,
+									ethnicity: selectedMinority,
 									jobId:job.jobId,
 									mmDistricts:constraints.majorityMinority,
 									populationType:constraints.populationType,
 									populationValue:constraints.populationValue,
+									threshold :constraints.populationThreshold
 								}
 							}).then(function (response) {
 								dispatch(Actions.setConstrainedSet(response.data));

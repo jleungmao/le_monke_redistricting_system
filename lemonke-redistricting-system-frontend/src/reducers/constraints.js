@@ -4,7 +4,8 @@ const constraintsReducer = (constraints = {
     'compactnessValue' : .5,
     'majorityMinority':0,
     'populationType' : 'TOTAL_POPULATION',
-    'populationValue':.5
+    'populationValue':.5,
+    'populationThreshold':0,
 }, action) => {
     let newConstraints = {...constraints};
     switch (action.type) {
@@ -26,6 +27,9 @@ const constraintsReducer = (constraints = {
         case "SET_MM":
             newConstraints['majorityMinority'] = action.payload
             return newConstraints
+        case "SET_POPULATION_THRESHOLD":
+            newConstraints['populationThreshold'] = action.payload
+            return newConstraints
         case "RESET_CONSTRAINTS":
             return {
                 'protectedIncumbents' : [],
@@ -34,6 +38,7 @@ const constraintsReducer = (constraints = {
                 'majorityMinority':0,
                 'populationType' : 'TOTAL_POPULATION',
                 'populationValue':.5,
+                'populationThreshold':0,
             }
         default:
             return newConstraints

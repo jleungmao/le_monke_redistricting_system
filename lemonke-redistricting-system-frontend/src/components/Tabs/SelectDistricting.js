@@ -182,10 +182,9 @@ function SelectDistricting(props) {
         dispatch(Actions.setDisplayedDistricting(districting));
     }
     return (
-        <div style={{ overflow: 'auto'}}>
+        <div style={{}}>
             <h2>Select Districting</h2>
             {useMemo(() => (<RadvizD3 labels={labelsMappings} content={radvizData} handleMouseClick={handleClick} zoom={true} colorAccessor={null} textLabel={null} />), [radvizData])}
-            <div>{(radvizData != null) && radvizData.length}</div>
             <FormControl>
                 <Select
                     value={selectedCategory}
@@ -197,10 +196,10 @@ function SelectDistricting(props) {
                     <MenuItem value={'areaPairDeviation'}>Different Area Pair-Deviations</MenuItem>
                 </Select>
             </FormControl>
-            <List style = {{ overflow :'auto' , maxHeight : '50%'}} >
+            <List style = {{}} >
                 {getList()}
             </List>
-            <div style={{ left: '5%', bottom: '2%', position: 'fixed' }}>
+            <div style={{overflow: 'auto', left: '5%', bottom: '2%', position : 'fixed', backgroundColor: 'white'}}>
                 <div>
                     <Button onClick={() => dispatch(Actions.decrementStep())} >
                         Back
