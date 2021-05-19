@@ -114,6 +114,9 @@ function ShowData(props) {
                     <div>American Indian Population: {numberWithCommas(populations[5])}  ({percentages[4]}%)</div>
                     <div>Other Population: {numberWithCommas(populations[6])}  ({percentages[5]}%)</div>
                 </div>
+            } else {
+
+                return null
             }
 
         } else {
