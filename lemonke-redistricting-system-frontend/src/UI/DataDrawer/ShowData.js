@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-// import Boxplot from '../../components/Boxplot';
+import Boxplot from '../../components/Boxplot';
 import { Route } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import axios from 'axios';
@@ -185,8 +185,7 @@ function ShowData(props) {
                 <DialogTitle id="alert-dialog-title"></DialogTitle>
                 <DialogContent>
                     <Grid container spacing={3}>
-                        {/* {<Route exact path='/' component={<Boxplot />}></Route>} */}
-                        {/* <Boxplot x={[1, 2, 3, 4, 5, 6, 7]} y={[[1, 2, 3, 3, 424], [334, 5, 4, 3, 5, 46, 45]]} /> */}
+                        {<Route exact path='/' component={Boxplot}></Route>}
                     </Grid>
                 </DialogContent>
                 <DialogActions>
