@@ -13,7 +13,7 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 function Map(props) {
 	const displayedDistricting = useSelector(state => state.displayedDistricting);
 	const selectedState = useSelector(state => state.selectedState);
-	const selectedDistrict = useSelector(state => state.selectedDistrict);
+	const selectedDistrict = useSelector(state => state.selectedDistrictId);
 	const stateList = useSelector(state => state.stateList);
 	const [lng, setLng] = useState(-89.8);
 	const [lat, setLat] = useState(35.8);
@@ -45,7 +45,6 @@ function Map(props) {
 	var featureId = 0;
 	var hoveredStateId = null;
 	var hoveredDistrictId = null;
-	var selectedDistrictId = null;
 	var fromThis = false;
 
 
@@ -108,8 +107,8 @@ function Map(props) {
 
 	useEffect(() => {
 		if (map) {
-			if (selectedDistrict.districtId && selectedDistrict.districtId !== 'none') {
-				console.log(selectedDistrict.districtId, displayedDistricting)
+			if (selectedDistrict && selectedDistrict !== 'none') {
+				console.log(selectedDistrict, displayedDistricting)
 				for (let i = 0; i < displayedDistricting.districts.length; i++) {
 					map.setFeatureState(
 						{ source: "districts", id: displayedDistricting.districts[i].districtId },
@@ -117,7 +116,7 @@ function Map(props) {
 					);
 				}
 				map.setFeatureState(
-					{ source: "districts", id: selectedDistrict.districtId },
+					{ source: "districts", id: selectedDistrict },
 					{ selected: true }
 				);
 			}
@@ -134,7 +133,6 @@ function Map(props) {
 
 	useEffect(() => {
 		if (map) {
-			selectedDistrictId = null;
 			dispatch(resetSelectedDistrict());
 			// console.log(displayedDistricting)
 			if (displayedDistricting.districts) {
@@ -151,13 +149,6 @@ function Map(props) {
 		}
 	}, [displayedDistricting]);
 
-	const findDistrictById = (id) => {
-		for (let district of displayedDistricting.districts) {
-			if (district.districtId === id) {
-				return district;
-			}
-		}
-	}
 
 	function displayingDistricting() {
 		// console.log(layersToDisplay)
@@ -197,7 +188,7 @@ function Map(props) {
 				map.on('click', 'districts', function (e) {
 					if (e.features.length > 0) {
 						if (hoveredDistrictId !== null) {
-							dispatch(setSelectedDistrict(findDistrictById(hoveredDistrictId)));
+							dispatch(setSelectedDistrict(hoveredDistrictId));
 						}
 					}
 				})
@@ -279,25 +270,6 @@ function Map(props) {
 			}
 		}
 	}
-
-	const updatePrecinctGeo = (key, value) => {
-		// Destructure current state object
-		const objectValue = {
-			...precinctGeo,
-			[key]: value,
-		};
-		console.log(objectValue)
-		setPrecinctGeo(objectValue, console.log(precinctGeo));
-	};
-	const updateCountyGeo = (key, value) => {
-		// Destructure current state object
-		const objectValue = {
-			...countyGeo,
-			[key]: value,
-		};
-		console.log(objectValue)
-		setCountyGeo(objectValue, console.log(countyGeo));
-	};
 
 	const setUpGeoFiles = (map) => {
 		axios.get(`./Nevadaprecincts.json`).then(res => {
