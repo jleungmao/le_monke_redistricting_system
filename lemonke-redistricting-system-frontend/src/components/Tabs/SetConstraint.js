@@ -188,7 +188,7 @@ function SetConstraints(props) {
 								</Typography>
 								<Typography className={classes.pos} color="textSecondary">
 									{selectedState.name}
-									{/* , district {inc.district} */}
+									district {inc.district}
 								</Typography>
 								<Typography variant="body2" component="div">
 									Keep them safe
@@ -196,7 +196,7 @@ function SetConstraints(props) {
 								</Typography>
 							</CardContent>
 							<CardActions>
-								<Button size="small">Learn More</Button>
+								<Button size="small" onClick={()=> window.open("https://www.house.gov/representatives", '_blank', 'noopener, noreferrer')}>Learn More</Button>
 							</CardActions>
 						</Card>
 					</Grid>
