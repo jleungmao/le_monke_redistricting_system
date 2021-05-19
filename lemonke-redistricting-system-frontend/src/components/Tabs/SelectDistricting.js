@@ -185,7 +185,6 @@ function SelectDistricting(props) {
         <div style={{ overflow: 'auto'}}>
             <h2>Select Districting</h2>
             {useMemo(() => (<RadvizD3 labels={labelsMappings} content={radvizData} handleMouseClick={handleClick} zoom={true} colorAccessor={null} textLabel={null} />), [radvizData])}
-            <div>{(radvizData != null) && radvizData.length}</div>
             <FormControl>
                 <Select
                     value={selectedCategory}
