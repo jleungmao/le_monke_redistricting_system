@@ -5,7 +5,7 @@ const constraintsReducer = (constraints = {
     'majorityMinority':0,
     'populationType' : 'TOTAL_POPULATION',
     'populationValue':.5,
-    'populationThreshold':0,
+    'populationThreshold':0.5,
 }, action) => {
     let newConstraints = {...constraints};
     switch (action.type) {
@@ -38,7 +38,7 @@ const constraintsReducer = (constraints = {
                 'majorityMinority':0,
                 'populationType' : 'TOTAL_POPULATION',
                 'populationValue':.5,
-                'populationThreshold':0,
+                'populationThreshold':0.5,
             }
         default:
             return newConstraints
