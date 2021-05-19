@@ -116,6 +116,7 @@ function SetMeasures() {
                     <Grid item xs={12} style={{ padding: '10px' }}>
                         <Typography gutterBottom>Deviation from average districting</Typography>
                         <Slider
+                            disabled={true}
                             defaultValue={measures['devFromAvg']}
                             step={0.01}
                             min={0}
@@ -128,6 +129,7 @@ function SetMeasures() {
                     <Grid item xs={12} style={{ padding: '10px' }}>
                         <Typography gutterBottom>Deviation from enacted area</Typography>
                         <Slider
+                            disabled={true}
                             defaultValue={measures['devFromEnactedArea']}
                             step={0.01}
                             min={0}
@@ -140,6 +142,7 @@ function SetMeasures() {
                     <Grid item xs={12} style={{ padding: '10px' }}>
                         <Typography gutterBottom>Deviation from enacted population</Typography>
                         <Slider
+                            disabled={true}
                             defaultValue={measures['devFromEnactedPop']}
                             step={0.01}
                             min={0}

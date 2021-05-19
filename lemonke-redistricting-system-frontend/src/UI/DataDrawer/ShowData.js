@@ -33,6 +33,7 @@ function ShowData(props) {
     const [collapseArray, updateCollapseArray] = useState(new Array(27).fill(false));
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
+    const step = useSelector(state => state.step);
 
 
     useEffect(() => {
@@ -206,7 +207,7 @@ function ShowData(props) {
     return (
         <div>
             <Grid item xs={12} style={{ padding: '10px' }}>
-                <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+                <Button variant="outlined" color="primary" onClick={handleClickOpen} disabled = {step >= 3}>
                     Display Box & whisker Plot.
                 </Button>
             </Grid>
