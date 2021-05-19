@@ -4,7 +4,7 @@ import stateListReducer from './stateList.js';
 import selectedStateReducer from './selectedState.js';
 import selectedDistrictingReducer from './selectedDistricting.js';
 import displayedDistrictingReducer from './displayedDistricting.js';
-import selectedDistrictReducer from './selectedDistrict.js';
+import selectedDistrictIdReducer from './selectedDistrictId.js';
 import selectedJobReducer from './selectedJob.js';
 import constrainedDistrictingsReducer from './constrainedDistrictings.js'
 import constraintsReducer from './constraints.js';
@@ -24,7 +24,7 @@ const allReducers = combineReducers({
     constraints: constraintsReducer,
     constrainedSet: constrainedDistrictingsReducer,
     measures: measuresReducer,
-    selectedDistrict: selectedDistrictReducer
+    selectedDistrictId: selectedDistrictIdReducer
 })
 
 export default allReducers;

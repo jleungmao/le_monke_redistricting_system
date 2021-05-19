@@ -13,7 +13,7 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 function Map(props) {
 	const displayedDistricting = useSelector(state => state.displayedDistricting);
 	const selectedState = useSelector(state => state.selectedState);
-	const selectedDistrict = useSelector(state => state.selectedDistrict);
+	const selectedDistrict = useSelector(state => state.selectedDistrictId);
 	const stateList = useSelector(state => state.stateList);
 	const [lng, setLng] = useState(-89.8);
 	const [lat, setLat] = useState(35.8);
@@ -30,7 +30,6 @@ function Map(props) {
 	var hoveredStateId = null;
 	var hoveredDistrictId = null;
 	var selectedDistrictId = null;
-	var fromThis = false;
 
 
 	useEffect(() => {
@@ -89,19 +88,20 @@ function Map(props) {
 	}, [layersToDisplay]);
 
 	useEffect(() => {
+		console.log(selectedDistrict, displayedDistricting)
 		if (map) {
-			if (selectedDistrict.districtId && selectedDistrict.districtId !== 'none') {
-				console.log(selectedDistrict.districtId, displayedDistricting)
+			if (selectedDistrict && selectedDistrict !== 'none' && selectedDistrictId != selectedDistrict) {
 				for(let i = 0; i< displayedDistricting.districts.length; i++){
 					map.setFeatureState(
 						{ source: "districts", id: displayedDistricting.districts[i].districtId },
-						{ selected: null }
+						{ selected: false }
 					);
 				}
 				map.setFeatureState(
-					{ source: "districts", id: selectedDistrict.districtId },
+					{ source: "districts", id: selectedDistrict },
 					{ selected: true }
 				);
+				selectedDistrictId = selectedDistrict;
 			}
 
 		}
@@ -178,10 +178,10 @@ function Map(props) {
 				map.on('click', 'districts', function (e) {
 					if (e.features.length > 0) {
 						if (hoveredDistrictId !== null) {
-							dispatch(setSelectedDistrict(findDistrictById(hoveredDistrictId)));
+							dispatch(setSelectedDistrict(hoveredDistrictId));
 						}
 					}
-				})
+				});
 
 				map.on('mousemove', "districts", function (e) {
 					if (e.features.length > 0) {

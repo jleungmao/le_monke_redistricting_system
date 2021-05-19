@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import Boxplot from '../../components/Boxplot';
+// import Boxplot from '../../components/Boxplot';
 import { Route } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import axios from 'axios';
@@ -29,7 +29,7 @@ import * as Actions from '../../actions';
 function ShowData(props) {
 
     const displayedDistricting = useSelector(state => state.displayedDistricting)
-    const selectedDistrict = useSelector(state => state.selectedDistrict);
+    const selectedDistrict = useSelector(state => state.selectedDistrictId);
     const [selectedIndex, setSelectedIndex] = useState();
     const [collapseArray, updateCollapseArray] = useState(new Array(27).fill(false));
     const [open, setOpen] = useState(false);
@@ -78,7 +78,7 @@ function ShowData(props) {
         if (event.target.value === 'none') {
             dispatch(Actions.resetSelectedDistrict());
         } else {
-            dispatch(Actions.setSelectedDistrict(findDistrictById(event.target.value)));
+            dispatch(Actions.setSelectedDistrict(event.target.value));
         }
     }
 
@@ -154,7 +154,7 @@ function ShowData(props) {
                 <DialogContent>
                     <Grid container spacing={3}>
                         {/* {<Route exact path='/' component={<Boxplot />}></Route>} */}
-                        <Boxplot x={[1, 2, 3, 4, 5, 6, 7]} y={[[1, 2, 3, 3, 424], [334, 5, 4, 3, 5, 46, 45]]} />
+                        {/* <Boxplot x={[1, 2, 3, 4, 5, 6, 7]} y={[[1, 2, 3, 3, 424], [334, 5, 4, 3, 5, 46, 45]]} /> */}
                     </Grid>
                 </DialogContent>
                 <DialogActions>
@@ -201,7 +201,7 @@ function ShowData(props) {
                 <DialogContainer />
                 <FormControl>
                     <Select
-                        value={selectedDistrict.districtId}
+                        value={selectedDistrict}
                         onChange={selectDistrict}
                     >
                         <MenuItem value={'none'}>None</MenuItem>
