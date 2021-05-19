@@ -85,9 +85,11 @@ function ShowData(props) {
     function BasicDemographicInfo() {
         if (selectedDistrict !== 'none') {
             let district;
-            for (let i = 0; i < displayedDistricting.districts.length; i++) {
-                if (displayedDistricting.districts[i].districtId === selectedDistrict) {
-                    district = displayedDistricting.districts[i];
+            if(displayedDistricting.districts){
+                for (let i = 0; i < displayedDistricting.districts.length; i++) {
+                    if (displayedDistricting.districts[i].districtId === selectedDistrict) {
+                        district = displayedDistricting.districts[i];
+                    }
                 }
             }
             if (district) {
@@ -114,6 +116,9 @@ function ShowData(props) {
                     <div>American Indian Population: {numberWithCommas(populations[5])}  ({percentages[4]}%)</div>
                     <div>Other Population: {numberWithCommas(populations[6])}  ({percentages[5]}%)</div>
                 </div>
+            } else {
+
+                return null
             }
 
         } else {

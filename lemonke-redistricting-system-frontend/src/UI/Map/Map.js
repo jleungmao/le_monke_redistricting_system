@@ -3,7 +3,7 @@ import mapboxgl, { BoxZoomHandler } from 'mapbox-gl';
 import classes from './Map.module.css';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { setEnactedDistricting, setDisplayedDistricting, setSelectedState, setSelectedDistrict, resetSelectedDistrict } from '../../actions';
+import { setEnactedDistricting, setDisplayedDistricting, setSelectedState, setSelectedDistrict, resetSelectedDistrict, resetDisplayedDistricting, resetEnactedDistricting } from '../../actions';
 import { Checkbox, FormControlLabel, FormGroup } from '@material-ui/core';
 
 
@@ -13,7 +13,7 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 function Map(props) {
 	const displayedDistricting = useSelector(state => state.displayedDistricting);
 	const selectedState = useSelector(state => state.selectedState);
-	const selectedDistrict = useSelector(state => state.selectedDistrict);
+	const selectedDistrict = useSelector(state => state.selectedDistrictId);
 	const stateList = useSelector(state => state.stateList);
 	const [lng, setLng] = useState(-89.8);
 	const [lat, setLat] = useState(35.8);
@@ -24,7 +24,7 @@ function Map(props) {
 	const [colors, setColors] = useState([]);
 	const [layersToDisplay, setLayersToDisplay] = useState({
 		districts: true,
-		precincts: true,
+		precincts: false,
 		counties: false
 	}); // [districts, precincts, counties]
 	const [districtGeo, setDistrictGeo] = useState({
@@ -45,7 +45,6 @@ function Map(props) {
 	var featureId = 0;
 	var hoveredStateId = null;
 	var hoveredDistrictId = null;
-	var selectedDistrictId = null;
 	var fromThis = false;
 
 
@@ -61,6 +60,9 @@ function Map(props) {
 
 			if (selectedState.enacted_districting_id) {
 				fetchEnacted(selectedState.enacted_districting_id);
+			} else {
+				dispatch(resetDisplayedDistricting());
+				dispatch(resetEnactedDistricting());
 			}
 			// let visibility = map.getLayoutProperty(
 			// 	selectedState.name,
@@ -108,8 +110,8 @@ function Map(props) {
 
 	useEffect(() => {
 		if (map) {
-			if (selectedDistrict.districtId && selectedDistrict.districtId !== 'none') {
-				console.log(selectedDistrict.districtId, displayedDistricting)
+			if (selectedDistrict && selectedDistrict !== 'none') {
+				console.log(selectedDistrict, displayedDistricting)
 				for (let i = 0; i < displayedDistricting.districts.length; i++) {
 					map.setFeatureState(
 						{ source: "districts", id: displayedDistricting.districts[i].districtId },
@@ -117,7 +119,7 @@ function Map(props) {
 					);
 				}
 				map.setFeatureState(
-					{ source: "districts", id: selectedDistrict.districtId },
+					{ source: "districts", id: selectedDistrict },
 					{ selected: true }
 				);
 			}
@@ -134,7 +136,6 @@ function Map(props) {
 
 	useEffect(() => {
 		if (map) {
-			selectedDistrictId = null;
 			dispatch(resetSelectedDistrict());
 			// console.log(displayedDistricting)
 			if (displayedDistricting.districts) {
@@ -151,153 +152,133 @@ function Map(props) {
 		}
 	}, [displayedDistricting]);
 
-	const findDistrictById = (id) => {
-		for (let district of displayedDistricting.districts) {
-			if (district.districtId === id) {
-				return district;
-			}
-		}
-	}
 
 	function displayingDistricting() {
 		// console.log(layersToDisplay)
-		if (layersToDisplay.districts) {
-			map.getSource("districts").setData(displayedDistricting.geometry)
-			if (!map.getLayer('districts')) {
-				map.addLayer({
-					'id': "districts",
-					'type': 'fill',
-					'source': "districts", // reference the data source
-					'layout': {
-						'visibility': 'visible'
-					},
-					'paint': {
-						'fill-color': ['get', 'color'],
-						'fill-opacity': [
-							'case',
-							['boolean', ['feature-state', 'selected'], ['feature-state', 'hover'], false],
-							1,
-							0.35
-						]
-					}
-				});
-				map.addLayer({
-					'id': "districts outline",
-					'type': 'line',
-					'source': "districts",
-					'layout': {
-						'visibility': 'visible'
-					},
-					'paint': {
-						'line-color': '#000',
-						'line-width': 4
-					}
-				});
-
-				map.on('click', 'districts', function (e) {
-					if (e.features.length > 0) {
-						if (hoveredDistrictId !== null) {
-							dispatch(setSelectedDistrict(findDistrictById(hoveredDistrictId)));
+		if (displayedDistricting.geometry) {
+			if (layersToDisplay.districts) {
+				map.getSource("districts").setData(displayedDistricting.geometry)
+				if (!map.getLayer('districts')) {
+					map.addLayer({
+						'id': "districts",
+						'type': 'fill',
+						'source': "districts", // reference the data source
+						'layout': {
+							'visibility': 'visible'
+						},
+						'paint': {
+							'fill-color': ['get', 'color'],
+							'fill-opacity': [
+								'case',
+								['boolean', ['feature-state', 'selected'], ['feature-state', 'hover'], false],
+								1,
+								0.35
+							]
 						}
-					}
-				})
+					});
+					map.addLayer({
+						'id': "districts outline",
+						'type': 'line',
+						'source': "districts",
+						'layout': {
+							'visibility': 'visible'
+						},
+						'paint': {
+							'line-color': '#000',
+							'line-width': 4
+						}
+					});
 
-				map.on('mousemove', "districts", function (e) {
-					if (e.features.length > 0) {
+					map.on('click', 'districts', function (e) {
+						if (e.features.length > 0) {
+							if (hoveredDistrictId !== null) {
+								dispatch(setSelectedDistrict(hoveredDistrictId));
+							}
+						}
+					})
+
+					map.on('mousemove', "districts", function (e) {
+						if (e.features.length > 0) {
+							if (hoveredDistrictId !== null) {
+								map.setFeatureState(
+									{ source: "districts", id: hoveredDistrictId },
+									{ hover: false }
+								);
+							}
+							hoveredDistrictId = e.features[0].id;
+							map.setFeatureState(
+								{ source: "districts", id: hoveredDistrictId },
+								{ hover: true }
+							);
+						}
+					});
+
+					map.on('mouseleave', "districts", function () {
 						if (hoveredDistrictId !== null) {
 							map.setFeatureState(
 								{ source: "districts", id: hoveredDistrictId },
 								{ hover: false }
 							);
 						}
-						hoveredDistrictId = e.features[0].id;
-						map.setFeatureState(
-							{ source: "districts", id: hoveredDistrictId },
-							{ hover: true }
-						);
-					}
-				});
-
-				map.on('mouseleave', "districts", function () {
-					if (hoveredDistrictId !== null) {
-						map.setFeatureState(
-							{ source: "districts", id: hoveredDistrictId },
-							{ hover: false }
-						);
-					}
-					hoveredDistrictId = null;
-				});
+						hoveredDistrictId = null;
+					});
+				}
+				map.setLayoutProperty(selectedState.name, 'visibility', 'none');
+				map.setLayoutProperty("districts", 'visibility', 'visible');
+				map.setLayoutProperty("districts outline", 'visibility', 'visible');
+			} else {
+				map.setLayoutProperty(selectedState.name, 'visibility', 'visible');
+				map.setLayoutProperty("districts", 'visibility', 'none');
+				map.setLayoutProperty("districts outline", 'visibility', 'none');
 			}
-			map.setLayoutProperty(selectedState.name, 'visibility', 'none');
-			map.setLayoutProperty("districts", 'visibility', 'visible');
-			map.setLayoutProperty("districts outline", 'visibility', 'visible');
-		} else {
+		}else{
 			map.setLayoutProperty(selectedState.name, 'visibility', 'visible');
-			map.setLayoutProperty("districts", 'visibility', 'none');
-			map.setLayoutProperty("districts outline", 'visibility', 'none');
+		}
+		if (selectedState.name) {
+			if (layersToDisplay['precincts']) {
+				if (map.getLayer("precincts outline")) {
+
+				} else {
+					map.addLayer({
+						'id': "precincts outline",
+						'type': 'line',
+						'source': selectedState.name + "precincts",
+						'layout': {},
+						'paint': {
+							'line-color': '#000',
+							'line-width': .5
+						}
+					});
+				}
+			} else {
+				if (map.getLayer("precincts outline")) {
+					map.removeLayer('precincts outline');
+				}
+			}
+			if (layersToDisplay['counties']) {
+				if (map.getLayer("counties outline")) {
+
+				} else {
+					map.addLayer({
+						'id': "counties outline",
+						'type': 'line',
+						'source': selectedState.name + "counties",
+						'layout': {},
+						'paint': {
+							'line-color': '#000',
+							'line-width': 2
+						}
+					});
+				}
+
+			} else {
+				if (map.getLayer("counties outline")) {
+					map.removeLayer('counties outline');
+				}
+			}
 		}
 
-		if (layersToDisplay['precincts']) {
-			if (map.getLayer("precincts outline")) {
-
-			}else{
-				map.addLayer({
-					'id': "precincts outline",
-					'type': 'line',
-					'source': selectedState.name+"precincts",
-					'layout': {},
-					'paint': {
-						'line-color': '#000',
-						'line-width': .5
-					}
-				});
-			}
-		} else {
-			if (map.getLayer("precincts outline")) {
-				map.removeLayer('precincts outline');
-			}
-		}
-		if (layersToDisplay['counties']) {
-			if (map.getLayer("counties outline")) {
-
-			}else{
-				map.addLayer({
-					'id': "counties outline",
-					'type': 'line',
-					'source': selectedState.name + "counties",
-					'layout': {},
-					'paint': {
-						'line-color': '#000',
-						'line-width': 2
-					}
-				});
-			}
-			
-		} else {
-			if (map.getLayer("counties outline")) {
-				map.removeLayer('counties outline');
-			}
-		}
 	}
-
-	const updatePrecinctGeo = (key, value) => {
-		// Destructure current state object
-		const objectValue = {
-			...precinctGeo,
-			[key]: value,
-		};
-		console.log(objectValue)
-		setPrecinctGeo(objectValue, console.log(precinctGeo));
-	};
-	const updateCountyGeo = (key, value) => {
-		// Destructure current state object
-		const objectValue = {
-			...countyGeo,
-			[key]: value,
-		};
-		console.log(objectValue)
-		setCountyGeo(objectValue, console.log(countyGeo));
-	};
 
 	const setUpGeoFiles = (map) => {
 		axios.get(`./Nevadaprecincts.json`).then(res => {
