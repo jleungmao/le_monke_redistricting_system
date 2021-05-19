@@ -21,12 +21,27 @@ function Map(props) {
 	const mapContainer = useRef();
 	const [map, setMap] = useState(null);
 	const dispatch = useDispatch();
-	const [colors, setColors] = useState([]); 
+	const [colors, setColors] = useState([]);
 	const [layersToDisplay, setLayersToDisplay] = useState({
 		districts: true,
 		precincts: true,
 		counties: false
-	}) // [districts, precincts, counties]
+	}); // [districts, precincts, counties]
+	const [districtGeo, setDistrictGeo] = useState({
+		"New York": {},
+		"Nevada": {},
+		"Florida": {}
+	});
+	const [precinctGeo, setPrecinctGeo] = useState({
+		"New York": {},
+		"Nevada": {},
+		"Florida": {}
+	});
+	const [countyGeo, setCountyGeo] = useState({
+		"New York": {},
+		"Nevada": {},
+		"Florida": {}
+	});
 	var featureId = 0;
 	var hoveredStateId = null;
 	var hoveredDistrictId = null;
@@ -85,7 +100,9 @@ function Map(props) {
 
 	useEffect(() => {
 		if (map) {
-			displayingDistricting();
+			if (displayedDistricting) {
+				displayingDistricting();
+			}
 		}
 	}, [layersToDisplay]);
 
@@ -93,7 +110,7 @@ function Map(props) {
 		if (map) {
 			if (selectedDistrict.districtId && selectedDistrict.districtId !== 'none') {
 				console.log(selectedDistrict.districtId, displayedDistricting)
-				for(let i = 0; i< displayedDistricting.districts.length; i++){
+				for (let i = 0; i < displayedDistricting.districts.length; i++) {
 					map.setFeatureState(
 						{ source: "districts", id: displayedDistricting.districts[i].districtId },
 						{ selected: null }
@@ -104,13 +121,12 @@ function Map(props) {
 					{ selected: true }
 				);
 			}
-
 		}
 	}, [selectedDistrict]);
 
-	useEffect(() =>{
+	useEffect(() => {
 		let randColors = [];
-		for(let i = 0; i < 30; i ++){
+		for (let i = 0; i < 30; i++) {
 			randColors.push(addColor());
 		}
 		setColors(randColors);
@@ -174,12 +190,7 @@ function Map(props) {
 					},
 					'paint': {
 						'line-color': '#000',
-						'line-width': [
-							'case',
-							['boolean', ['feature-state', 'selected'], ['feature-state', 'hover'], false],
-							3,
-							1
-						]
+						'line-width': 4
 					}
 				});
 
@@ -225,6 +236,107 @@ function Map(props) {
 			map.setLayoutProperty("districts", 'visibility', 'none');
 			map.setLayoutProperty("districts outline", 'visibility', 'none');
 		}
+
+		if (layersToDisplay['precincts']) {
+			if (map.getLayer("precincts outline")) {
+
+			}else{
+				map.addLayer({
+					'id': "precincts outline",
+					'type': 'line',
+					'source': selectedState.name+"precincts",
+					'layout': {},
+					'paint': {
+						'line-color': '#000',
+						'line-width': .5
+					}
+				});
+			}
+		} else {
+			if (map.getLayer("precincts outline")) {
+				map.removeLayer('precincts outline');
+			}
+		}
+		if (layersToDisplay['counties']) {
+			if (map.getLayer("counties outline")) {
+
+			}else{
+				map.addLayer({
+					'id': "counties outline",
+					'type': 'line',
+					'source': selectedState.name + "counties",
+					'layout': {},
+					'paint': {
+						'line-color': '#000',
+						'line-width': 2
+					}
+				});
+			}
+			
+		} else {
+			if (map.getLayer("counties outline")) {
+				map.removeLayer('counties outline');
+			}
+		}
+	}
+
+	const updatePrecinctGeo = (key, value) => {
+		// Destructure current state object
+		const objectValue = {
+			...precinctGeo,
+			[key]: value,
+		};
+		console.log(objectValue)
+		setPrecinctGeo(objectValue, console.log(precinctGeo));
+	};
+	const updateCountyGeo = (key, value) => {
+		// Destructure current state object
+		const objectValue = {
+			...countyGeo,
+			[key]: value,
+		};
+		console.log(objectValue)
+		setCountyGeo(objectValue, console.log(countyGeo));
+	};
+
+	const setUpGeoFiles = (map) => {
+		axios.get(`./Nevadaprecincts.json`).then(res => {
+			map.addSource("Nevadaprecincts", {
+				type: 'geojson',
+				data: res.data
+			});
+		});
+		axios.get(`./New Yorkprecincts.json`).then(res => {
+			map.addSource("New Yorkprecincts", {
+				type: 'geojson',
+				data: res.data
+			});
+		});
+		axios.get(`./Floridaprecincts.json`).then(res => {
+			map.addSource("Floridaprecincts", {
+				type: 'geojson',
+				data: res.data
+			});
+		});
+		axios.get(`./Nevadacounty.json`).then(res => {
+			map.addSource("Nevadacounties", {
+				type: 'geojson',
+				data: res.data
+			});
+		});
+		axios.get(`./New Yorkcounty.json`).then(res => {
+			map.addSource("New Yorkcounties", {
+				type: 'geojson',
+				data: res.data
+			});
+		});
+		axios.get(`./Floridacounty.json`).then(res => {
+			map.addSource("Floridacounties", {
+				type: 'geojson',
+				data: res.data
+			});
+		});
+
 	}
 
 	useEffect(() => {
@@ -286,8 +398,24 @@ function Map(props) {
 					});
 				}
 
+
+				setUpGeoFiles(map);
 				//create districts source to be edited later
 				map.addSource("districts", {
+					type: 'geojson',
+					data: {
+						"type": "FeatureCollection",
+						"features": []
+					}
+				});
+				map.addSource("precincts", {
+					type: 'geojson',
+					data: {
+						"type": "FeatureCollection",
+						"features": []
+					}
+				});
+				map.addSource("counties", {
 					type: 'geojson',
 					data: {
 						"type": "FeatureCollection",
@@ -365,7 +493,7 @@ function Map(props) {
 			'layout': {},
 			'paint': {
 				'line-color': '#000',
-				'line-width': 4
+				'line-width': 5
 			}
 		});
 
@@ -522,11 +650,11 @@ function Map(props) {
 						label="Districts"
 					/>
 					<FormControlLabel
-						control={<Checkbox key={1} onChange={handleChange} name="precincts" disabled={true} />}
+						control={<Checkbox key={1} checked={layersToDisplay.precincts} onChange={handleChange} name="precincts" />}
 						label="Precincts"
 					/>
 					<FormControlLabel
-						control={<Checkbox key={2} onChange={handleChange} name="counties" disabled={true} />}
+						control={<Checkbox key={2} checked={layersToDisplay.counties} onChange={handleChange} name="counties" />}
 						label="Counties"
 					/>
 				</FormGroup>
