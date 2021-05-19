@@ -177,6 +177,13 @@ export const setMajorityMinorityConstraint = (mm) => {
     }
 }
 
+export const setPopulationThreshold = (populationThreshold) => {
+    return {
+        type: "SET_POPULATION_THRESHOLD",
+        payload:populationThreshold
+    }
+}
+
 
 export const resetConstraints = () => {
     return {
